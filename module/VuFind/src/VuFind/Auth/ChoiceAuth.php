@@ -264,7 +264,9 @@ class ChoiceAuth extends AbstractBase
 
     /**
      * Get the URL to establish a session (needed when the internal VuFind login
-     * form is inadequate).  Returns false when no session initiator is needed.
+     * form is inadequate).  Returns false when no session initiator is needed or
+     * true if session initiator is built-in and form processing needs to be
+     * bypassed.
      *
      * @param string $target Full URL where external authentication strategy should
      * send user after login (some drivers may override this).
@@ -340,7 +342,9 @@ class ChoiceAuth extends AbstractBase
             return false;
         }
 
-        if (!in_array($this->strategy, $this->strategies)) {
+        if ('Email' !== $this->strategy
+            && !in_array($this->strategy, $this->strategies)
+        ) {
             throw new InvalidArgumentException("Illegal setting: {$this->strategy}");
         }
         $authenticator = $this->getPluginManager()->get($this->strategy);

@@ -174,7 +174,7 @@ class Manager implements \ZfcRbac\Identity\IdentityProviderInterface
     protected function makeAuth($method)
     {
         // If an illegal option was passed in, don't allow the object to load:
-        if (!in_array($method, $this->legalAuthOptions)) {
+        if ('Email' !== $method && !in_array($method, $this->legalAuthOptions)) {
             throw new \Exception("Illegal authentication method: $method");
         }
         $auth = $this->pluginManager->get($method);
@@ -238,7 +238,9 @@ class Manager implements \ZfcRbac\Identity\IdentityProviderInterface
 
     /**
      * Get the URL to establish a session (needed when the internal VuFind login
-     * form is inadequate).  Returns false when no session initiator is needed.
+     * form is inadequate).  Returns false when no session initiator is needed or
+     * true if session initiator is built-in and form processing needs to be
+     * bypassed.
      *
      * @param string $target Full URL where external authentication method should
      * send user after login (some drivers may override this).
@@ -559,10 +561,22 @@ class Manager implements \ZfcRbac\Identity\IdentityProviderInterface
      * account credentials.
      *
      * @throws AuthException
+     * @throws \VuFind\Exception\PasswordSecurity
+     * @throws \VuFind\Exception\AuthInProgress
      * @return UserRow Object representing logged-in user.
      */
     public function login($request)
     {
+        // Always support auth_method=Email
+        $authMethod = trim(
+            $request->getPost()->get(
+                'auth_method', $request->getQuery()->get('auth_method')
+            )
+        );
+        if ('Email' === $authMethod) {
+            $this->setAuthMethod('Email');
+        }
+
         // Allow the auth module to inspect the request (used by ChoiceAuth,
         // for example):
         $this->getAuth()->preLoginCheck($request);
@@ -648,6 +662,22 @@ class Manager implements \ZfcRbac\Identity\IdentityProviderInterface
     public function validateCredentials($request)
     {
         return $this->getAuth()->validateCredentials($request);
+    }
+
+    /**
+     * What login method does the ILS use (password, email, vufind)
+     *
+     * @param string $target Login target (MultiILS only)
+     *
+     * @return array|false
+     */
+    public function getILSLoginMethod($target = '')
+    {
+        $auth = $this->getAuth();
+        if (is_callable([$auth, 'getILSLoginMethod'])) {
+            return $auth->getILSLoginMethod($target);
+        }
+        return false;
     }
 
     /**
