@@ -59,10 +59,11 @@ class MultiILS extends \VuFind\Auth\MultiILS
     public function authenticate($request)
     {
         $target = trim($request->getPost()->get('target'));
+        $loginMethod = $this->getILSLoginMethod($target);
         $username = trim($request->getPost()->get('username'));
         $username = str_replace(' ', '', $username);
         $password = trim($request->getPost()->get('password'));
-        if ($username == '' || $password == '') {
+        if ($username == '' || ('password' === $loginMethod && $password == '')) {
             throw new AuthException('authentication_error_blank');
         }
 
@@ -84,6 +85,14 @@ class MultiILS extends \VuFind\Auth\MultiILS
         }
 
         // Did the patron successfully log in?
+        if ('email' === $loginMethod) {
+            if ($patron) {
+                $this->emailAuthenticator
+                    ->sendAuthenticationLink($patron['email'], $patron);
+            }
+            // Don't reveal the result
+            throw new \VuFind\Exception\AuthInProgress('email_login_link_sent');
+        }
         if ($patron) {
             return $this->processILSUser($patron);
         }
