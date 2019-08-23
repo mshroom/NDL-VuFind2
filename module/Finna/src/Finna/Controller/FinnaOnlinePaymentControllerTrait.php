@@ -185,6 +185,7 @@ trait FinnaOnlinePaymentControllerTrait
         $view->payableOnlineCnt = count($payableFines);
         $view->nonPayableFines = count($fines) != count($payableFines);
 
+
         $paymentParam = 'payment';
         $request = $this->getRequest();
         $pay = $this->formWasSubmitted('pay-confirm');
@@ -195,7 +196,9 @@ trait FinnaOnlinePaymentControllerTrait
             && $payableOnline['payable'] && $payableOnline['amount']
         ) {
             // Payment started, check that fee list has not been updated
-            if ($this->checkIfFinesUpdated($patron, $fines)) {
+            if (($paymentConfig['exactBalanceRequired'] ?? true)
+                && $this->checkIfFinesUpdated($patron, $fines)
+            ) {
                 // Fines updated, redirect and show updated list.
                 $session->payment_fines_changed = true;
                 header("Location: " . $this->getServerUrl('myresearch-fines'));
