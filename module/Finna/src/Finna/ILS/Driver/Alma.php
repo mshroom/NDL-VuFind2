@@ -27,9 +27,7 @@
  */
 namespace Finna\ILS\Driver;
 
-use SimpleXMLElement;
 use VuFind\Exception\ILS as ILSException;
-use Zend\Http\Headers;
 
 /**
  * Alma ILS Driver
@@ -201,5 +199,4 @@ class Alma extends \VuFind\ILS\Driver\Alma
         }
         return parent::getConfig($function, $params);
     }
-
 }

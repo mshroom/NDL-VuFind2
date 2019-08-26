@@ -185,7 +185,6 @@ trait FinnaOnlinePaymentControllerTrait
         $view->payableOnlineCnt = count($payableFines);
         $view->nonPayableFines = count($fines) != count($payableFines);
 
-
         $paymentParam = 'payment';
         $request = $this->getRequest();
         $pay = $this->formWasSubmitted('pay-confirm');
