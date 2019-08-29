@@ -566,8 +566,18 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         $fields = [];
         if (!empty($updateConfig['fields'])) {
             foreach ($updateConfig['fields'] as $fieldConfig) {
-                list($label, $field) = explode(':', $fieldConfig);
-                $fields[$field] = ['label' => $label];
+                if (is_array($fieldConfig)) {
+                    $fields[$fieldConfig['field']] = $fieldConfig;
+                } else {
+                    $parts = explode(':', $fieldConfig);
+                    $label = $parts[0];
+                    $field = $parts[1] ?? '';
+                    $type = $parts[2] ?? '';
+                    $fields[$field] = [
+                        'label' => $label,
+                        'type' => $type,
+                    ];
+                }
             }
         }
         if (empty($fields)) {

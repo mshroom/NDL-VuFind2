@@ -235,9 +235,14 @@ class Alma extends \VuFind\ILS\Driver\Alma
                 $profile['city']     =  isset($address->city)
                                             ? (string)$address->city
                                             : null;
-                $profile['country']  =  isset($address->country)
-                                            ? (string)$address->country
-                                            : null;
+                if (!empty($address->country)) {
+                    $countryCode = (string)$address->country;
+                    $table = $this->getCodeTableOptions('CountryCodes', '');
+                    $profile['country'] = $table[$countryCode]
+                        ? $table[$countryCode]['name'] : $countryCode;
+                } else {
+                    $profile['country'] = null;
+                }
             }
             if ($contact->phones) {
                 $phone = null;
@@ -268,6 +273,15 @@ class Alma extends \VuFind\ILS\Driver\Alma
                 $profile['email'] = isset($email->email_address)
                                         ? (string)$email->email_address
                                         : null;
+            }
+        }
+        $profile['self_service_pin'] = '****';
+
+        if ($xml->proxy_for_users) {
+            foreach ($xml->proxy_for_users->proxy_for_user as $user) {
+                $profile['guarantees'][] = [
+                    'lastname' => (string)$user->full_name
+                ];
             }
         }
 
@@ -306,6 +320,9 @@ class Alma extends \VuFind\ILS\Driver\Alma
         $emailMapping = [
             'email' => 'email_address'
         ];
+        $otherMapping = [
+            'self_service_pin' => 'pin_number'
+        ];
         // We need to process address fields, phone number fields and email fields
         // as separate sets, so divide them now to gategories
         $hasAddress = false;
@@ -326,12 +343,9 @@ class Alma extends \VuFind\ILS\Driver\Alma
                         $hasPhone = true;
                     }
                 } elseif ('email' === $fieldName) {
-                    $emailFields[$fieldName] = $parts[0];
                     if (isset($details[$fieldName])) {
                         $hasEmail = true;
                     }
-                } else {
-                    $otherFields[$fieldName] = $parts[0];
                 }
             }
         }
@@ -357,11 +371,10 @@ class Alma extends \VuFind\ILS\Driver\Alma
                 }
             }
             $address = $contact->addresses->addChild('address');
+            $addressTypes = $address->addChild('address_types');
             if (null === $types) {
-                $types = $address->addChild('address_types');
-                $types->addChild('address_type', 'home');
+                $addressTypes->addChild('address_type', 'home');
             } else {
-                $addressTypes = $address->addChild('address_types');
                 foreach ($types as $type) {
                     $addressTypes->addChild('address_type', (string)$type);
                 }
@@ -389,11 +402,10 @@ class Alma extends \VuFind\ILS\Driver\Alma
                 }
             }
             $phone = $contact->phones->addChild('phone');
+            $phoneTypes = $phone->addChild('phone_types');
             if (null === $types) {
-                $types = $phone->addChild('phone_types');
-                $types->addChild('phone_type', 'mobile');
+                $phoneTypes->addChild('phone_type', 'mobile');
             } else {
-                $phoneTypes = $phone->addChild('phone_types');
                 foreach ($types as $type) {
                     $phoneTypes->addChild('phone_type', (string)$type);
                 }
@@ -406,25 +418,87 @@ class Alma extends \VuFind\ILS\Driver\Alma
             }
         }
 
-        // Remove data that we don't ever update and is handled by Alma as complete
-        // entities
+        if ($hasEmail) {
+            // Try to find an existing email to modify
+            $types = null;
+            if (!$contact->emails) {
+                $contact->addChild('emails');
+            }
+            foreach ($contact->emails->email as $item) {
+                if ('true' === (string)$item['preferred']) {
+                    // Remove the existing email address
+                    $types = clone $item->email_types->email_type;
+                    unset($item[0]);
+                    break;
+                }
+            }
+            $email = $contact->emails->addChild('email');
+            $emailTypes = $email->addChild('email_types');
+            if (null === $types) {
+                $emailTypes->addChild('email_type', 'home');
+            } else {
+                foreach ($types as $type) {
+                    $emailTypes->addChild('email_type', (string)$type);
+                }
+            }
+            $email['preferred'] = 'true';
+            foreach ($details as $key => $value) {
+                if (isset($emailMapping[$key])) {
+                    $email->addChild($emailMapping[$key], $value);
+                }
+            }
+        }
+
+        $overrideFields = [];
+        foreach ($details as $key => $value) {
+            $value = trim($value);
+            if (isset($otherMapping[$key])) {
+                $fieldName = $otherMapping[$key];
+                if ('pin_number' === $fieldName) {
+                    if (empty($value) || trim($value) === '****') {
+                        continue;
+                    }
+                    $overrideFields[] = 'pin_number';
+                }
+                $field = $userData->{$fieldName};
+                if ($field) {
+                    $field[0] = $value;
+                } else {
+                    $field = $userData->addChild($fieldName, $value);
+                }
+            }
+        }
+
+        // Remove list-style data that we don't ever update and is handled by Alma
+        // as complete entities
         unset($userData->user_identifiers);
         unset($userData->user_roles);
         unset($userData->user_blocks);
         unset($userData->user_statistics);
         unset($userData->proxy_for_users);
 
-        $this->debug($userData->asXML());
-
         // Update user in Alma
-        $this->makeRequest(
-            '/users/' . urlencode($patron['id']),
+        $queryParams = '';
+        if ($overrideFields) {
+            $queryParams = '?override=' . implode(',', $overrideFields);
+        }
+        list($response, $code) = $this->makeRequest(
+            '/users/' . urlencode($patron['id']) . $queryParams,
             [],
             [],
             'PUT',
             $userData->asXML(),
-            ['Content-Type' => 'application/xml']
+            ['Content-Type' => 'application/xml'],
+            [400],
+            true
         );
+        if (200 !== $code) {
+            return [
+                'success' => false,
+                'status' => (string)$response->errorList->error[0]->errorMessage,
+                'sys_message' => ''
+            ];
+        }
 
         return [
             'success' => true,
@@ -453,7 +527,26 @@ class Alma extends \VuFind\ILS\Driver\Alma
             }
             return $config;
         }
-        return parent::getConfig($function, $params);
+        $config = parent::getConfig($function, $params);
+        if ('updateAddress' === $function) {
+            // Add code tables
+            if (!empty($config['fields'])) {
+                foreach ($config['fields'] as &$field) {
+                    list($label, $fieldId) = explode(':', $field, 2);
+                    if ('country' === $fieldId) {
+                        $field = [
+                            'field' => 'country',
+                            'label' => $label,
+                            'type' => 'select',
+                            'options' => $this->getCodeTableOptions(
+                                'CountryCodes', 'description'
+                            )
+                        ];
+                    }
+                }
+            }
+        }
+        return $config;
     }
 
     /**
@@ -471,5 +564,52 @@ class Alma extends \VuFind\ILS\Driver\Alma
     public function getDefaultPickUpLocation($patron = null, $holdDetails = null)
     {
         return false;
+    }
+
+    /**
+     * Get code table options for table
+     *
+     * @param string $codeTable Code table to fetch
+     * @param string $sort      Sort order ('', 'code' or 'description)
+     *
+     * @return array
+     */
+    protected function getCodeTableOptions($codeTable, $sort)
+    {
+        $cacheId = 'alma|codetable|' . $codeTable . "|$sort";
+        $cached = $this->getCachedData($cacheId);
+        if (null !== $cached) {
+            return $cached;
+        }
+
+        $table = $this->makeRequest('/conf/code-tables/' . urlencode($codeTable));
+        $result = [];
+        foreach ($table->rows->row as $row) {
+            if ((string)$row->enabled === 'true') {
+                $result[(string)$row->code] = [
+                    'name' => (string)$row->description
+                ];
+            }
+        }
+
+        if ('code' === $sort) {
+            uksort(
+                $result,
+                function ($a, $b) {
+                    return strcmp($a, $b);
+                }
+            );
+        } elseif ('description' === $sort) {
+            uasort(
+                $result,
+                function ($a, $b) {
+                    return strcmp($a['name'], $b['name']);
+                }
+            );
+        }
+
+        $this->putCachedData($cacheId, $result);
+
+        return $result;
     }
 }
