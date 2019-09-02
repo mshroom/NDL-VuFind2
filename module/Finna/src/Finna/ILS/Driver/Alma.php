@@ -328,8 +328,8 @@ class Alma extends \VuFind\ILS\Driver\Alma
         $hasAddress = false;
         $hasPhone = false;
         $hasEmail = false;
-        $fieldConfig = isset($this->config['updateAddress']['fields'])
-            ? $this->config['updateAddress']['fields'] : [];
+        $fieldConfig = isset($this->config['updateProfile']['fields'])
+            ? $this->config['updateProfile']['fields'] : [];
         foreach ($fieldConfig as $field) {
             $parts = explode(':', $field);
             if (isset($parts[1])) {
@@ -527,8 +527,11 @@ class Alma extends \VuFind\ILS\Driver\Alma
             }
             return $config;
         }
-        $config = parent::getConfig($function, $params);
         if ('updateAddress' === $function) {
+            $function = 'updateProfile';
+        }
+        $config = parent::getConfig($function, $params);
+        if ('updateProfile' === $function) {
             // Add code tables
             if (!empty($config['fields'])) {
                 foreach ($config['fields'] as &$field) {

@@ -112,9 +112,9 @@ secret = YOUR_WEBHOOK_SECRET_FROM_ALMA
 ; Currency
 ;currency = 'EUR'
 
-; Uncomment the following lines to enable updating of address information.
-; Choose a method on how to update the address information (driver, email or url).
-[updateAddress]
+; Uncomment the following lines to enable updating of profile information.
+; Choose a method on how to update the profile information (driver, email or url).
+[updateProfile]
 method = driver
 ; emailAddress is required for the email method
 ;emailAddress =
@@ -128,8 +128,9 @@ fields[] = Address2:address2
 fields[] = Zip:zip
 fields[] = City:city
 fields[] = Country:country
-fields[] = self_service_pin:pin:password
-;fields[] = Email:email
+fields[] = Email:email
+fields[] = Phone:phone
+fields[] = self_service_pin:self_service_pin:password
 ; url is required for the url method. url can be a single address or an array of
 ; language-specific addresses. First example is a single one:
 ;url = http://address.of.change.form
