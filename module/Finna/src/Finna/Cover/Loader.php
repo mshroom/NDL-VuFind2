@@ -369,9 +369,17 @@ class Loader extends \VuFind\Cover\Loader
         $finalFile = $cache ? $this->localFile : $tempFile . '.jpg';
 
         $pdfFile = preg_match('/\.pdf$/i', $url);
-        $convertPdf = $this->config->Content->convertPdfToCoverImage ?? false;
-        if ($pdfFile && !$convertPdf) {
+        $convertPdfService
+            = $this->config->Content->convertPdfToCoverImageService
+            ?? false;
+
+        if ($pdfFile && !$convertPdfService) {
             return false;
+        }
+
+        if ($pdfFile) {
+            // Convert pdf to jpg
+            $url = "$convertPdfService?url=" . urlencode($url);
         }
 
         // Attempt to pull down the image:
@@ -383,36 +391,11 @@ class Loader extends \VuFind\Cover\Loader
             $this->debug("Failed to retrieve image from $url");
             return false;
         }
-        if (!$result->getContentLength()) {
-            return false;
-        }
-
-        if (preg_match('/\.pdf$/i', $url)) {
-            // Convert pdf to jpg
-            try {
-                $im = new \Imagick();
-                $im->setResolution(150, 150);
-                // Read first page from pdf
-                if (true !== $im->readimage("{$tempFile}[0]")) {
-                    $this->debug(
-                        'Error reading pdf for jpg conversion: ' . $tempFile
-                    );
-                    return false;
-                }
-                $im = $im->mergeImageLayers(\Imagick::LAYERMETHOD_FLATTEN);
-                $im->setFormat('jpg');
-                $im->writeImage($tempFile);
-                $im->clear();
-            } catch (\Exception $e) {
-                $this->debug(
-                    get_class($e) . ' during conversion from pdf to jpg'
-                    . ': ' . $e->getMessage()
-                );
-                return false;
-            }
-        }
 
         $image = file_get_contents($tempFile);
+        if (strlen($image) === 0) {
+            return false;
+        }
 
         // Try to create a GD image and rewrite as JPEG, fail if we can't:
         if (!($imageGD = @imagecreatefromstring($image))) {
