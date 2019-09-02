@@ -1,9 +1,9 @@
 <!-- START of: finna - myresearch/change-address-settings.phtml -->
 <?php
-    $user = $this->auth()->isLoggedIn();
-    $updatePhone = $this->ils()->checkFunction('updatePhone', compact($user));
-    $updateEmail = $this->ils()->checkFunction('updateEmail', compact($user));
-    $updateAddress = $this->ils()->checkFunction('updateAddress', compact($user));
+    $patron = $this->auth()->isLoggedIn();
+    $updatePhone = $this->ils()->checkFunction('updatePhone', compact('patron'));
+    $updateEmail = $this->ils()->checkFunction('updateEmail', compact('patron'));
+    $updateAddress = $this->ils()->checkFunction('updateAddress', compact('patron'));
     $needsApproval = $updateAddress['needsApproval'] ?? true;
     // Set up page title:
     $title = $this->translate(($updatePhone || $updateEmail) ? 'request_address_change' : 'request_contact_information_change');

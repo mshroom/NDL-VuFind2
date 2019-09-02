@@ -41,6 +41,107 @@ use VuFind\Exception\ILS as ILSException;
 class Alma extends \VuFind\ILS\Driver\Alma
 {
     /**
+     * Patron Login
+     *
+     * This is responsible for authenticating a patron against the catalog.
+     *
+     * @param string $username The patrons barcode or other username.
+     * @param string $password The patrons password.
+     *
+     * @return string[]|NULL
+     */
+    public function patronLogin($username, $password)
+    {
+        $loginMethod = $this->config['Catalog']['loginMethod'] ?? 'vufind';
+
+        $patron = [];
+        $patronId = $username;
+        if ('email' === $loginMethod) {
+            // Create parameters for API call
+            $getParams = [
+                'q' => 'email~' . $username
+            ];
+
+            // Try to find the user in Alma
+            $response = $this->makeRequest(
+                '/users/',
+                $getParams
+            );
+
+            foreach (($response->user ?? []) as $user) {
+                if ((string)$user->status !== 'ACTIVE') {
+                    continue;
+                }
+                if ($patron) {
+                    // More than one match, cannot log in by email
+                    $this->debug(
+                        "Email $username matches more than one user, cannot login"
+                    );
+                    return null;
+                }
+                $patron = [
+                    'id' => (string)$user->primary_id,
+                    'cat_username' => trim($username),
+                    'email' => trim($username)
+                ];
+            }
+            if (!$patron) {
+                return null;
+            }
+            // Use primary id in further queries
+            $patronId = $patron['id'];
+        } elseif ('password' === $loginMethod) {
+            // Create parameters for API call
+            $getParams = [
+                'user_id_type' => 'all_unique',
+                'op' => 'auth',
+                'password' => $password
+            ];
+
+            // Try to authenticate the user with Alma
+            list($response, $status) = $this->makeRequest(
+                '/users/' . urlencode($username),
+                $getParams,
+                [],
+                'POST',
+                null,
+                null,
+                [400],
+                true
+            );
+            if (400 === $status) {
+                return null;
+            }
+        }
+
+        // Create parameters for API call
+        $getParams = [
+            'user_id_type' => 'all_unique',
+            'view' => 'brief',
+            'expand' => 'none'
+        ];
+
+        // Check for patron in Alma
+        $response = $this->makeRequest(
+            '/users/' . urlencode($patronId),
+            $getParams
+        );
+
+        if ($response !== null) {
+            // We may already have some information, so just fill the gaps
+            $patron['id'] = (string)$response->primary_id;
+            $patron['cat_username'] = trim($username);
+            $patron['cat_password'] = trim($password);
+            $patron['firstname'] = (string)$response->first_name ?? '';
+            $patron['lastname'] = (string)$response->last_name ?? '';
+            $patron['account_type'] = (string)$response->account_type;
+            return $patron;
+        }
+
+        return null;
+    }
+
+    /**
      * Get Patron Fines
      *
      * This is responsible for retrieving all fines by a specific patron.
@@ -532,10 +633,24 @@ class Alma extends \VuFind\ILS\Driver\Alma
         }
         $config = parent::getConfig($function, $params);
         if ('updateProfile' === $function) {
+            // Allow only a limited set of fields for external users
+            if (($params['patron']['account_type'] ?? '') === 'EXTERNAL') {
+                $fields = [];
+                foreach ($config['fields'] as &$field) {
+                    list($label, $fieldId) = explode(':', $field);
+                    if (in_array($fieldId, ['self_service_pin'])) {
+                        $fields[] = $field;
+                    }
+                }
+                if (!$fields) {
+                    return false;
+                }
+                $config['fields'] = $fields;
+            }
             // Add code tables
             if (!empty($config['fields'])) {
                 foreach ($config['fields'] as &$field) {
-                    list($label, $fieldId) = explode(':', $field, 2);
+                    list($label, $fieldId) = explode(':', $field);
                     if ('country' === $fieldId) {
                         $field = [
                             'field' => 'country',
