@@ -112,11 +112,16 @@ class VerifyResourceMetadata extends AbstractService
 
         $count = 0;
         $fixed = 0;
+        $this->recordLoader->setCacheContext(\VuFind\Record\Cache::CONTEXT_FAVORITE);
         foreach ($resources as $resource) {
             try {
                 $driver = $this->recordLoader
                     ->load($resource->record_id, $resource->source);
                 $original = clone $resource;
+                // Reset metadata first, otherwise assignMetadata doesn't do anything
+                $resource->title = '';
+                $resource->author = '';
+                $resource->year = '';
                 $resource->assignMetadata($driver, $this->dateConverter);
                 if ($original != $resource) {
                     $resource->save();
