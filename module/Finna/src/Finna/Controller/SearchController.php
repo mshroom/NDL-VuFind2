@@ -207,17 +207,12 @@ class SearchController extends \VuFind\Controller\SearchController
     }
 
     /**
-     * Results action.
+     * Blended action.
      *
      * @return mixed
      */
-    public function resultsAction()
+    public function blendedAction()
     {
-        if ($this->getRequest()->getQuery()->get('combined')) {
-            $this->saveToHistory = false;
-        }
-
-        $this->initCombinedViewFilters();
         $view = parent::resultsAction();
         $view->browse = false;
         $this->initSavedTabs();
