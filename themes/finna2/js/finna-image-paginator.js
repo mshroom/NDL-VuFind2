@@ -68,9 +68,9 @@ finna.imagePaginator = (function imagePaginator() {
 
   /**
    * Function to create a new paginator with given images object and settings object
-   * 
-   * @param {object} images 
-   * @param {object} settings 
+   *
+   * @param {object} images
+   * @param {object} settings
    */
   function initPaginator(images, settings) {
     if (settings.recordType === 'marc') {
@@ -369,7 +369,7 @@ finna.imagePaginator = (function imagePaginator() {
 
   /**
    * Function to browse images presented in image holder object
-   * 
+   *
    * @param int direction to try and find an image from
    */
   FinnaPaginator.prototype.onBrowseButton = function onBrowseButton(direction) {
@@ -872,7 +872,7 @@ finna.imagePaginator = (function imagePaginator() {
 
           var previousRecord = $(previousRecordButton).clone();
           var nextRecord = $(nextRecordButton).clone();
-          
+
           mfpContainer.find('.mfp-content').addClass('loaded ' + _.settings.recordType);
           mfpContainer.append(previousRecord, nextRecord);
 
@@ -983,7 +983,7 @@ finna.imagePaginator = (function imagePaginator() {
 
   /**
    * Function to find an image element from imageHolder track
-   * 
+   *
    * @param index int index of wanted image element
    */
   FinnaPaginator.prototype.findSmallImage = function findSmallImage(index) {

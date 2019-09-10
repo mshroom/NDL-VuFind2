@@ -27,7 +27,6 @@
  */
 namespace FinnaSearch\Backend\Blender;
 
-use FinnaSearch\Feature\WorkExpressionsInterface;
 use VuFindSearch\Feature\RetrieveBatchInterface;
 use VuFindSearch\ParamBag;
 use VuFindSearch\Backend\AbstractBackend;
@@ -44,8 +43,6 @@ use VuFindSearch\Response\RecordCollectionInterface;
  * @link     https://vufind.org
  */
 class Backend extends AbstractBackend implements RetrieveBatchInterface
-//    implements SimilarInterface, RetrieveBatchInterface,
-//    WorkExpressionsInterface
 {
     /**
      * Primary backend
@@ -66,27 +63,39 @@ class Backend extends AbstractBackend implements RetrieveBatchInterface
      *
      * @var int
      */
-    protected $blendLimit = 100;
+    protected $blendLimit;
 
     /**
      * Block size for interleaved records
      *
      * @var int
      */
-    protected $blockSize = 10;
+    protected $blockSize;
+
+    /**
+     * Configuration
+     *
+     * @var \Zend\Config\Config
+     */
+    protected $config;
 
     /**
      * Constructor.
      *
-     * @param AbstractBackend $primary   Primary backend
-     * @param AbstractBackend $secondary Secondary backend
+     * @param AbstractBackend     $primary   Primary backend
+     * @param AbstractBackend     $secondary Secondary backend
+     * @param \Zend\Config\Config $config    Blender config
      *
      * @return void
      */
-    public function __construct($primary, $secondary)
-    {
+    public function __construct(AbstractBackend $primary, AbstractBackend $secondary,
+        \Zend\Config\Config $config
+    ) {
         $this->primaryBackend = $primary;
         $this->secondaryBackend = $secondary;
+        $this->config = $config;
+        $this->blendLimit = min(100, $this->config['Results']['blendLimit'] ?? 100);
+        $this->blockSize = $this->config['Results']['blockSize'] ?? 10;
     }
 
     /**
@@ -102,8 +111,11 @@ class Backend extends AbstractBackend implements RetrieveBatchInterface
     public function search(AbstractQuery $query, $offset, $limit,
         ParamBag $params = null
     ) {
-        $mergedCollection = new Response\Json\RecordCollection();
+        $mergedCollection = new Response\Json\RecordCollection($this->config);
 
+        $secondaryQuery = $this->translateQuery($query);
+        $secondaryParams = $params->get('secondary_backend')[0];
+        $params->remove('secondary_backend');
         // If offset is less than the limit, fetch from both backends
         // up to the limit first.
         if ($offset <= $this->blendLimit) {
@@ -115,10 +127,10 @@ class Backend extends AbstractBackend implements RetrieveBatchInterface
             );
 
             $secondaryCollection = $this->secondaryBackend->search(
-                $query,
+                $secondaryQuery,
                 0,
                 $this->blendLimit,
-                $params
+                $secondaryParams
             );
 
             $mergedCollection->initBlended(
@@ -137,16 +149,18 @@ class Backend extends AbstractBackend implements RetrieveBatchInterface
             );
 
             $secondaryCollection = $this->secondaryBackend->search(
-                $query,
+                $secondaryQuery,
                 0,
                 0,
-                $params
+                $secondaryParams
             );
+
             $mergedCollection->initBlended(
                 $primaryCollection,
                 $secondaryCollection,
                 $offset,
-                $limit
+                $limit,
+                $this->blockSize
             );
         }
 
@@ -168,6 +182,7 @@ class Backend extends AbstractBackend implements RetrieveBatchInterface
                 if ($primary) {
                     $record = $this->getRecord(
                         $this->primaryBackend,
+                        $params,
                         $primaryCollection,
                         $query,
                         $primaryOffset
@@ -176,6 +191,7 @@ class Backend extends AbstractBackend implements RetrieveBatchInterface
                 } else {
                     $record = $this->getRecord(
                         $this->secondaryBackend,
+                        $secondaryParams,
                         $secondaryCollection,
                         $query,
                         $secondaryOffset
@@ -251,6 +267,18 @@ class Backend extends AbstractBackend implements RetrieveBatchInterface
     }
 
     /**
+     * Return the record collection factory.
+     *
+     * Lazy loads a generic collection factory.
+     *
+     * @return RecordCollectionFactoryInterface
+     */
+    public function getRecordCollectionFactory()
+    {
+        return null;
+    }
+
+    /**
      * Get a record from the given backend by offset
      *
      * @param AbstractBackend           $backend    Backend
@@ -261,27 +289,27 @@ class Backend extends AbstractBackend implements RetrieveBatchInterface
      * @return array
      */
     protected function getRecord(AbstractBackend $backend,
-        RecordCollectionInterface $collection,
+        ParamBag $params, RecordCollectionInterface $collection,
         AbstractQuery $query, $offset
     ) {
         $records = $collection->getRecords();
         if ($offset < count($records)) {
             return $records[offset];
         }
-        $collection = $backend->search($query, $offset, $this->blockSize);
+        $collection = $backend->search($query, $offset, $this->blockSize, $params);
         $records = $collection->getRecords();
         return $records[$offset] ?? null;
     }
 
     /**
-     * Return the record collection factory.
+     * Translate query from the primary backend format to secondary backend format
      *
-     * Lazy loads a generic collection factory.
+     * @param AbstractQuery $query Query
      *
-     * @return RecordCollectionFactoryInterface
+     * @return AbstractQuery
      */
-    public function getRecordCollectionFactory()
+    protected function translateQuery(AbstractQuery $query)
     {
-        return null;
+        return $query;
     }
 }

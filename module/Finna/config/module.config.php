@@ -574,7 +574,7 @@ $config = [
             ],
             'search_params' => [
                 'factories' => [
-                    'Finna\Search\Blender\Params' => 'Finna\Search\Solr\ParamsFactory',
+                    'Finna\Search\Blender\Params' => 'Finna\Search\Blender\ParamsFactory',
 
                     'Finna\Search\Combined\Params' => 'Finna\Search\Solr\ParamsFactory',
                     'Finna\Search\EDS\Params' => 'VuFind\Search\Params\ParamsFactory',

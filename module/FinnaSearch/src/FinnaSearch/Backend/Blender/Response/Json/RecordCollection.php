@@ -46,6 +46,22 @@ class RecordCollection
     extends \FinnaSearch\Backend\Solr\Response\Json\RecordCollection
 {
     /**
+     * Configuration
+     *
+     * @var \Zend\Config\Config
+     */
+    protected $config;
+
+    /**
+     * Constructor
+     *
+     * @param \Zend\Config\Config $config Configuration
+     */
+    public function __construct ($config = null) {
+        $this->config = $config;
+    }
+
+    /**
      * Number of records included from the primary collection when blending
      *
      * @var int
@@ -60,15 +76,18 @@ class RecordCollection
     protected $secondaryCount;
 
     /**
-     * Constructor.
+     * Initialize blended results
      *
-     * @return void
+     * @param RecordCollectionInterface $primaryCollection   Primary record
+     * collection
+     * @param RecordCollectionInterface $secondaryCollection Secondary record
+     * collection
+     * @param int                       $offset              Results list offset
+     * @param int                       $limit               Result limit
+     * @param int                       $blockSize           Record block size
      */
-    public function __construct() {
-    }
-
-    public function initBlended($primaryCollection, $secondaryCollection, $offset,
-        $limit, $blockSize
+    public function initBlended(RecordCollectionInterface $primaryCollection,
+        RecordCollectionInterface $secondaryCollection, $offset, $limit, $blockSize
     ) {
         $this->response = static::$template;
         $this->response['response']['numFound'] = $primaryCollection->getTotal()
@@ -82,19 +101,20 @@ class RecordCollection
             $record
                 ->setSourceIdentifier($record->getSourceIdentifier() . '/p');
         }
+        $initialPrimary = $this->config['Results']['boostPosition'] ?? $blockSize;
+        $boostRecordCount = $this->config['Results']['boostCount'] ?? 0;
         $records = array_merge(
-            array_slice($primaryRecords, 0, 3),
-            array_slice($secondaryRecords, 0, 3)
+            array_splice($primaryRecords, 0, $initialPrimary),
+            array_splice($secondaryRecords, 0, $boostRecordCount),
+            array_splice(
+                $primaryRecords, 0, $blockSize - $initialPrimary
+            )
         );
-        $max = min($limit, max(count($primaryRecords), count($secondaryRecords)));
-        for ($pos = 3; $pos < $max; $pos += 10) {
+        for ($pos = count($records); $pos < $offset + $limit; $pos += $blockSize) {
             $records = array_merge(
                 $records,
-                array_slice($primaryRecords, $pos, $blockSize)
-            );
-            $records = array_merge(
-                $records,
-                array_slice($secondaryRecords, $pos, $blockSize)
+                array_splice($secondaryRecords, 0, $blockSize),
+                array_splice($primaryRecords, 0, $blockSize)
             );
         }
 
@@ -113,6 +133,8 @@ class RecordCollection
                 ++$this->secondaryCount;
             }
         }
+
+        $this->mergeFacets($primaryCollection, $secondaryCollection);
     }
 
     /**
@@ -133,5 +155,24 @@ class RecordCollection
     public function getSecondaryCount()
     {
         return $this->secondaryCount;
+    }
+
+    /**
+     * @param RecordCollectionInterface $primaryCollection   Primary record
+     * collection
+     * @param RecordCollectionInterface $secondaryCollection Secondary record
+     * collection
+     *
+     * @return void
+     */
+    protected function mergeFacets($primaryCollection, $secondaryCollection)
+    {
+        $primary = $primaryCollection->getFacets()->getFieldFacets();
+        $secondary = $secondaryCollection->getFacets();
+        $facetFields = [];
+        foreach ($primary as $key => $value) {
+            $facetFields[$key] = $value;
+        }
+        $this->response['facet_counts']['facet_fields'] = $facetFields;
     }
 }

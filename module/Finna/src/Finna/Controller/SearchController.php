@@ -213,11 +213,15 @@ class SearchController extends \VuFind\Controller\SearchController
      */
     public function blendedAction()
     {
-        $view = parent::resultsAction();
-        $view->browse = false;
-        $this->initSavedTabs();
-        $view->fromStreetSearch = $this->getRequest()->getQuery()
-            ->get('streetsearch', false);
+        $saveId = $this->searchClassId;
+        try {
+            $this->searchClassId = 'Blender';
+            $view = parent::resultsAction();
+        } catch (\Exception $e) {
+            $this->searchClassId = $saveId;
+            throw $e;
+        }
+        $this->searchClassId = $saveId;
         return $view;
     }
 

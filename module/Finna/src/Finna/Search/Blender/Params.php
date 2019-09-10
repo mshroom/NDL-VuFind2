@@ -28,6 +28,8 @@
  */
 namespace Finna\Search\Blender;
 
+use VuFindSearch\Backend\EDS\SearchRequestModel as SearchRequestModel;
+
 /**
  * Blender Search Parameters
  *
@@ -40,4 +42,125 @@ namespace Finna\Search\Blender;
  */
 class Params extends \Finna\Search\Solr\Params
 {
+    /**
+     * Secondary search params
+     *
+     * @var \VuFind\Search\Base\Params
+     */
+    protected $secondaryParams;
+
+    /**
+     * Blender configuration
+     *
+     * @var \Zend\Config\Config
+     */
+    protected $blenderConfig;
+
+    /**
+     * Blender mappings
+     *
+     * @var array
+     */
+    protected $mappings;
+
+    /**
+     * Constructor
+     *
+     * @param \VuFind\Search\Base\Options  $options       Options to use
+     * @param \VuFind\Config\PluginManager $configLoader  Config loader
+     * @param HierarchicalFacetHelper      $facetHelper   Hierarchical facet helper
+     * @param \VuFind\Date\Converter       $dateConverter Date converter
+     * @param \Zend\Config\Config          $blenderConfig Blender configuration
+     * @param array                        $mappings      Blender mappings
+     */
+    public function __construct($options, \VuFind\Config\PluginManager $configLoader,
+        \Finna\Search\Solr\HierarchicalFacetHelper $facetHelper,
+        \VuFind\Date\Converter $dateConverter,
+        \VuFind\Search\Base\Params $secondaryParams,
+        \Zend\Config\Config $blenderConfig,
+        $mappings
+    ) {
+        parent::__construct($options, $configLoader, $facetHelper, $dateConverter);
+
+        $this->secondaryParams = $secondaryParams;
+        $this->blenderConfig = $blenderConfig;
+        $this->mappings = $mappings;
+    }
+
+    /**
+     * Pull the search parameters
+     *
+     * @param \Zend\StdLib\Parameters $request Parameter object representing user
+     * request.
+     *
+     * @return void
+     */
+    public function initFromRequest($request)
+    {
+        parent::initFromRequest($request);
+        $this->secondaryParams->initFromRequest($this->translateRequest($request));
+    }
+
+    /**
+     * Create search backend parameters for advanced features.
+     *
+     * @return \VuFindSearch\ParamBag
+     */
+    public function getBackendParameters()
+    {
+        $params = parent::getBackendParameters();
+        $secondaryParams = $this->secondaryParams->getBackendParameters();
+        $params->set(
+            'secondary_backend',
+            $secondaryParams
+        );
+        return $params;
+    }
+
+    /**
+     * Translate a request for the secondary backend
+     *
+     * @param \Zend\StdLib\Parameters $request Parameter object representing user
+     * request.
+     *
+     * @return \Zend\StdLib\Parameters
+     */
+    protected function translateRequest($request)
+    {
+        $secondary = $this->blenderConfig['Secondary']['backend'];
+        $mappings = $this->mappings['Facets'] ?? [];
+        $filters = $request->get('filter');
+        if (!empty($filters)) {
+            $newFilters = [];
+            foreach ((array)$filters as $filter) {
+                list($field, $value) = $this->parseFilter($filter);
+                $prefix = '';
+                if (substr($field, 0, 1) === '~') {
+                    $prefix = '~';
+                    $field = substr($field, 1);
+                }
+                if (isset($mappings[$field]['secondary'])) {
+                    // Map facet value
+                    if (isset($mappings[$field]['values'][$value])) {
+                        $value = $mappings[$field]['values'][$value];
+                    }
+                    // Map facet type
+                    if (isset($mappings[$field]['secondary'])) {
+                        $field = $mappings[$field]['secondary'];
+                    }
+                }
+
+                if ('EDS' === $secondary) {
+                    $value = SearchRequestModel::escapeSpecialCharacters($value);
+                }
+                if ('Primo' === $secondary) {
+                    $prefix = '';
+                }
+                $newFilters[] = $prefix . $field . ':"' . $value . '"';
+            }
+            $request->set('filter', $newFilters);
+        }
+
+        return $request;
+    }
 }

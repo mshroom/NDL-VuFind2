@@ -86,8 +86,8 @@ class BlenderBackendFactory implements FactoryInterface
      */
     public function __construct()
     {
-        $this->searchConfig = 'searches';
-        $this->facetConfig = 'facets';
+        $this->searchConfig = 'blender';
+        $this->facetConfig = 'blender';
     }
 
     /**
@@ -104,13 +104,20 @@ class BlenderBackendFactory implements FactoryInterface
     public function __invoke(ContainerInterface $sm, $name, array $options = null)
     {
         $this->serviceLocator = $sm;
-        $this->config = $this->serviceLocator
-            ->get(\VuFind\Config\PluginManager::class);
+        $this->config = $sm->get(\VuFind\Config\PluginManager::class);
+        $yamlReader = $sm->get(\VuFind\Config\YamlReader::class);
+        $blenderConfig = $this->config->get('blender');
+        if (!isset($blenderConfig['Primary']['backend'])) {
+            throw new \Exception('Primary backend not configured in blender.ini');
+        }
+        if (!isset($blenderConfig['Secondary']['backend'])) {
+            throw new \Exception('Secondary backend not configured in blender.ini');
+        }
         $backendManager = $sm->get(\VuFind\Search\BackendManager::class);
-
         $backend = new Backend(
-            $backendManager->get('Solr'),
-            $backendManager->get('EDS')
+            $backendManager->get($blenderConfig['Primary']['backend']),
+            $backendManager->get($blenderConfig['Secondary']['backend']),
+            $blenderConfig
         );
         $this->createListeners($backend);
         return $backend;
