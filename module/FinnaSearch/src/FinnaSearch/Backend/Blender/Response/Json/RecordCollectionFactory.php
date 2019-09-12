@@ -64,10 +64,8 @@ class RecordCollectionFactory implements RecordCollectionFactoryInterface
      *
      * @return void
      */
-    public function __construct($recordFactory = null,
-        $collectionClass
-            = 'VuFindSearch\Backend\Blender\Response\Json\RecordCollection'
-    ) {
+    public function __construct($recordFactory = null, $collectionClass = null)
+    {
         if (null === $recordFactory) {
             $this->recordFactory = function ($data) {
                 return new Record($data);
@@ -75,7 +73,9 @@ class RecordCollectionFactory implements RecordCollectionFactoryInterface
         } else {
             $this->recordFactory = $recordFactory;
         }
-        $this->collectionClass = $collectionClass;
+        $this->collectionClass = null === $collectionClass
+            ? 'VuFindSearch\Backend\Blender\Response\Json\RecordCollection'
+            : $collectionClass;
     }
 
     /**

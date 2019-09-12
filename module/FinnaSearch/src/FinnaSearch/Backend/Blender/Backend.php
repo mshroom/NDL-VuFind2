@@ -27,9 +27,9 @@
  */
 namespace FinnaSearch\Backend\Blender;
 
+use VuFindSearch\Backend\AbstractBackend;
 use VuFindSearch\Feature\RetrieveBatchInterface;
 use VuFindSearch\ParamBag;
-use VuFindSearch\Backend\AbstractBackend;
 use VuFindSearch\Query\AbstractQuery;
 use VuFindSearch\Response\RecordCollectionInterface;
 
@@ -80,22 +80,32 @@ class Backend extends AbstractBackend implements RetrieveBatchInterface
     protected $config;
 
     /**
+     * Mappings configuration
+     *
+     * @var array
+     */
+    protected $mappings;
+
+    /**
      * Constructor.
      *
      * @param AbstractBackend     $primary   Primary backend
      * @param AbstractBackend     $secondary Secondary backend
-     * @param \Zend\Config\Config $config    Blender config
+     * @param \Zend\Config\Config $config    Blender configuration
+     * @param array               $mappings  Mappings configuration
      *
      * @return void
      */
     public function __construct(AbstractBackend $primary, AbstractBackend $secondary,
-        \Zend\Config\Config $config
+        \Zend\Config\Config $config, $mappings
     ) {
         $this->primaryBackend = $primary;
         $this->secondaryBackend = $secondary;
         $this->config = $config;
-        $this->blendLimit = min(100, $this->config['Results']['blendLimit'] ?? 100);
-        $this->blockSize = $this->config['Results']['blockSize'] ?? 10;
+        $this->mappings = $mappings;
+
+        $this->blendLimit = min(100, $this->config['Blending']['blendLimit'] ?? 100);
+        $this->blockSize = $this->config['Blending']['blockSize'] ?? 10;
     }
 
     /**
@@ -111,7 +121,9 @@ class Backend extends AbstractBackend implements RetrieveBatchInterface
     public function search(AbstractQuery $query, $offset, $limit,
         ParamBag $params = null
     ) {
-        $mergedCollection = new Response\Json\RecordCollection($this->config);
+        $mergedCollection = new Response\Json\RecordCollection(
+            $this->config, $this->mappings
+        );
 
         $secondaryQuery = $this->translateQuery($query);
         $secondaryParams = $params->get('secondary_backend')[0];
@@ -282,6 +294,7 @@ class Backend extends AbstractBackend implements RetrieveBatchInterface
      * Get a record from the given backend by offset
      *
      * @param AbstractBackend           $backend    Backend
+     * @param Params                    $params     Search params
      * @param RecordCollectionInterface $collection Record collection
      * @param AbstractQuery             $query      Query
      * @param int                       $offset     Record offset

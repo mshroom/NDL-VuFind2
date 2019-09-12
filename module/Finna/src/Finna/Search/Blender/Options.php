@@ -41,6 +41,17 @@ namespace Finna\Search\Blender;
 class Options extends \Finna\Search\Solr\Options
 {
     /**
+     * Constructor
+     *
+     * @param \VuFind\Config\PluginManager $configLoader Config loader
+     */
+    public function __construct(\VuFind\Config\PluginManager $configLoader)
+    {
+        $this->facetsIni = $this->searchIni = 'Blender';
+        parent::__construct($configLoader);
+    }
+
+    /**
      * Return the route name for the search results action.
      *
      * @return string

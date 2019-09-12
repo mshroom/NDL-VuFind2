@@ -65,12 +65,12 @@ class ParamsFactory extends \VuFind\Search\Params\ParamsFactory
             = $container->get(\VuFind\Search\Solr\HierarchicalFacetHelper::class);
         $converter = $container->get(\VuFind\Date\Converter::class);
         $configLoader = $container->get(\VuFind\Config\PluginManager::class);
-        $blenderConfig = $configLoader->get('blender');
+        $blenderConfig = $configLoader->get('Blender');
         if (!isset($blenderConfig['Secondary']['backend'])) {
             throw new \Exception('Secondary backend not defined in blender.ini');
         }
         $yamlReader = $container->get(\VuFind\Config\YamlReader::class);
-        $blenderMappings = $yamlReader->get('blendermappings.yaml');
+        $blenderMappings = $yamlReader->get('BlenderMappings.yaml');
         $paramsMgr = $container->get(\VuFind\Search\Params\PluginManager::class);
         $secondaryParams = $paramsMgr->get(
             'VuFind\\Search\\' . $blenderConfig['Secondary']['backend']

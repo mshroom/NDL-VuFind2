@@ -35,9 +35,9 @@ use Finna\Search\Solr\SolrExtensionsListener;
 
 use FinnaSearch\Backend\Blender\Backend;
 
-use VuFindSearch\Backend\BackendInterface;
-
 use Interop\Container\ContainerInterface;
+
+use VuFindSearch\Backend\BackendInterface;
 
 use Zend\ServiceManager\Factory\FactoryInterface;
 
@@ -86,8 +86,8 @@ class BlenderBackendFactory implements FactoryInterface
      */
     public function __construct()
     {
-        $this->searchConfig = 'blender';
-        $this->facetConfig = 'blender';
+        $this->searchConfig = 'Blender';
+        $this->facetConfig = 'Blender';
     }
 
     /**
@@ -106,18 +106,20 @@ class BlenderBackendFactory implements FactoryInterface
         $this->serviceLocator = $sm;
         $this->config = $sm->get(\VuFind\Config\PluginManager::class);
         $yamlReader = $sm->get(\VuFind\Config\YamlReader::class);
-        $blenderConfig = $this->config->get('blender');
+        $blenderConfig = $this->config->get($this->searchConfig);
         if (!isset($blenderConfig['Primary']['backend'])) {
             throw new \Exception('Primary backend not configured in blender.ini');
         }
         if (!isset($blenderConfig['Secondary']['backend'])) {
             throw new \Exception('Secondary backend not configured in blender.ini');
         }
+        $blenderMappings = $yamlReader->get('BlenderMappings.yaml');
         $backendManager = $sm->get(\VuFind\Search\BackendManager::class);
         $backend = new Backend(
             $backendManager->get($blenderConfig['Primary']['backend']),
             $backendManager->get($blenderConfig['Secondary']['backend']),
-            $blenderConfig
+            $blenderConfig,
+            $blenderMappings
         );
         $this->createListeners($backend);
         return $backend;

@@ -66,14 +66,16 @@ class Params extends \Finna\Search\Solr\Params
     /**
      * Constructor
      *
-     * @param \VuFind\Search\Base\Options  $options       Options to use
-     * @param \VuFind\Config\PluginManager $configLoader  Config loader
-     * @param HierarchicalFacetHelper      $facetHelper   Hierarchical facet helper
-     * @param \VuFind\Date\Converter       $dateConverter Date converter
-     * @param \Zend\Config\Config          $blenderConfig Blender configuration
-     * @param array                        $mappings      Blender mappings
+     * @param \VuFind\Search\Base\Options  $options         Options to use
+     * @param \VuFind\Config\PluginManager $configLoader    Config loader
+     * @param HierarchicalFacetHelper      $facetHelper     Hierarchical facet helper
+     * @param \VuFind\Date\Converter       $dateConverter   Date converter
+     * @param \VuFind\Search\Base\Params   $secondaryParams Secondary search params
+     * @param \Zend\Config\Config          $blenderConfig   Blender configuration
+     * @param array                        $mappings        Blender mappings
      */
-    public function __construct($options, \VuFind\Config\PluginManager $configLoader,
+    public function __construct(\VuFind\Search\Base\Options $options,
+        \VuFind\Config\PluginManager $configLoader,
         \Finna\Search\Solr\HierarchicalFacetHelper $facetHelper,
         \VuFind\Date\Converter $dateConverter,
         \VuFind\Search\Base\Params $secondaryParams,
@@ -147,6 +149,9 @@ class Params extends \Finna\Search\Solr\Params
                     // Map facet type
                     if (isset($mappings[$field]['secondary'])) {
                         $field = $mappings[$field]['secondary'];
+                    } else {
+                        // Facet not supported by secondary
+                        continue;
                     }
                 }
 

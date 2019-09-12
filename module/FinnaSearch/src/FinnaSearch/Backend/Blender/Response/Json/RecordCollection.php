@@ -53,12 +53,22 @@ class RecordCollection
     protected $config;
 
     /**
+     * Mappings configuration
+     *
+     * @var array
+     */
+    protected $mappings;
+
+    /**
      * Constructor
      *
-     * @param \Zend\Config\Config $config Configuration
+     * @param \Zend\Config\Config $config   Configuration
+     * @param array               $mappings Mappings configuration
      */
-    public function __construct ($config = null) {
+    public function __construct($config = null, $mappings = [])
+    {
         $this->config = $config;
+        $this->mappings = $mappings;
     }
 
     /**
@@ -85,6 +95,8 @@ class RecordCollection
      * @param int                       $offset              Results list offset
      * @param int                       $limit               Result limit
      * @param int                       $blockSize           Record block size
+     *
+     * @return void
      */
     public function initBlended(RecordCollectionInterface $primaryCollection,
         RecordCollectionInterface $secondaryCollection, $offset, $limit, $blockSize
@@ -101,8 +113,8 @@ class RecordCollection
             $record
                 ->setSourceIdentifier($record->getSourceIdentifier() . '/p');
         }
-        $initialPrimary = $this->config['Results']['boostPosition'] ?? $blockSize;
-        $boostRecordCount = $this->config['Results']['boostCount'] ?? 0;
+        $initialPrimary = $this->config['Blending']['boostPosition'] ?? $blockSize;
+        $boostRecordCount = $this->config['Blending']['boostCount'] ?? 0;
         $records = array_merge(
             array_splice($primaryRecords, 0, $initialPrimary),
             array_splice($secondaryRecords, 0, $boostRecordCount),
@@ -158,6 +170,8 @@ class RecordCollection
     }
 
     /**
+     * Merge facets
+     *
      * @param RecordCollectionInterface $primaryCollection   Primary record
      * collection
      * @param RecordCollectionInterface $secondaryCollection Secondary record
@@ -167,12 +181,69 @@ class RecordCollection
      */
     protected function mergeFacets($primaryCollection, $secondaryCollection)
     {
-        $primary = $primaryCollection->getFacets()->getFieldFacets();
+        $facets = $primaryCollection->getFacets()->getFieldFacets();
         $secondary = $secondaryCollection->getFacets();
-        $facetFields = [];
-        foreach ($primary as $key => $value) {
-            $facetFields[$key] = $value;
+        foreach ($facets as $facet => &$values) {
+            if (is_object($values)) {
+                $values = $values->toArray();
+            }
         }
+        foreach ($secondary as $facet => $values) {
+            $mappings = [];
+            $hierarchical = false;
+            foreach ($this->mappings['Facets'] ?? [] as $key => $current) {
+                if ($facet === $current['secondary']) {
+                    $facet = $key;
+                    $mappings = $current['values'] ?? [];
+                    $hierarchical = $current['hierarchical'] ?? false;
+                    break;
+                }
+            }
+            if (is_object($values)) {
+                $values = $values->toArray();
+            }
+            $list = $facets[$facet] ?? [];
+            foreach ($values as $field => $count) {
+                $mapped = array_search($field, $mappings);
+                if (false !== $mapped) {
+                    $field = $mapped;
+                } elseif ($hierarchical) {
+                    $field = "0/$field/";
+                }
+                if (isset($list[$field])) {
+                    $list[$field] += $count;
+                } else {
+                    $list[$field] = $count;
+                }
+
+                if ($hierarchical) {
+                    $parts = explode('/', $field);
+                    $level = array_shift($parts);
+                    for ($i = $level - 1; $i >= 0; $i--) {
+                        $key = $i . '/'
+                            . implode('/', array_slice($parts, 0, $i + 1))
+                            . '/';
+                        if (isset($list[$key])) {
+                            $list[$key] += $count;
+                        } else {
+                            $list[$key] = $count;
+                        }
+                    }
+                }
+            }
+            $facets[$facet] = $list;
+        }
+
+        // Break the keyed array back to Solr-style array with two elements
+        $facetFields = [];
+        foreach ($facets as $facet => $values) {
+            $list = [];
+            foreach ($values as $key => $value) {
+                $list[] = [$key, $value];
+            }
+            $facetFields[$facet] = $list;
+        }
+
         $this->response['facet_counts']['facet_fields'] = $facetFields;
     }
 }
