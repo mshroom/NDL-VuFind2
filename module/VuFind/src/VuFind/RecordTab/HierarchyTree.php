@@ -209,6 +209,17 @@ class HierarchyTree extends AbstractBase
     }
 
     /**
+     * Should we hide the tree preview on mobile devices?
+     *
+     * @return int
+     */
+    public function isTreePreviewHiddenOnMobile()
+    {
+        $config = $this->getConfig();
+        return $config->Hierarchy->hideTreePreviewOnMobileDevices ?? -1;
+    }
+
+    /**
      * Get the current active record. Returns record driver if there is an active
      * record or null otherwise.
      *

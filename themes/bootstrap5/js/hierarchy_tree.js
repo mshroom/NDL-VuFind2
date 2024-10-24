@@ -18,6 +18,12 @@ VuFind.register('hierarchyTree', function HierarchyTree() {
       return false;
     }
     const recordEl = document.querySelector(treeEl.dataset.previewElement);
+    if (recordEl.classList.contains('js-hide-on-mobile')) {
+      const displayStyle = window.getComputedStyle(recordEl, null).getPropertyValue("display");
+      if (displayStyle === 'none') {
+        return false;
+      }
+    }
     if (!recordEl) {
       console.error('Record preview element not found');
       return false;
