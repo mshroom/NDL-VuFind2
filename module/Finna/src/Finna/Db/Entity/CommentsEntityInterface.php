@@ -44,13 +44,6 @@ use VuFind\Db\Entity\ResourceEntityInterface;
 interface CommentsEntityInterface extends \VuFind\Db\Entity\CommentsEntityInterface
 {
     /**
-     * Resource getter.
-     *
-     * @return ResourceEntityInterface
-     */
-    public function getResource(): ResourceEntityInterface;
-
-    /**
      * Get last update date.
      *
      * @return ?DateTime

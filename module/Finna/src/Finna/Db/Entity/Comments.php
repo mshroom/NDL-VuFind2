@@ -67,16 +67,6 @@ class Comments extends \VuFind\Db\Entity\Comments implements CommentsEntityInter
     protected ?DateTime $finnaUpdated = null;
 
     /**
-     * Resource getter.
-     *
-     * @return ResourceEntityInterface
-     */
-    public function getResource(): ResourceEntityInterface
-    {
-        return $this->resource;
-    }
-
-    /**
      * Last update date getter
      *
      * @return DateTime
