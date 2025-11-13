@@ -30,7 +30,6 @@
 namespace Finna\Db\Entity;
 
 use DateTime;
-use VuFind\Db\Entity\ResourceEntityInterface;
 
 /**
  * Interface for representing a comment.

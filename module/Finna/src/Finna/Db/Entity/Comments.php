@@ -31,7 +31,6 @@ namespace Finna\Db\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use VuFind\Db\Entity\ResourceEntityInterface;
 
 /**
  * Entity model for comments table
