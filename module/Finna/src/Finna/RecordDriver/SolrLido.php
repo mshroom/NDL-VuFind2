@@ -3000,7 +3000,7 @@ class SolrLido extends \VuFind\RecordDriver\SolrDefault implements \Psr\Log\Logg
      *
      * @return string
      */
-    protected function getPlaceIDType(\SimpleXmlElement $placeID): string
+    protected function getPlaceIDType(\SimpleXMLElement $placeID): string
     {
         $type = trim((string)($placeID->attributes()->type ?? ''));
         if (
