@@ -341,7 +341,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
             )
         );
 
-        $view->blocks = $this->getAccountBlocks($patron);
+        $view->setVariable('blocks', $this->getAccountBlocks($patron));
         return $view;
     }
 
@@ -791,7 +791,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         $view->hideProfileEmailAddress = $config->Site->hideProfileEmailAddress ?? false;
 
         if (is_array($patron)) {
-            $view->blocks = $this->getAccountBlocks($patron);
+            $view->setVariable('blocks', $this->getAccountBlocks($patron));
         }
 
         return $view;
@@ -1163,7 +1163,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
 
         $view = parent::storageRetrievalRequestsAction();
         $view->recordList = $this->sortRequestsByAvailability($view->recordList);
-        $view->blocks = $this->getAccountBlocks($patron);
+        $view->setVariable('blocks', $this->getAccountBlocks($patron));
         return $view;
     }
 
@@ -1185,7 +1185,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
 
         $view = parent::illRequestsAction();
         $view->recordList = $this->sortRequestsByAvailability($view->recordList);
-        $view->blocks = $this->getAccountBlocks($patron);
+        $view->setVariable('blocks', $this->getAccountBlocks($patron));
         return $view;
     }
 
@@ -1206,7 +1206,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         }
 
         $view = parent::finesAction();
-        $view->blocks = $this->getAccountBlocks($patron);
+        $view->setVariable('blocks', $this->getAccountBlocks($patron));
         return $view;
     }
 
