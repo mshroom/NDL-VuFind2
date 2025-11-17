@@ -41,6 +41,7 @@ use Finna\Db\Service\UserListService as FinnaUserListService;
 use Finna\Db\Service\UserListServiceInterface;
 use Finna\Db\Service\UserResourceService;
 use Finna\Db\Service\UserServiceInterface;
+use Laminas\View\Model\ViewModel;
 use VuFind\Db\Service\SearchServiceInterface;
 use VuFind\Db\Type\AuditEventSubtype;
 use VuFind\Db\Type\AuditEventType;
@@ -341,7 +342,9 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
             )
         );
 
-        $view->blocks = $this->getAccountBlocks($patron);
+        if ($view instanceof ViewModel) {
+            $view->blocks = $this->getAccountBlocks($patron);
+        }
         return $view;
     }
 
@@ -790,7 +793,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         // Check whether to hide email address in profile
         $view->hideProfileEmailAddress = $config->Site->hideProfileEmailAddress ?? false;
 
-        if (is_array($patron)) {
+        if (is_array($patron) && $view instanceof ViewModel) {
             $view->blocks = $this->getAccountBlocks($patron);
         }
 
@@ -1163,7 +1166,9 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
 
         $view = parent::storageRetrievalRequestsAction();
         $view->recordList = $this->sortRequestsByAvailability($view->recordList);
-        $view->blocks = $this->getAccountBlocks($patron);
+        if ($view instanceof ViewModel) {
+            $view->blocks = $this->getAccountBlocks($patron);
+        }
         return $view;
     }
 
@@ -1185,7 +1190,9 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
 
         $view = parent::illRequestsAction();
         $view->recordList = $this->sortRequestsByAvailability($view->recordList);
-        $view->blocks = $this->getAccountBlocks($patron);
+        if ($view instanceof ViewModel) {
+            $view->blocks = $this->getAccountBlocks($patron);
+        }
         return $view;
     }
 
@@ -1206,7 +1213,9 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         }
 
         $view = parent::finesAction();
-        $view->blocks = $this->getAccountBlocks($patron);
+        if ($view instanceof ViewModel) {
+            $view->blocks = $this->getAccountBlocks($patron);
+        }
         return $view;
     }
 
