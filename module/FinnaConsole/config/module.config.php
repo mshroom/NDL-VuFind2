@@ -3,6 +3,17 @@
 namespace FinnaConsole\Module\Configuration;
 
 $config = [
+    'router' => [
+        'routes' => [
+            // Temporary fix for invalid route in upstream code
+            'admin-payments' => [
+                'type' => 'Laminas\Router\Http\Literal',
+                'options' => [
+                    'route'    => '/',
+                ],
+            ],
+        ],
+    ],
     'vufind' => [
         'plugin_managers' => [
             'command' => [
