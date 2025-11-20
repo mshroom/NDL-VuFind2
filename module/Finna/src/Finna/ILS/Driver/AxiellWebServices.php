@@ -2270,10 +2270,10 @@ class AxiellWebServices extends \VuFind\ILS\Driver\AbstractBase implements
             $fine = [
                 'debt_id' => $debt->id,
                 'fineId' => $debt->id,
-                'amount' => $amount,
+                'amount' => (int)$amount,
                 'checkout' => '',
                 'fine' => $description,
-                'balance' => $amount,
+                'balance' => (int)$amount,
                 'createdate' => $debt->debtDate,
                 'organization' => trim($debt->organisation ?? ''),
             ];
