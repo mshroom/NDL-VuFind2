@@ -29,7 +29,6 @@
 
 namespace FinnaConsole\Command\Util;
 
-use DateTime;
 use Finna\Db\Service\FinnaStatisticsServiceInterface;
 use Finna\Db\Type\FinnaStatisticsClientType;
 use Finna\Statistics\Driver\Redis as RedisDriver;
