@@ -2266,13 +2266,13 @@ class AxiellWebServices extends \VuFind\ILS\Driver\AbstractBase implements
             }
             // Round the amount in case it's a weird decimal number:
             $amount = round($amount);
-            $description = $debt->debtType . ' - ' . $debt->debtNote;
             $fine = [
                 'debt_id' => $debt->id,
                 'fineId' => $debt->id,
                 'amount' => (int)$amount,
                 'checkout' => '',
-                'fine' => $description,
+                'fine' => (string)$debt->debtType,
+                'description' => (string)$debt->debtNote,
                 'balance' => (int)$amount,
                 'createdate' => $debt->debtDate,
                 'organization' => trim($debt->organisation ?? ''),
