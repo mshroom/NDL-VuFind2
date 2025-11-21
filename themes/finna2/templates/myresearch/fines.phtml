@@ -196,7 +196,7 @@
             </div>
           <?php endif; ?>
       <?php elseif (!empty($this->nonPayableReason) && !empty($this->fines)): ?>
-        <div class="fines-info-area">
+        <div class="fines-info-area payment-block-reason">
           <p><?=$this->transEsc($this->nonPayableReason); ?><?=$this->nonPayableReason == 'Payment::minimum_payment' ? (': <span class="amount">' . $this->safeMoneyFormat($this->minimumFee / 100.00)) . '</span>' : '';?></p>
         </div>
       <?php endif; ?>
