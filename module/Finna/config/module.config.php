@@ -799,12 +799,15 @@ $config = [
             'onlinepayment_handler' => [
                 'factories' => [
                     \Finna\OnlinePayment\Handler\CPU::class => \VuFind\OnlinePayment\Handler\AbstractBaseFactory::class,
+                    \Finna\OnlinePayment\Handler\Paytrail::class
+                        => \VuFind\OnlinePayment\Handler\AbstractBaseFactory::class,
                     \Finna\OnlinePayment\Handler\TurkuPaymentAPI::class
                         => \VuFind\OnlinePayment\Handler\AbstractBaseFactory::class,
                 ],
                 'aliases' => [
                     'CPU' => \Finna\OnlinePayment\Handler\CPU::class,
-                    'PaytrailPaymentAPI' => 'Paytrail',
+                    'Paytrail' => \Finna\OnlinePayment\Handler\Paytrail::class,
+                    'PaytrailPaymentAPI' => \Finna\OnlinePayment\Handler\Paytrail::class,
                     'TurkuPaymentAPI' => \Finna\OnlinePayment\Handler\TurkuPaymentAPI::class,
                 ],
             ],
