@@ -40,4 +40,19 @@ namespace Finna\Db\Entity;
  */
 interface FinnaFeedbackEntityInterface extends \VuFind\Db\Entity\FeedbackEntityInterface
 {
+    /**
+     * Get modifier ID
+     *
+     * @return ?int
+     */
+    public function getModifierId(): ?int;
+
+    /**
+     * Set modifier ID
+     *
+     * @param ?int $modifierId Modifier ID
+     *
+     * @return static
+     */
+    public function setModifierId(?int $modifierId): static;
 }

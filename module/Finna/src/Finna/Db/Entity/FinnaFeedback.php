@@ -123,7 +123,7 @@ class FinnaFeedback implements FinnaFeedbackEntityInterface
      *
      * @var ?int
      */
-    #[ORM\Column(name: 'modifier_id', type: 'int', nullable: true)]
+    #[ORM\Column(name: 'modifier_id', type: 'integer', nullable: true)]
     protected ?int $modifierId = null;
 
     /**
@@ -341,6 +341,30 @@ class FinnaFeedback implements FinnaFeedbackEntityInterface
     public function getUser(): ?UserEntityInterface
     {
         return $this->user;
+    }
+
+    /**
+     * Get modifier ID
+     *
+     * @return ?int
+     */
+    public function getModifierId(): ?int
+    {
+        return $this->modifierId;
+    }
+
+    /**
+     * Set modifier ID
+     *
+     * @param ?int $modifierId Modifier ID
+     *
+     * @return static
+     */
+    public function setModifierId(?int $modifierId): static
+    {
+        $this->modifierId = $modifierId;
+
+        return $this;
     }
 
     /**
