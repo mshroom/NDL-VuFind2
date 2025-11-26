@@ -162,7 +162,7 @@ class UserService extends \VuFind\Db\Service\UserService implements
      */
     public function getExpiringUsers(DateTime $lastLoginDateThreshold): array
     {
-        $dql = 'SELECT ul.user FROM ' . UserListEntityInterface::class . ' ul'
+        $dql = 'SELECT IDENTITY(ul.user) FROM ' . UserListEntityInterface::class . ' ul'
             . ' WHERE ul.finnaProtected = 1';
         $subQuery = $this->entityManager->createQuery($dql);
 
@@ -172,7 +172,7 @@ class UserService extends \VuFind\Db\Service\UserService implements
         $query->setParameters([
             'nullDate' => $this->getNonNullableDateTimeFromNullable(null),
             'lastLoginDateThreshold' => $lastLoginDateThreshold,
-            'subQuery' => $subQuery,
+            'subQuery' => $subQuery->getResult(),
         ]);
         return $query->getResult();
     }
@@ -184,13 +184,13 @@ class UserService extends \VuFind\Db\Service\UserService implements
      */
     public function getUsersWithDueDateReminders(): array
     {
-        $dql = 'SELECT uc FROM ' . UserCardEntityInterface::class . ' WHERE uc.finnaDueDateReminder > 0';
+        $dql = 'SELECT uc FROM ' . UserCardEntityInterface::class . ' uc WHERE uc.finnaDueDateReminder > 0';
         $subQuery = $this->entityManager->createQuery($dql);
 
         $dql = 'SELECT u FROM ' . UserEntityInterface::class . ' u'
             . ' WHERE u IN (:subQuery)';
         $query = $this->entityManager->createQuery($dql);
-        $query->setParameters(compact('subQuery'));
+        $query->setParameter('subQuery', $subQuery->getResult());
         return $query->getResult();
     }
 
