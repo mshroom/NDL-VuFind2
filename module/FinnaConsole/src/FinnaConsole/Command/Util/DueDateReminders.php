@@ -182,6 +182,8 @@ class DueDateReminders extends AbstractUtilCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->output = $output;
+
         // Current view local configuration directory
         $this->baseDir = $input->getArgument('vufind_dir');
 
