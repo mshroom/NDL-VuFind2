@@ -500,7 +500,7 @@ class AccountExpirationReminders extends AbstractUtilCommand
         if (strcasecmp($userAuthMethod, 'multiils') === 0) {
             [$target] = explode('.', $userName);
             if (empty($this->currentMultiBackendConfig['Drivers'][$target])) {
-                $this->msg("$consoleMsgPrefix: unknown MultiILS login target, bypassing expiration reminder");
+                $this->msg("$consoleMsgPrefix: unknown MultiILS login target '$target', bypassing expiration reminder");
                 return false;
             }
             $loginTargets = $this->currentMultiBackendConfig['Login']['drivers'] ?? [];
