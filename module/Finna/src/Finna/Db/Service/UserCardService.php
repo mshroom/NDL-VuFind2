@@ -51,7 +51,7 @@ use function is_int;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:plugins:database_gateways Wiki
  */
-class UserCardService extends \VuFind\Db\Service\UserCardService
+class UserCardService extends \VuFind\Db\Service\UserCardService implements UserCardServiceInterface
 {
     /**
      * Constructor
@@ -83,6 +83,8 @@ class UserCardService extends \VuFind\Db\Service\UserCardService
     /**
      * Get all library cards associated with the user.
      *
+     * Finna: filters out cards for inactive login targets.
+     *
      * @param UserEntityInterface|int $userOrId    User object or identifier
      * @param ?int                    $id          Optional card ID filter
      * @param ?string                 $catUsername Optional catalog username filter
@@ -107,6 +109,23 @@ class UserCardService extends \VuFind\Db\Service\UserCardService
             );
         }
         return $cards;
+    }
+
+    /**
+     * Get all library cards associated with the user.
+     *
+     * @param UserEntityInterface|int $userOrId    User object or identifier
+     * @param ?int                    $id          Optional card ID filter
+     * @param ?string                 $catUsername Optional catalog username filter
+     *
+     * @return UserCardEntityInterface[]
+     */
+    public function getAllLibraryCards(
+        UserEntityInterface|int $userOrId,
+        ?int $id = null,
+        ?string $catUsername = null
+    ): array {
+        return parent::getLibraryCards($userOrId, $id, $catUsername);
     }
 
     /**

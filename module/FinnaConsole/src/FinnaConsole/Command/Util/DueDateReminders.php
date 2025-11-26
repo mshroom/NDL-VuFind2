@@ -35,6 +35,7 @@ use Finna\Crypt\SecretCalculator;
 use Finna\Db\Entity\UserCardEntityInterface;
 use Finna\Db\Entity\UserEntityInterface;
 use Finna\Db\Service\FinnaDueDateReminderServiceInterface;
+use Finna\Db\Service\UserCardServiceInterface;
 use Finna\Db\Service\UserServiceInterface;
 use Laminas\Mvc\I18n\Translator;
 use Laminas\View\Renderer\PhpRenderer;
@@ -44,7 +45,6 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use VuFind\Db\Service\UserCardServiceInterface;
 use VuFind\Mailer\Mailer;
 
 use function assert;
@@ -259,7 +259,7 @@ class DueDateReminders extends AbstractUtilCommand
 
         $remindLoans = [];
         $errors = [];
-        foreach ($this->userCardService->getLibraryCards($user) as $card) {
+        foreach ($this->userCardService->getAllLibraryCards($user) as $card) {
             assert($card instanceof UserCardEntityInterface);
             if (!$card->getId() || $card->getFinnaDueDateReminder() === 0) {
                 $this->msg(
