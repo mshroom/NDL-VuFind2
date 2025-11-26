@@ -312,7 +312,7 @@ class DueDateReminders extends AbstractUtilCommand
                     . " (id {$card->getId()}) -- disabling due date reminders for the"
                     . ' card'
                 );
-                $errors[] = ['card' => $card['cat_username']];
+                $errors[] = ['card' => $card->getCatUserName()];
                 // Disable due date reminders for this card
                 if ($user->getCatUsername() === $card->getCatUsername()) {
                     // Card is the active one, update user too:
