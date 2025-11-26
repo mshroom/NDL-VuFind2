@@ -165,15 +165,20 @@ class UserService extends \VuFind\Db\Service\UserService implements
         $dql = 'SELECT IDENTITY(ul.user) FROM ' . UserListEntityInterface::class . ' ul'
             . ' WHERE ul.finnaProtected = 1';
         $subQuery = $this->entityManager->createQuery($dql);
+        $subResult = $subQuery->getResult();
 
         $dql = 'SELECT u FROM ' . UserEntityInterface::class . ' u'
-            . ' WHERE u.lastLogin != :nullDate AND u.lastLogin < :lastLoginDateThreshold AND u NOT IN (:subQuery)';
-        $query = $this->entityManager->createQuery($dql);
-        $query->setParameters([
+            . ' WHERE u.lastLogin != :nullDate AND u.lastLogin < :lastLoginDateThreshold';
+        $params = [
             'nullDate' => $this->getNonNullableDateTimeFromNullable(null),
             'lastLoginDateThreshold' => $lastLoginDateThreshold,
-            'subQuery' => $subQuery->getResult(),
-        ]);
+        ];
+        if ($subResult) {
+            $dql .= ' AND u NOT IN (:subQuery)';
+            $params['subQuery'] = $subResult;
+        }
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameters($params);
         return $query->getResult();
     }
 
