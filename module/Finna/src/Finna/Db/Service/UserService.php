@@ -189,7 +189,8 @@ class UserService extends \VuFind\Db\Service\UserService implements
      */
     public function getUsersWithDueDateReminders(): array
     {
-        $dql = 'SELECT uc FROM ' . UserCardEntityInterface::class . ' uc WHERE uc.finnaDueDateReminder > 0';
+        $dql = 'SELECT IDENTITY(uc.user) FROM ' . UserCardEntityInterface::class . ' uc'
+            . ' WHERE uc.finnaDueDateReminder > 0';
         $subQuery = $this->entityManager->createQuery($dql);
 
         $dql = 'SELECT u FROM ' . UserEntityInterface::class . ' u'
