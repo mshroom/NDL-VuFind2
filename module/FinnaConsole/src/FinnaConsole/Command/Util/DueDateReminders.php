@@ -262,6 +262,10 @@ class DueDateReminders extends AbstractUtilCommand
         foreach ($this->userCardService->getLibraryCards($user) as $card) {
             assert($card instanceof UserCardEntityInterface);
             if (!$card->getId() || $card->getFinnaDueDateReminder() === 0) {
+                $this->msg(
+                    'Due date reminders disabled for card ' . $card->getId(),
+                    OutputInterface::VERBOSITY_VERBOSE
+                );
                 continue;
             }
             $ddrConfig = $this->catalog->getConfig(
@@ -272,6 +276,10 @@ class DueDateReminders extends AbstractUtilCommand
             // boolean..
             if (isset($ddrConfig['enabled']) && $ddrConfig['enabled'] !== true) {
                 // Due date reminders disabled for the source
+                $this->msg(
+                    'Due date reminders disabled for card ' . $card->getId() . ' source',
+                    OutputInterface::VERBOSITY_VERBOSE
+                );
                 continue;
             }
 
@@ -336,6 +344,10 @@ class DueDateReminders extends AbstractUtilCommand
                 );
                 continue;
             }
+            $this->msg(
+                $loans['count'] . ' loans to check for card ' . $card->getId(),
+                OutputInterface::VERBOSITY_VERBOSE
+            );
             foreach ($loans['records'] as $loan) {
                 $dueDate = new \DateTime($loan['duedate']);
                 $dayDiff = $dueDate->diff($todayTime)->days;
@@ -345,6 +357,10 @@ class DueDateReminders extends AbstractUtilCommand
                 ) {
                     if ($this->dueDateReminderService->getRemindedLoan($user, $loan['item_id'], $dueDate)) {
                         // Reminder already sent
+                        $this->msg(
+                            'Loan ' . $loan['item_id'] . ' for card ' . $card->getId() . ': Reminder already sent',
+                            OutputInterface::VERBOSITY_VERBOSE
+                        );
                         continue;
                     }
 
@@ -368,6 +384,10 @@ class DueDateReminders extends AbstractUtilCommand
                         'title' => $loan['title'] ?? null,
                         'record' => $record,
                     ];
+                    $this->msg(
+                        'Loan ' . $loan['item_id'] . ' for card ' . $card->getId() . ': Reminder needed',
+                        OutputInterface::VERBOSITY_VERBOSE
+                    );
                 }
             }
         }
