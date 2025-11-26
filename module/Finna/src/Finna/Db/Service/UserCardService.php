@@ -38,7 +38,9 @@ use VuFind\Db\Entity\UserCardEntityInterface;
 use VuFind\Db\Entity\UserEntityInterface;
 use VuFind\Db\PersistenceManager;
 
+use function assert;
 use function in_array;
+use function is_int;
 
 /**
  * Database service for UserCard.
@@ -105,5 +107,40 @@ class UserCardService extends \VuFind\Db\Service\UserCardService
             );
         }
         return $cards;
+    }
+
+    /**
+     * Verify that the user's current ILS settings exist in their library card data
+     * (if enabled) and are up to date. Designed to be called after updating the
+     * user row; will create or modify library card rows as needed.
+     *
+     * @param UserEntityInterface|int $userOrId User object or identifier
+     *
+     * @return bool
+     * @throws \VuFind\Exception\PasswordSecurity
+     */
+    public function synchronizeUserLibraryCardData(UserEntityInterface|int $userOrId): bool
+    {
+        parent::synchronizeUserLibraryCardData($userOrId);
+
+        // Synchronize due date reminder setting
+        if (!$this->capabilities->libraryCardsEnabled()) {
+            return true; // success, because there's nothing to do
+        }
+        $user = is_int($userOrId)
+            ? $this->getDbService(UserServiceInterface::class)->getUserById($userOrId) : $userOrId;
+        assert($user instanceof \Finna\Db\Entity\UserEntityInterface);
+        if (!$user->getCatUsername()) {
+            return true; // success, because there's nothing to do
+        }
+        $cards = $this->getLibraryCards($user, catUsername: $user->getCatUsername());
+        if (!($card = reset($cards))) {
+            // This should never happen!
+            return true;
+        }
+        $card->setFinnaDueDateReminder($user->getFinnaDueDateReminder());
+
+        $this->persistEntity($card);
+        return true;
     }
 }
