@@ -44,6 +44,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use VuFind\Config\ConfigManagerInterface;
+use VuFind\Config\Feature\ExplodeSettingTrait;
 use VuFind\Config\Location\ConfigFile;
 use VuFind\Db\Service\ResourceServiceInterface;
 use VuFind\Db\Service\SearchServiceInterface;
@@ -74,6 +75,7 @@ class AccountExpirationReminders extends AbstractUtilCommand
 {
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
     use EmailWithRetryTrait;
+    use ExplodeSettingTrait;
 
     /**
      * Current view local configuration directory.
@@ -465,10 +467,7 @@ class AccountExpirationReminders extends AbstractUtilCommand
 
         $authMethod = $this->currentSiteConfig['Authentication']['method'] ?? '';
         if ('ChoiceAuth' === $authMethod) {
-            $authOptions = explode(
-                ',',
-                $this->currentSiteConfig['ChoiceAuth']['choice_order'] ?? ''
-            );
+            $authOptions = $this->explodeListSetting($this->currentSiteConfig['ChoiceAuth']['choice_order'] ?? '');
         } else {
             $authOptions = [$authMethod];
         }
