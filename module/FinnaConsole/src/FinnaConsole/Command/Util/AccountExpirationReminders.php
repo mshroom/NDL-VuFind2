@@ -498,7 +498,16 @@ class AccountExpirationReminders extends AbstractUtilCommand
         }
 
         if (strcasecmp($userAuthMethod, 'multiils') === 0) {
-            [$target] = explode('.', $userName);
+            // Try to get target from cat id because it's the most reliable source:
+            if ($catId = $user->getCatId()) {
+                if (str_contains($catId, ':')) {
+                    [, $catId] = explode(':', $catId, 2);
+                }
+                [$target] = explode('.', $catId);
+            } else {
+                // Fall back to catalog username:
+                [$target] = explode('.', $user->getCatUsername());
+            }
             if (empty($this->currentMultiBackendConfig['Drivers'][$target])) {
                 $this->msg("$consoleMsgPrefix: unknown MultiILS login target '$target', bypassing expiration reminder");
                 return false;
