@@ -44,6 +44,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use VuFind\Config\ConfigManagerInterface;
+use VuFind\Config\Feature\EmailSettingsTrait;
 use VuFind\Config\Feature\ExplodeSettingTrait;
 use VuFind\Config\Location\ConfigFile;
 use VuFind\Db\Service\ResourceServiceInterface;
@@ -74,6 +75,7 @@ use function sprintf;
 class AccountExpirationReminders extends AbstractUtilCommand
 {
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
+    use EmailSettingsTrait;
     use EmailWithRetryTrait;
     use ExplodeSettingTrait;
 
@@ -605,7 +607,7 @@ class AccountExpirationReminders extends AbstractUtilCommand
 
         $to = $user->getEmail();
         try {
-            $from = $this->currentSiteConfig['Site']['email'];
+            $from = $this->getEmailSenderAddress($this->currentSiteConfig);
 
             if ($this->reportOnly) {
                 echo <<<EOT

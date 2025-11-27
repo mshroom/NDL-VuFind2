@@ -45,6 +45,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use VuFind\Config\Feature\EmailSettingsTrait;
 use VuFind\Mailer\Mailer;
 
 use function assert;
@@ -67,6 +68,7 @@ use function in_array;
 )]
 class DueDateReminders extends AbstractUtilCommand
 {
+    use EmailSettingsTrait;
     use EmailWithRetryTrait;
 
     /**
@@ -506,7 +508,7 @@ class DueDateReminders extends AbstractUtilCommand
         }
         $message = $this->viewRenderer->render('Email/due-date-reminder.phtml', $params);
         $to = $user->getEmail();
-        $from = $this->currentSiteConfig['Site']['email'];
+        $from = $this->getEmailSenderAddress($this->currentSiteConfig);
         try {
             $this->sendEmailWithRetry($to, $from, $subject, $message);
         } catch (\Exception $e) {
