@@ -441,11 +441,11 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
                         $user
                     );
                     $savedData = current($allSavedData);
-                    if (!empty($savedData['notes'])) {
-                        $notesBlocks = explode($notesSeparator, $savedData['notes']);
+                    if ($savedData && !empty($savedData->getNotes())) {
+                        $notesBlocks = explode($notesSeparator, $savedData->getNotes());
                         // Separate any other notes from the loan notes blocks
                         $otherBlock = strncmp(
-                            $savedData['notes'],
+                            $savedData->getNotes(),
                             $notesSeparator,
                             strlen($notesSeparator)
                         );
