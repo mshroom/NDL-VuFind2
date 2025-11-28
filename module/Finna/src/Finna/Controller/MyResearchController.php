@@ -471,7 +471,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
                     }
                     if ($loc) {
                         $notes[] = $this->translate('Borrowing Location') . ': '
-                            . $this->translateWithPrefix('location_', $inst);
+                            . $this->translateWithPrefix('location_', $loc);
                     }
 
                     if (!empty($current['checkoutDate'])) {
