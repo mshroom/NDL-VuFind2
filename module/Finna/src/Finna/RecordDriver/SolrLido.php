@@ -1648,7 +1648,7 @@ class SolrLido extends \VuFind\RecordDriver\SolrDefault implements \Psr\Log\Logg
                             ->vitalDatesActor->earliestDate ?? '');
                         $latestDate = (string)($actor->actorInRole->actor
                             ->vitalDatesActor->latestDate ?? '');
-                        $id = trim((string)($actor->actorInRole->actor->actorID ?? ''));
+                        $id = $this->getPrimaryActorId($actor);
                         $actors[] = [
                             'name' => $appellationValue,
                             'role' => $role,
@@ -1989,7 +1989,7 @@ class SolrLido extends \VuFind\RecordDriver\SolrDefault implements \Psr\Log\Logg
                         $roles = $this->getAllLanguageSpecificItems($langRoles, $language);
                         $role = implode(', ', $roles);
                     }
-                    $id = trim((string)($actor->actorInRole->actor->actorID ?? ''));
+                    $id = $this->getPrimaryActorId($actor);
                     $key = $priority * 1000 + $index++;
                     $authors[$key] = compact(
                         'name',
@@ -3014,5 +3014,27 @@ class SolrLido extends \VuFind\RecordDriver\SolrDefault implements \Psr\Log\Logg
             $type = $this->placeIDSourceMappings[mb_strtolower($source, 'UTF-8')] ?? $source;
         }
         return $type;
+    }
+
+    /**
+     * Get actor's primary ID
+     *
+     * @param \SimpleXmlElement $actor element
+     *
+     * @return string
+     */
+    protected function getPrimaryActorId(\SimpleXMLElement $actor): string
+    {
+        $id = '';
+        foreach ($actor->actorInRole->actor->actorID ?? [] as $actorId) {
+            if ($trimmed = trim((string)$actorId)) {
+                if (preg_match('/^(http:\/\/urn\.fi\/URN:NBN:fi:au:finaf:)(.*)/', $trimmed)) {
+                    return $trimmed;
+                } elseif (preg_match('/^(https:\/\/isni\.org\/isni\/)(.*)/', $trimmed, $matches)) {
+                    $id = $trimmed;
+                }
+            }
+        }
+        return $id;
     }
 }
