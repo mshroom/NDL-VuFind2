@@ -3019,7 +3019,7 @@ class SolrLido extends \VuFind\RecordDriver\SolrDefault implements \Psr\Log\Logg
     /**
      * Get actor's primary ID
      *
-     * @param \SimpleXmlElement $actor element
+     * @param \SimpleXmlElement $actor Actor
      *
      * @return string
      */
