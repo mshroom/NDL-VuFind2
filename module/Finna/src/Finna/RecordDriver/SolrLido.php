@@ -3030,7 +3030,7 @@ class SolrLido extends \VuFind\RecordDriver\SolrDefault implements \Psr\Log\Logg
             if ($trimmed = trim((string)$actorId)) {
                 if (preg_match('/^(http:\/\/urn\.fi\/URN:NBN:fi:au:finaf:)(.*)/', $trimmed)) {
                     return $trimmed;
-                } elseif (preg_match('/^(https:\/\/isni\.org\/isni\/)(.*)/', $trimmed, $matches)) {
+                } elseif (preg_match('/^(https:\/\/isni\.org\/isni\/)(.*)/', $trimmed)) {
                     $id = $trimmed;
                 }
             }
