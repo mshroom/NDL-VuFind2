@@ -231,6 +231,7 @@
             <eventActor>
               <actorInRole>
                 <actor>
+                  <actorID type="URI" source="ISNI">https://isni.org/isni/0000000109136025</actorID>
                   <nameActorSet>
                     <appellationValue>  Mattilainen, Meikä   </appellationValue>
                   </nameActorSet>
@@ -247,6 +248,8 @@
             <eventActor>
               <actorInRole>
                 <actor>
+                  <actorID type="URI" source="ISNI">https://isni.org/isni/0000000474486306</actorID>
+                  <actorID type="URI" source="finaf">http://urn.fi/URN:NBN:fi:au:finaf:000016723</actorID>
                   <nameActorSet>
                     <appellationValue>  Tiistai, Nietos  </appellationValue>
                   </nameActorSet>
@@ -325,6 +328,7 @@
             <eventActor>
               <actorInRole>
                 <actor>
+                  <actorID type="Local Identifier">12345678</actorID>
                   <actorID type="URI" source="finaf">http://urn.fi/URN:NBN:fi:au:finaf:000228701</actorID>
                   <nameActorSet>
                     <appellationValue>Puu, Teisto</appellationValue>
