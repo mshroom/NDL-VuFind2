@@ -97,7 +97,6 @@
     border-radius: $border-radius-small;
     display: flex;
     align-items: center;
-    max-height: 30px;
     white-space: nowrap;
     .filter-text {
       white-space: nowrap;
@@ -109,6 +108,13 @@
       color: $filters-icon-color;
       margin: 4px;
     }
+    .text {
+      flex-grow: 1;
+      margin-right: 0.5em;
+    }
+    &.dropdown-item {
+      width: initial;
+    }
   }
   .title-value-pair {
     margin-left: 10px;
@@ -117,6 +123,13 @@
     margin-left: 5px;
   }
 }
+.finna-filters .filters a.filter-value:hover,
+.finna-filters .filters a.filter-value:focus {
+  color: #fff;
+  text-decoration: line-through;
+  background-color: $state-danger-text;
+}
+
 .results .noresults {
   flex-direction: column;
   padding: 10px;
