@@ -466,10 +466,7 @@ class SolrEad3 extends SolrEad
             }
         }
         // Check if required filing unit exists
-        if (($datasourceSettings['archiveRequestRequireFilingUnit'] ?? false) && empty($this->getFilingUnit())) {
-            return false;
-        }
-        return true;
+        return !(($datasourceSettings['archiveRequestRequireFilingUnit'] ?? false) && empty($this->getFilingUnit()));
     }
 
     /**
@@ -2298,7 +2295,7 @@ class SolrEad3 extends SolrEad
      * - 'url'
      *     URL from a ref element or null
      *
-     * @param boolean $returnItems Return summary items? Optional, defaults to false.
+     * @param bool $returnItems Return summary items? Optional, defaults to false.
      *
      * @return array
      */

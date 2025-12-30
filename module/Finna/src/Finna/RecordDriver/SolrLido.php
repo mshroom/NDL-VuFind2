@@ -1465,11 +1465,7 @@ class SolrLido extends \VuFind\RecordDriver\SolrDefault implements \Psr\Log\Logg
                 $confParam = 'lido_augment_display_date_with_period';
                 if ($this->getDataSourceConfigurationValue($confParam)) {
                     if ($period = ($node->periodName->term ?? '')) {
-                        if ($date) {
-                            $date = $period . ', ' . $date;
-                        } else {
-                            $date = $period;
-                        }
+                        $date = $date ? $period . ', ' . $date : $period;
                     }
                 }
             }

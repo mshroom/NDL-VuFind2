@@ -238,7 +238,7 @@
   <?php endif; ?>
   <?php if ($this->config()->getSimilarRecordsCarouselLocation() === 'after_tabs' && $this->driver->getSourceIdentifier() === 'Solr'): ?>
     <div class="similar-bottom container">
-      <?=$this->render('RecordTab/similaritemscarousel.phtml', ['tab' => $this->record($this->driver)->getSimilarItemsCarousel()])?>
+      <?=$this->render('RecordTab/channels.phtml', ['tab' => $this->record($this->driver)->getChannelsTab()])?>
     </div>
   <?php endif; ?>
 
