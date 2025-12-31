@@ -95,20 +95,18 @@
     background: $filters-background-color;
     color: $filters-text-color;
     border-radius: $border-radius-small;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     white-space: nowrap;
-    .filter-text {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin: 0;
-    }
     a {
       color: $filters-icon-color;
       margin: 4px;
     }
     .text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin: 0;
       flex-grow: 1;
       margin-right: 0.5em;
     }
@@ -187,7 +185,7 @@
       display: flex;
       margin-right: 5px;
 
-      .filter-text {
+      .text {
         flex-grow: 1;
         margin-right: 0.5em;
       }

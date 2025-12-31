@@ -138,7 +138,7 @@
                     data-filter="<?=$this->escapeHtmlAttr($urlQuery->formatFilterString($value['field'], $value['value'], $value['operator']))?>"
                   <?php endif; ?>
                 >
-                  <span class="filter-text">
+                  <span class="text">
                     <?php // Always handle online_boolean and free_online_boolean even if not configured ?>
                     <?php if ($isOnlineFacet): ?>
                       <?=$this->translate('online_boolean' === $value['field'] ? 'online_material_facet_html' : 'free_online_material_facet_html') ?>
@@ -157,7 +157,7 @@
                     data-filter="<?=$this->escapeHtmlAttr($urlQuery->formatFilterString($value['field'], $value['value'], $value['operator']))?>"
                   <?php endif; ?>
                 >
-                  <span class="filter-text">
+                  <span class="text">
                     <?php // Always handle online_boolean and free_online_boolean even if not configured ?>
                     <?php if ($isOnlineFacet): ?>
                       <?=$this->translate('online_boolean' === $value['field'] ? 'online_material_facet_html' : 'free_online_material_facet_html') ?>
