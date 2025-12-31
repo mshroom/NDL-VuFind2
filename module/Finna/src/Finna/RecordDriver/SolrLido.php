@@ -1465,11 +1465,7 @@ class SolrLido extends \VuFind\RecordDriver\SolrDefault implements \Psr\Log\Logg
                 $confParam = 'lido_augment_display_date_with_period';
                 if ($this->getDataSourceConfigurationValue($confParam)) {
                     if ($period = ($node->periodName->term ?? '')) {
-                        if ($date) {
-                            $date = $period . ', ' . $date;
-                        } else {
-                            $date = $period;
-                        }
+                        $date = $date ? $period . ', ' . $date : $period;
                     }
                 }
             }
@@ -2105,14 +2101,10 @@ class SolrLido extends \VuFind\RecordDriver\SolrDefault implements \Psr\Log\Logg
         ) {
             foreach ($set->subject->subjectActor ?? [] as $subjectActor) {
                 if ($name = trim((string)($subjectActor->actor->nameActorSet->appellationValue ?? ''))) {
-                    if ($extended) {
-                        $results[] = [
+                    $results[] = $extended ? [
                             'name' => $name,
                             'id' => $this->getPrimaryActorId($subjectActor),
-                        ];
-                    } else {
-                        $results[] = $name;
-                    }
+                    ] : $name;
                 }
             }
         }
@@ -2188,15 +2180,11 @@ class SolrLido extends \VuFind\RecordDriver\SolrDefault implements \Psr\Log\Logg
     {
         $headings = $this->getAllSubjectHeadingsForDisplay($extended);
         foreach ($this->getSubjectActors($extended) as $actor) {
-            if ($extended) {
-                $headings[] = [
-                    'heading' => [$actor['name']],
-                    'type' => 'topic',
-                    'id' => $actor['id'],
-                ];
-            } else {
-                $headings[] = [$actor];
-            }
+            $headings[] = $extended ? [
+                'heading' => [$actor['name']],
+                'type' => 'topic',
+                'id' => $actor['id'],
+            ] : [$actor];
         }
         if ($places = $this->getSubjectPlaces($extended, false)) {
             $headings = [...$headings, ...$places];

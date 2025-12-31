@@ -843,7 +843,7 @@ class SolrLidoTest extends \PHPUnit\Framework\TestCase
     public function testGetSubjectActorsExtended(): void
     {
         $driver = $this->getDriver('lido_test.xml');
-        $this->assertEquals(
+        $this->assertSame(
             [
                 [
                     'name' => 'Pukki, Joulu',
