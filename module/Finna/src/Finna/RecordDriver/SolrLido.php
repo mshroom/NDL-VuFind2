@@ -2102,8 +2102,8 @@ class SolrLido extends \VuFind\RecordDriver\SolrDefault implements \Psr\Log\Logg
             foreach ($set->subject->subjectActor ?? [] as $subjectActor) {
                 if ($name = trim((string)($subjectActor->actor->nameActorSet->appellationValue ?? ''))) {
                     $results[] = $extended ? [
-                            'name' => $name,
-                            'id' => $this->getPrimaryActorId($subjectActor),
+                        'name' => $name,
+                        'id' => $this->getPrimaryActorId($subjectActor),
                     ] : $name;
                 }
             }
