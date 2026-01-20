@@ -7,7 +7,7 @@
             "Finna\\": ["module/Finna/src/Finna", "module/Finna"],
             "FinnaApi\\": ["module/FinnaApi/src/FinnaApi", "module/FinnaApi"],
             "FinnaConsole\\": ["module/FinnaConsole/src/FinnaConsole", "module/FinnaConsole"],
-            "FinnaCustom\\": ["module/FinnaCustom/src/FinnaCustom", "module/FinnaCustom"],
+            "FinnaCustom\\": "module/FinnaCustom/src/FinnaCustom",
             "FinnaSearch\\": ["module/FinnaSearch/src/FinnaSearch", "module/FinnaSearch"],
             "FinnaTheme\\": ["module/FinnaTheme/src/FinnaTheme", "module/FinnaTheme"]
         }
