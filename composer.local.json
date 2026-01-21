@@ -34,6 +34,7 @@
             "cd themes/finna2 && npm run updateDeps"
         ],
         "install-build-deps": [
+            "cd themes/bootstrap5 && npm run installBuildDeps",
             "cd themes/finna2 && npm run installBuildDeps"
         ]
     }
