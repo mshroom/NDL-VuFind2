@@ -185,10 +185,10 @@ return [
         [ 'file' => 'vendor/easymde.min.css' ],
         [ 'file' => 'vendor/splide-core.min.css' ],
         [ 'file' => 'vendor/video-js.min.css' ],
+        [ 'file' => 'vendor/tify.min.css' ],
         [ 'file' => 'finna.css' ],
         [ 'file' => 'finnaicons.css' ],
         [ 'file' => 'vendor/priority-nav-core.css' ],
-        [ 'file' => 'vendor/tify.min.css' ],
     ],
     'js' => [
         [ 'file' => 'finna-object-editor.js' ],
