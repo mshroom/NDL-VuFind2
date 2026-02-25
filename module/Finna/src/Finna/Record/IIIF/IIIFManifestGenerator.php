@@ -30,8 +30,8 @@
 namespace Finna\Record\IIIF;
 
 use Finna\View\Helper\Root\RecordLinker;
-use Laminas\View\Helper\ServerUrl;
-use Laminas\View\Helper\Url;
+use VuFind\Http\RouteHelper;
+use VuFind\Http\ServerUrlHelper;
 use VuFind\I18n\Locale\LocaleSettings;
 use VuFind\I18n\Translator\TranslatorAwareInterface;
 use VuFind\RecordDriver\AbstractBase as RecordDriver;
@@ -61,17 +61,15 @@ class IIIFManifestGenerator implements HttpServiceAwareInterface, TranslatorAwar
     /**
      * Constructor.
      *
-     * @param Url            $url            URL helper
-     * @param ServerUrl      $serverUrl      Server URL helper
-     * @param RecordLinker   $recordLinker   RecordLinker helper
-     *                                       For getting the URL of the record
-     *                                       action constructing this class
-     * @param LocaleSettings $localeSettings LocaleSettings
-     *                                       For getting enabled locales
+     * @param RouteHelper     $routeHelper     URL helper
+     * @param ServerUrlHelper $serverUrlHelper Server URL helper
+     * @param RecordLinker    $recordLinker    RecordLinker helper for getting the URL of the record action constructing
+     * this class
+     * @param LocaleSettings  $localeSettings  LocaleSettings for getting enabled locales
      */
     public function __construct(
-        protected Url $url,
-        protected ServerUrl $serverUrl,
+        protected RouteHelper $routeHelper,
+        protected ServerUrlHelper $serverUrlHelper,
         protected RecordLinker $recordLinker,
         protected LocaleSettings $localeSettings,
     ) {
@@ -95,7 +93,7 @@ class IIIFManifestGenerator implements HttpServiceAwareInterface, TranslatorAwar
         $recordId    = $driver->getUniqueID();
         $source      = $driver->getSourceIdentifier();
         $manifestId  = $this->recordLinker->getGeneratedIiifManifestUrl($driver);
-        $recordTitle = $driver->getTitle();
+        $recordTitle = $driver->tryMethod('getTitle', default: '');
 
         return $this->createManifest(
             $images,
@@ -254,18 +252,17 @@ class IIIFManifestGenerator implements HttpServiceAwareInterface, TranslatorAwar
         string $size,
         string $source
     ): string {
-        return ($this->url)(
-            'cover-show',
-            [],
-            [
-                'force_canonical' => true,
-                'query' => [
+        return $this->serverUrlHelper->getUrlForPath(
+            $this->routeHelper->getUrlFromRoute(
+                'cover-show',
+                [],
+                [
                     'id'     => $recordId,
                     'index'  => $index,
                     'size'   => $size,
                     'source' => $source,
-                ],
-            ]
+                ]
+            )
         );
     }
 

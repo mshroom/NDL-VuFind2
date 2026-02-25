@@ -31,6 +31,8 @@ namespace Finna\Record\IIIF;
 
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
+use VuFind\Http\RouteHelper;
+use VuFind\Http\ServerUrlHelper;
 
 /**
  * IIIF manifest generator factory
@@ -64,8 +66,8 @@ class IIIFManifestGeneratorFactory implements FactoryInterface
         }
         $viewRenderer = $container->get('ViewRenderer');
         $generator = new IIIFManifestGenerator(
-            $viewRenderer->plugin('url'),
-            $viewRenderer->plugin('serverUrl'),
+            $container->get(RouteHelper::class),
+            $container->get(ServerUrlHelper::class),
             $viewRenderer->plugin('recordLinker'),
             $container->get(\VuFind\I18n\Locale\LocaleSettings::class),
         );
