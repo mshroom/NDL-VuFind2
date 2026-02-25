@@ -1170,7 +1170,7 @@ class SolrForwardTest extends \PHPUnit\Framework\TestCase
         $mockHandler
             ->method('getData')
             ->willReturnCallback(
-                function ($params) {
+                function (array $params): array {
                     return $params;
                 }
             );

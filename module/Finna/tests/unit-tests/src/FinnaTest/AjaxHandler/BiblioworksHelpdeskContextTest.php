@@ -150,7 +150,7 @@ class BiblioworksHelpdeskContextTest extends \VuFindTest\Unit\AjaxHandlerTestCas
         $this->assertIsArray($result);
         $this->assertCount(1, $result);
         $data = $result[0];
-        $this->assertSame(true, $data['logged_in']);
+        $this->assertTrue($data['logged_in']);
         $this->assertNotEmpty($data['ust']);
         $this->assertIsInt($data['expires_at']);
     }
