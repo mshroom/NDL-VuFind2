@@ -1333,6 +1333,7 @@ class Quria extends AxiellWebServices
         $blockedTypes = $paymentConfig['nonPayable'] ?? [];
         $payableMinDate
             = strtotime($paymentConfig['payableFineDateThreshold'] ?? '-5 years');
+        $mapItemIdentifier = $paymentConfig['mapItemIdentifier'] ?? null;
 
         $function = 'GetDebts';
         $functionResult = 'debtsResponse';
@@ -1400,10 +1401,12 @@ class Quria extends AxiellWebServices
             }
             $note = (string)$debt->debtNote;
             $productCode = null;
-            if (preg_match($this->paymentIdPattern, $note, $matches)) {
-                $productCode = $matches[1];
+            if ('productCode' === $mapItemIdentifier) {
+                if (preg_match($this->paymentIdPattern, $note, $matches)) {
+                    $productCode = $matches[1];
+                }
+                $note = preg_replace($this->paymentIdPattern, '', $note);
             }
-            $note = preg_replace($this->paymentIdPattern, '', $note);
             $fine = [
                 'debt_id' => $debt->id,
                 'fine_id' => $debt->id,
