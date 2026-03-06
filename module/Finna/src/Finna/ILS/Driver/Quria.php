@@ -82,6 +82,13 @@ class Quria extends AxiellWebServices
     ];
 
     /**
+     * Regex pattern for extracting payment identifier from debt note.
+     *
+     * @var string
+     */
+    protected string $paymentIdPattern = '/\s*Maksun tunnus: ([\w\-]+)/';
+
+    /**
      * Constructor
      *
      * @param \VuFind\Date\Converter      $dateConverter Date converter object
@@ -1391,6 +1398,12 @@ class Quria extends AxiellWebServices
                     }
                 }
             }
+            $note = (string)$debt->debtNote;
+            $productCode = null;
+            if (preg_match($this->paymentIdPattern, $note, $matches)) {
+                $productCode = $matches[1];
+            }
+            $note = preg_replace($this->paymentIdPattern, '', $note);
             $fine = [
                 'debt_id' => $debt->id,
                 'fine_id' => $debt->id,
@@ -1398,10 +1411,11 @@ class Quria extends AxiellWebServices
                 'amount' => (int)$amount,
                 'checkout' => '',
                 'fine' => $this->mapAndTranslateFineType($debt->debtType),
-                'description' => (string)$debt->debtNote,
+                'description' => $note,
                 'balance' => (int)$amount,
                 'createdate' => $debt->debtDate,
                 'payableOnline' => $payable,
+                'productCode' => $productCode,
                 'organization' => trim($debt->organisation ?? ''),
             ];
             $fine['payableOnline'] = $this->fineIsPayable($fine);
