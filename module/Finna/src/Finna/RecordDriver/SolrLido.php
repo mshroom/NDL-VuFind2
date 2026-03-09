@@ -2227,7 +2227,7 @@ class SolrLido extends \VuFind\RecordDriver\SolrDefault implements \Psr\Log\Logg
         $results = [];
         $path = 'lido/descriptiveMetadata/objectRelationWrap/subjectWrap/subjectSet/subject/subjectPlace';
         foreach ($reader->all(path: $path) as $subjectPlace) {
-            $displayPlace = trim($reader->firstValue($subjectPlace, 'displayPlace') ?? '', ', \n\r\t\v\0');
+            $displayPlace = trim($reader->firstValue($subjectPlace, 'displayPlace') ?? '', ", \n\r\t\v\0");
             if ('' === $displayPlace) {
                 $placeNames = $reader->allValues($subjectPlace, 'place/namePlaceSet/appellationValue');
                 foreach ($reader->all($subjectPlace, 'place/partOfPlace') as $part) {
