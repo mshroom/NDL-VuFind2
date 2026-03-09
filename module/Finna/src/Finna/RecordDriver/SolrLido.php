@@ -1515,7 +1515,7 @@ class SolrLido extends \VuFind\RecordDriver\SolrDefault implements \Psr\Log\Logg
 
             $places = [];
             foreach ($reader->all($node, 'eventPlace') as $eventPlace) {
-                $displayPlace = trim($reader->firstValue($eventPlace, 'displayPlace') ?? '', ', \n\r\t\v\0');
+                $displayPlace = trim($reader->firstValue($eventPlace, 'displayPlace') ?? '', ", \n\r\t\v\0");
                 $placeId = $reader->first($eventPlace, 'place/placeID');
                 if (!$displayPlace) {
                     // Gather display name from placeNameSet:
