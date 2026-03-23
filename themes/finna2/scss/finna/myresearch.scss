@@ -442,10 +442,22 @@
   }
   .list-title {
     font-size: $font-size-h2;
+    span {
+      display: inline;
+    }
   }
   a.dropdown-toggle {
     font-size: 0.9em;
     height: 30px;
+  }
+  // Content tooltip
+  .tooltip-myaccount {
+    background: initial;
+    border: none;
+    font-size: $font-size-h2;
+    padding-right: 0;
+    position: relative;
+    top: -4px;
   }
 }
 .sort-col.sort-col-mobile {
