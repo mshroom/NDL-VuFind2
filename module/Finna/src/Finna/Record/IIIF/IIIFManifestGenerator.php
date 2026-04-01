@@ -1,7 +1,7 @@
 <?php
 
 /**
- * IIIF manifest generator service
+ * IIIF manifest generator service.
  *
  * PHP version 8
  *
@@ -40,7 +40,7 @@ use VuFindHttp\HttpServiceAwareInterface;
 use function count;
 
 /**
- * IIIF manifest generator service
+ * IIIF manifest generator service.
  *
  * Only intended for internal use as a compatibility layer. With this we can use
  * Tify to show non-IIIF images and image sets.
@@ -83,7 +83,7 @@ class IIIFManifestGenerator implements HttpServiceAwareInterface, TranslatorAwar
     }
 
     /**
-     * Generate IIIF presentation manifest (version 3)
+     * Generate IIIF presentation manifest (version 3).
      *
      * @param RecordDriver $driver Record driver
      *
@@ -107,7 +107,7 @@ class IIIFManifestGenerator implements HttpServiceAwareInterface, TranslatorAwar
     }
 
     /**
-     * Handle actual manifest generation
+     * Handle actual manifest generation.
      *
      * @param ?array $images      Images
      *                            Array, or null if driver did not have the
@@ -195,7 +195,7 @@ class IIIFManifestGenerator implements HttpServiceAwareInterface, TranslatorAwar
     }
 
     /**
-     * Create metadata array for a canvas
+     * Create metadata array for a canvas.
      *
      * @param array $image Image
      *
@@ -227,7 +227,7 @@ class IIIFManifestGenerator implements HttpServiceAwareInterface, TranslatorAwar
     }
 
     /**
-     * Translate a message for all provided locales at once
+     * Translate a message for all provided locales at once.
      *
      * Uses Laminas\Translator\TranslatorInterface directly, because VuFind's
      * interface does not expose the $locale parameter.
@@ -250,7 +250,7 @@ class IIIFManifestGenerator implements HttpServiceAwareInterface, TranslatorAwar
     }
 
     /**
-     * Build the cover URL for this image
+     * Build the cover URL for this image.
      *
      * @param string $recordId Record unique ID
      * @param int    $index    Image number
@@ -280,7 +280,7 @@ class IIIFManifestGenerator implements HttpServiceAwareInterface, TranslatorAwar
     }
 
     /**
-     * Create annotation page representing a given image
+     * Create annotation page representing a given image.
      *
      * @param int    $index      Image number
      * @param string $size       Image size: 'large', 'medium', 'small'

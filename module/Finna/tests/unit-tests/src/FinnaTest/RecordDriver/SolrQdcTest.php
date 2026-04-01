@@ -1,7 +1,7 @@
 <?php
 
 /**
- * SolrQdc Institutional Repository Test Class
+ * SolrQdc Institutional Repository Test Class.
  *
  * PHP version 8
  *
@@ -35,7 +35,7 @@ use Finna\RecordDriver\SolrQdc;
 use function is_callable;
 
 /**
- * SolrQdc Institutional Repository Test Class
+ * SolrQdc Institutional Repository Test Class.
  *
  * @category VuFind
  * @package  Tests
@@ -209,7 +209,7 @@ class SolrQdcTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test functions
+     * Test functions.
      *
      * @param string $function Function of the driver to test
      * @param mixed  $expected Result to be expected
@@ -237,7 +237,7 @@ class SolrQdcTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Function to get expected author data
+     * Function to get expected author data.
      *
      * @return array
      */
@@ -290,7 +290,7 @@ class SolrQdcTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test getNonPresenterAuthors
+     * Test getNonPresenterAuthors.
      *
      * @param string $language Language
      * @param array  $expected Result to be expected
@@ -317,7 +317,7 @@ class SolrQdcTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test getXML
+     * Test getXML.
      *
      * @return void
      */
@@ -405,7 +405,7 @@ class SolrQdcTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Function to get expected function data
+     * Function to get expected function data.
      *
      * @return array
      */
@@ -529,7 +529,7 @@ class SolrQdcTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test functions with return value array
+     * Test functions with return value array.
      *
      * @param string $function Function of the driver to test
      * @param mixed  $expected Result to be expected
@@ -550,7 +550,7 @@ class SolrQdcTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Data for getOnlineURLs
+     * Data for getOnlineURLs.
      *
      * @return array
      */
@@ -680,7 +680,7 @@ class SolrQdcTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Function to get expected online url data
+     * Function to get expected online url data.
      *
      * @param string $indexValue    Index values to test
      * @param ?array $expected      Result to be expected
@@ -705,7 +705,7 @@ class SolrQdcTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Function to get expected publication date range data
+     * Function to get expected publication date range data.
      *
      * @return array
      */
@@ -752,7 +752,7 @@ class SolrQdcTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test getPublicationDateRange
+     * Test getPublicationDateRange.
      *
      * @param string $indexValue Index value to test
      * @param ?array $expected   Result to be expected
@@ -782,7 +782,7 @@ class SolrQdcTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Simple function to test element filtering works properly
+     * Simple function to test element filtering works properly.
      *
      * @return void
      */
@@ -802,7 +802,7 @@ class SolrQdcTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Function to get expected human readable publication dates data
+     * Function to get expected human readable publication dates data.
      *
      * @return array
      */
@@ -849,7 +849,7 @@ class SolrQdcTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test getHumanReadablePublicationDates
+     * Test getHumanReadablePublicationDates.
      *
      * @param string $indexValue Index value to test
      * @param ?array $expected   Result to be expected
@@ -879,7 +879,7 @@ class SolrQdcTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Get a record driver with fake data
+     * Get a record driver with fake data.
      *
      * @param array  $overrides    Fixture fields to override
      * @param array  $searchConfig Search configuration
@@ -964,7 +964,7 @@ class SolrQdcTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Get a record driver with fake data
+     * Get a record driver with fake data.
      *
      * @param array $overrides    Fixture fields to override
      * @param array $searchConfig Search configuration

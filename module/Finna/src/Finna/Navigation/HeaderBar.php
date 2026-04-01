@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HeaderBar section plugin
+ * HeaderBar section plugin.
  *
  * PHP version 8
  *
@@ -37,7 +37,7 @@ use function count;
 use function in_array;
 
 /**
- * HeaderBar section plugin
+ * HeaderBar section plugin.
  *
  * @category VuFind
  * @package  Navigation

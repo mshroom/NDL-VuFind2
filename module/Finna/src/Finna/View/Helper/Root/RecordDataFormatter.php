@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Record driver data formatting view helper
+ * Record driver data formatting view helper.
  *
  * PHP version 8
  *
@@ -41,7 +41,7 @@ use VuFind\RecordDriver\AbstractBase as RecordDriver;
 use function in_array;
 
 /**
- * Record driver data formatting view helper
+ * Record driver data formatting view helper.
  *
  * @category VuFind
  * @package  View_Helpers
@@ -244,7 +244,7 @@ class RecordDataFormatter extends \VuFind\View\Helper\Root\RecordDataFormatter
     }
 
     /**
-     * Filter unnecessary fields from Lrmi records
+     * Filter unnecessary fields from Lrmi records.
      *
      * @param array $coreFields data to filter
      *

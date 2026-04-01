@@ -132,7 +132,7 @@ class IIIFManifestGeneratorIntegrationTest extends TestCase
     }
 
     /**
-     * Get LIDO fixture files and expected return types
+     * Get LIDO fixture files and expected return types.
      *
      * @return \Generator<array<string>>
      */
@@ -147,7 +147,7 @@ class IIIFManifestGeneratorIntegrationTest extends TestCase
     }
 
     /**
-     * Coherence-check the validator with guaranteed-invalid JSON
+     * Coherence-check the validator with guaranteed-invalid JSON.
      *
      * @param string $input Input JSON
      *
@@ -161,7 +161,7 @@ class IIIFManifestGeneratorIntegrationTest extends TestCase
     }
 
     /**
-     * Get invalid inputs for the schema validator
+     * Get invalid inputs for the schema validator.
      *
      * @return \Generator<array<string>>
      */
@@ -173,7 +173,7 @@ class IIIFManifestGeneratorIntegrationTest extends TestCase
     }
 
     /**
-     * Create a mock SolrLido record
+     * Create a mock SolrLido record.
      *
      * @param string $recordXml    Path to LIDO fixture file
      * @param array  $searchConfig searchSettings for SolrLido
@@ -259,7 +259,7 @@ class IIIFManifestGeneratorIntegrationTest extends TestCase
     }
 
     /**
-     * Use swaggest/json-schema to validate Presentation API manifest
+     * Use swaggest/json-schema to validate Presentation API manifest.
      *
      * The JSON schema fixture file is from:
      * https://github.com/IIIF/presentation-validator/blob/6fe43b8d6e27f12f83bd99b31125e3821e60ba7b/schema/iiif_3_0.json

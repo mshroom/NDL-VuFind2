@@ -1,7 +1,7 @@
 <?php
 
 /**
- * LibraryCards Controller
+ * LibraryCards Controller.
  *
  * PHP version 8
  *
@@ -57,7 +57,7 @@ use function intval;
 class LibraryCardsController extends \VuFind\Controller\LibraryCardsController
 {
     /**
-     * Constructor
+     * Constructor.
      *
      * @param ServiceLocatorInterface $sm      Service locator
      * @param SessionContainer        $session Session container for library cards
@@ -71,7 +71,7 @@ class LibraryCardsController extends \VuFind\Controller\LibraryCardsController
     }
 
     /**
-     * Send user's library cards to the view
+     * Send user's library cards to the view.
      *
      * @return mixed
      */
@@ -108,7 +108,7 @@ class LibraryCardsController extends \VuFind\Controller\LibraryCardsController
     }
 
     /**
-     * Send user's library card to the edit view
+     * Send user's library card to the edit view.
      *
      * @return mixed
      */
@@ -149,7 +149,7 @@ class LibraryCardsController extends \VuFind\Controller\LibraryCardsController
     }
 
     /**
-     * Change library card password
+     * Change library card password.
      *
      * @return mixed
      */
@@ -206,7 +206,7 @@ class LibraryCardsController extends \VuFind\Controller\LibraryCardsController
     }
 
     /**
-     * Recover a library account
+     * Recover a library account.
      *
      * @return View object
      *
@@ -228,7 +228,7 @@ class LibraryCardsController extends \VuFind\Controller\LibraryCardsController
     }
 
     /**
-     * Self-registration action
+     * Self-registration action.
      *
      * @return View object
      */
@@ -308,7 +308,7 @@ class LibraryCardsController extends \VuFind\Controller\LibraryCardsController
     }
 
     /**
-     * Self-registration form action
+     * Self-registration form action.
      *
      * @return View object
      */
@@ -460,7 +460,7 @@ class LibraryCardsController extends \VuFind\Controller\LibraryCardsController
     }
 
     /**
-     * Self-registration confirmation action
+     * Self-registration confirmation action.
      *
      * @return View object
      */
@@ -770,7 +770,7 @@ class LibraryCardsController extends \VuFind\Controller\LibraryCardsController
     }
 
     /**
-     * Return a list of users connected to this library card
+     * Return a list of users connected to this library card.
      *
      * @return mixed
      */
@@ -794,7 +794,7 @@ class LibraryCardsController extends \VuFind\Controller\LibraryCardsController
     }
 
     /**
-     * Helper function for verification hashes
+     * Helper function for verification hashes.
      *
      * @param string $hash User-unique hash string from request
      *

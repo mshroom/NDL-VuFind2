@@ -51,7 +51,7 @@ class IIIFManifestGeneratorUnitTest extends TestCase
     use ReflectionTrait;
 
     /**
-     * Test that createManifest() called with empty $images returns null
+     * Test that createManifest() called with empty $images returns null.
      *
      * @return void
      */

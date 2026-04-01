@@ -69,7 +69,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     protected string $marcNs = 'http://www.loc.gov/MARC21/slim';
 
     /**
-     * Fields that may contain subject headings, and their descriptions
+     * Fields that may contain subject headings, and their descriptions.
      *
      * @var array
      */
@@ -87,7 +87,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     ];
 
     /**
-     * Accepted book binding strings mapped to translation key strings
+     * Accepted book binding strings mapped to translation key strings.
      *
      * @var array
      */
@@ -105,7 +105,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     ];
 
     /**
-     * Mappings for component part relations
+     * Mappings for component part relations.
      *
      * @var array
      */
@@ -114,7 +114,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     ];
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param \VuFind\Config\Config $mainConfig     VuFind main configuration (omit
      * for built-in defaults)
@@ -218,7 +218,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
      *               'link'  => link_URI
      *        ),
      *        ...
-     * )
+     * ).
      *
      * @return null|array
      */
@@ -639,7 +639,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     /**
      * Get original version notes.
      * Each result contains:
-     * - notes => Notes found
+     * - notes => Notes found.
      *
      * @return array
      */
@@ -659,7 +659,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
-     * Get an array of embedded component parts
+     * Get an array of embedded component parts.
      *
      * @param bool $onlyCollections Only get component parts that are collections
      *
@@ -1046,7 +1046,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
-     * Get an array of host records
+     * Get an array of host records.
      *
      * Return an array of arrays with the following keys:
      *   id
@@ -1232,7 +1232,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
-     * Get manufacturer
+     * Get manufacturer.
      *
      * @return string
      */
@@ -1251,7 +1251,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
-     * Get producers
+     * Get producers.
      *
      * @return array
      */
@@ -1271,7 +1271,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
-     * Get all authors and primary presenters
+     * Get all authors and primary presenters.
      *
      * @return array
      */
@@ -1281,7 +1281,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
-     * Return extended author information
+     * Return extended author information.
      *
      * @return array
      */
@@ -1291,7 +1291,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
-     * Get all authors apart from presenters
+     * Get all authors apart from presenters.
      *
      * @return array
      */
@@ -1301,7 +1301,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
-     * Gets all author fields
+     * Gets all author fields.
      *
      * @param bool $getPrimaryPresenters Whether the function returns primary presenters alongside authors (optional)
      *
@@ -1408,7 +1408,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
-     * Get presenters
+     * Get presenters.
      *
      * @param bool $getSecondaryPresentersOnly Whether returns only secondary presenters
      *
@@ -1470,7 +1470,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
-     * Get secondary presenters
+     * Get secondary presenters.
      *
      * @return array
      */
@@ -1515,7 +1515,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
-     * Get the publication end date of the record
+     * Get the publication end date of the record.
      *
      * @return number|false
      */
@@ -1590,7 +1590,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
-     * Return SFX Object ID
+     * Return SFX Object ID.
      *
      * @return string
      */
@@ -1607,7 +1607,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
-     * Return Alma MMS ID
+     * Return Alma MMS ID.
      *
      * @return string
      */
@@ -1780,7 +1780,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
      * - source    Source of authority for the restriction
      * - url       URL to terms
      * - rightsSource Source of the access licence (e.g. 'cc' for Creative Commons)
-     * - rights    Licence code
+     * - rights    Licence code.
      *
      * @return string
      */
@@ -1915,7 +1915,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
-     * Does this record have embedded component parts
+     * Does this record have embedded component parts.
      *
      * @return bool Whether this record has embedded component parts
      */
@@ -2005,7 +2005,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
-     * Returns the array element for the 'getAllRecordLinks' method
+     * Returns the array element for the 'getAllRecordLinks' method.
      *
      * @param File_MARC_Data_Field $field Field to examine
      *
@@ -2117,7 +2117,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
-     * Get linked MARC field contents
+     * Get linked MARC field contents.
      *
      * @param string|array $field     Field tag or actual field
      * @param array        $subfields Subfields
@@ -2160,7 +2160,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
-     * Get component parts that are collections
+     * Get component parts that are collections.
      *
      * @return array
      */
@@ -2445,7 +2445,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
-     * Get audience characteristics from field 385
+     * Get audience characteristics from field 385.
      *
      * @return array
      */
@@ -2461,7 +2461,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
-     * Get creator/contributor characteristics from field 386
+     * Get creator/contributor characteristics from field 386.
      *
      * @return array
      */
@@ -2712,7 +2712,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
-     * Get System details from field 538
+     * Get System details from field 538.
      *
      * @return array
      */
@@ -2733,7 +2733,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
 
     /**
      * Get accessibility information from field 341, subfields a and b.
-     * Additional information from field 532, subfield a
+     * Additional information from field 532, subfield a.
      *
      * @return array
      */
@@ -2802,7 +2802,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
-     * Get original languages from fields 041, subfield h and 979, subfields h and i
+     * Get original languages from fields 041, subfield h and 979, subfields h and i.
      *
      * @return array
      */
@@ -2821,7 +2821,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
-     * Get book binding from fields 020 subfield q, 340 subfield l or 500 subfield a
+     * Get book binding from fields 020 subfield q, 340 subfield l or 500 subfield a.
      *
      * @return string
      */
@@ -2864,7 +2864,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
-     * Get record linking settings
+     * Get record linking settings.
      *
      * @param string $recordSource Record source
      *

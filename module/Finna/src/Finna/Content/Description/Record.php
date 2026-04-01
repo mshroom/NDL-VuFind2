@@ -47,14 +47,14 @@ class Record extends AbstractDescriptionProvider implements TranslatorAwareInter
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
 
     /**
-     * View renderer
+     * View renderer.
      *
      * @var RendererInterface
      */
     protected $renderer;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param RendererInterface $renderer View renderer
      */

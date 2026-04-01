@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Navibar trait
+ * Navibar trait.
  *
  * PHP version 8
  *
@@ -40,7 +40,7 @@ use function is_string;
 use function strlen;
 
 /**
- * Navibar trait
+ * Navibar trait.
  *
  * @category VuFind
  * @package  Navigation
@@ -55,28 +55,28 @@ trait NavibarTrait
     use TranslatorAwareTrait;
 
     /**
-     * Navibar configuration
+     * Navibar configuration.
      *
      * @var array
      */
     protected array $navibarConfig;
 
     /**
-     * Router object
+     * Router object.
      *
      * @var TreeRouteStack
      */
     protected TreeRouteStack $router;
 
     /**
-     * Server URL helper
+     * Server URL helper.
      *
      * @var ServerUrlHelper
      */
     protected ServerUrlHelper $serverUrlHelper;
 
     /**
-     * Menu items
+     * Menu items.
      *
      * @var array
      */
@@ -142,7 +142,7 @@ trait NavibarTrait
     }
 
     /**
-     * Check if a URL points to the current page
+     * Check if a URL points to the current page.
      *
      * @param string $url URL
      *
@@ -387,7 +387,7 @@ trait NavibarTrait
     }
 
     /**
-     * Sort menu items
+     * Sort menu items.
      *
      * @param array $items Menu items
      * @param array $order Ordering
@@ -440,7 +440,7 @@ trait NavibarTrait
     }
 
     /**
-     * Get menu item index
+     * Get menu item index.
      *
      * @param array  $items Menu items
      * @param string $id    Menu item id
@@ -460,7 +460,7 @@ trait NavibarTrait
     }
 
     /**
-     * Move menu item
+     * Move menu item.
      *
      * @param array $items Menu items
      * @param int   $from  From (index)
@@ -479,7 +479,7 @@ trait NavibarTrait
     }
 
     /**
-     * Check if a translation is empty
+     * Check if a translation is empty.
      *
      * Code from TranslationEmpty::__invoke().
      *

@@ -44,7 +44,7 @@ use VuFind\Exception\Auth as AuthException;
 trait ILSFinna
 {
     /**
-     * Check if ILS supports self-registration
+     * Check if ILS supports self-registration.
      *
      * @param string $target Login target (MultiILS)
      *
@@ -61,7 +61,7 @@ trait ILSFinna
     }
 
     /**
-     * Make sure passwords match and fulfill ILS policy
+     * Make sure passwords match and fulfill ILS policy.
      *
      * @param array $params request parameters
      *

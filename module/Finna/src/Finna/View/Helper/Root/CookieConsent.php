@@ -1,7 +1,7 @@
 <?php
 
 /**
- * CookieConsent view helper
+ * CookieConsent view helper.
  *
  * PHP version 8
  *
@@ -32,7 +32,7 @@ namespace Finna\View\Helper\Root;
 use function in_array;
 
 /**
- * CookieConsent view helper
+ * CookieConsent view helper.
  *
  * @category VuFind
  * @package  View_Helpers
@@ -43,7 +43,7 @@ use function in_array;
 class CookieConsent extends \VuFind\View\Helper\Root\CookieConsent
 {
     /**
-     * Render cookie consent initialization script
+     * Render cookie consent initialization script.
      *
      * @return string
      */

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Record Controller
+ * Record Controller.
  *
  * PHP version 8
  *
@@ -41,7 +41,7 @@ use function is_array;
 use function is_string;
 
 /**
- * Record Controller
+ * Record Controller.
  *
  * @category VuFind
  * @package  Controller
@@ -701,7 +701,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
     }
 
     /**
-     * Download 3D model
+     * Download 3D model.
      *
      * @return \Laminas\Http\Response
      */
@@ -766,7 +766,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
     }
 
     /**
-     * Download a file
+     * Download a file.
      *
      * @return \Laminas\Http\Response
      */
@@ -873,7 +873,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
     }
 
     /**
-     * Call IIIF manifest generator and encode body in JSON
+     * Call IIIF manifest generator and encode body in JSON.
      *
      * @return \Laminas\Http\Response
      */
