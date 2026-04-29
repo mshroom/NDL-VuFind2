@@ -1,11 +1,11 @@
 <?php
 
 /**
- * CookieConsent helper factory.
+ * Factory for AuthorityApiController.
  *
  * PHP version 8
  *
- * Copyright (C) The National Library of Finland 2022.
+ * Copyright (C) Universität Mannheim 2026
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,13 +21,13 @@
  * <https://www.gnu.org/licenses/>.
  *
  * @category VuFind
- * @package  View_Helpers
- * @author   Ere Maijala <ere.maijala@helsinki.fi>
+ * @package  Controller
+ * @author   Stefan Weil <stefan.weil@uni-mannheim.de>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     https://vufind.org/wiki/development Wiki
+ * @link     https://vufind.org/wiki/development:plugins:controllers Wiki
  */
 
-namespace VuFind\View\Helper\Root;
+namespace VuFindApi\Controller;
 
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
@@ -36,15 +36,15 @@ use Psr\Container\ContainerExceptionInterface as ContainerException;
 use Psr\Container\ContainerInterface;
 
 /**
- * CookieConsent helper factory.
+ * Factory for AuthorityApiController.
  *
  * @category VuFind
- * @package  View_Helpers
- * @author   Ere Maijala <ere.maijala@helsinki.fi>
+ * @package  Controller
+ * @author   Stefan Weil <stefan.weil@uni-mannheim.de>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     https://vufind.org/wiki/development Wiki
+ * @link     https://vufind.org/wiki/development:plugins:controllers Wiki
  */
-class CookieConsentFactory implements FactoryInterface
+class AuthorityApiControllerFactory implements FactoryInterface
 {
     /**
      * Create an object.
@@ -68,15 +68,10 @@ class CookieConsentFactory implements FactoryInterface
         if (!empty($options)) {
             throw new \Exception('Unexpected options passed to factory.');
         }
-        $config = $container->get(\VuFind\Config\ConfigManagerInterface::class)->getConfigObject('config');
-        $consentConfig = $container->get(\VuFind\Config\YamlReader::class)
-            ->get('CookieConsent.yaml');
         return new $requestedName(
-            $config->toArray(),
-            $consentConfig['CookieConsent'] ?? [],
-            $container->get(\VuFind\Cookie\CookieManager::class),
-            $container->get(\VuFind\Date\Converter::class),
-            $container->get(\VuFind\Auth\LoginTokenManager::class)
+            $container,
+            $container->get(\VuFindApi\Formatter\AuthorityRecordFormatter::class),
+            $container->get(\VuFindApi\Formatter\FacetFormatter::class)
         );
     }
 }
