@@ -5,7 +5,7 @@
  *
  * PHP version 8
  *
- * Copyright (C) The National Library of Finland 2022.
+ * Copyright (C) The National Library of Finland 2022-2026.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -43,11 +43,13 @@ use function in_array;
 class CookieConsent extends \VuFind\View\Helper\Root\CookieConsent
 {
     /**
-     * Render cookie consent initialization script.
+     * Render cookie consent.
+     *
+     * @param ?string $type Dialog type (only valid option is 'bottom'; null value will disable cookie consent)
      *
      * @return string
      */
-    public function render(): string
+    public function render(?string $type = null): string
     {
         if (!$this->isEnabled()) {
             return '';
@@ -98,7 +100,7 @@ class CookieConsent extends \VuFind\View\Helper\Root\CookieConsent
             }
         }
 
-        return parent::render();
+        return parent::render($type);
     }
 
     /**
