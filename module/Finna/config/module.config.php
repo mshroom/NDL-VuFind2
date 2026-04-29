@@ -1220,6 +1220,7 @@ $dynamicRoutes = [
 $staticRoutes = [
     'LibraryCards/Recover', 'LibraryCards/Register',
     'LibraryCards/RegistrationDone', 'LibraryCards/RegistrationForm',
+    'LibraryCards/VerifyRegistrationEmail',
     'LocationService/Modal',
     'Cover/Pipe',
     'MetaLib/Home', 'MetaLib/Search', 'MetaLib/Advanced',
