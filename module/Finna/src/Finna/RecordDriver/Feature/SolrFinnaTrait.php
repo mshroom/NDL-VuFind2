@@ -1441,7 +1441,7 @@ trait SolrFinnaTrait
         $compareFull = str_replace([',', ';'], '', implode(' ', $compare));
         if ($compareFull != $title) {
             foreach ($compare as $item) {
-                $checkTitle = str_replace([',', ';'], ' ', (string)$item) != $title;
+                $checkTitle = str_replace([',', ';'], '', (string)$item) != $title;
                 if ($checkTitle) {
                     $compareDone[] = (string)$item;
                 }

@@ -137,8 +137,7 @@ class SolrEad3Test extends \PHPUnit\Framework\TestCase
         string $language,
         array $expected
     ): void {
-        $driver = $this->getDriver('ead3_test.xml');
-        $driver->setPreferredLanguage($language);
+        $driver = $this->getDriver('ead3_test.xml', language: $language);
         $this->assertEquals(
             $expected,
             $driver->getOtherRelatedMaterial()
@@ -445,8 +444,7 @@ class SolrEad3Test extends \PHPUnit\Framework\TestCase
         array $expected
     ): void {
         foreach ($expected as $file => $result) {
-            $driver = $this->getDriver($file);
-            $driver->setPreferredLanguage($language);
+            $driver = $this->getDriver($file, language: $language);
             $this->assertEquals(
                 $result,
                 $driver->getAllSubjectHeadingsExtended()
@@ -512,8 +510,7 @@ class SolrEad3Test extends \PHPUnit\Framework\TestCase
         array $expected
     ): void {
         foreach ($expected as $file => $result) {
-            $driver = $this->getDriver($file);
-            $driver->setPreferredLanguage($language);
+            $driver = $this->getDriver($file, language: $language);
             $this->assertEquals(
                 $result,
                 $driver->getPhysicalDescriptions()
@@ -635,8 +632,7 @@ class SolrEad3Test extends \PHPUnit\Framework\TestCase
         string $language,
         array $expected
     ): void {
-        $driver = $this->getDriver('ead3_test5.xml');
-        $driver->setPreferredLanguage($language);
+        $driver = $this->getDriver('ead3_test5.xml', language: $language);
         $this->assertEquals(
             $expected,
             $driver->getGeneralNotes()
@@ -644,28 +640,119 @@ class SolrEad3Test extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test titles
+     *
+     * @return void
+     */
+    public function testTitles(): void
+    {
+        $rawData = [
+            'title' => 'Otsikko suomeksi',
+            'title_fi_txt' => 'Otsikko suomeksi',
+            'title_en_txt' => 'Title in English',
+            'title_sv_txt' => 'Titel på svenska',
+            'title_alt' => [
+                'Toinen otsikko',
+                'Yet another title',
+            ],
+        ];
+        $driver = $this->getDriver(
+            'ead3_test5.xml',
+            overrides: $rawData,
+            language: 'fi',
+            fallbackLanguages: 'fi,sv,en'
+        );
+        $this->assertSame(
+            'Otsikko suomeksi',
+            $driver->getTitle()
+        );
+        $this->assertSame(
+            [
+                'Titel på svenska',
+                'Title in English',
+                'Toinen otsikko',
+                'Yet another title',
+            ],
+            $driver->getAlternativeTitles()
+        );
+        $driver = $this->getDriver('ead3_test3.xml', overrides: $rawData, language: 'sv');
+        $this->assertSame(
+            'Titel på svenska',
+            $driver->getTitle()
+        );
+        $this->assertSame(
+            [
+                'Otsikko suomeksi',
+                'Title in English',
+                'Toinen otsikko',
+                'Yet another title',
+            ],
+            $driver->getAlternativeTitles()
+        );
+        $driver = $this->getDriver('ead3_test2.xml', overrides: $rawData, language: 'en');
+        $this->assertSame(
+            'Title in English',
+            $driver->getTitle()
+        );
+        $this->assertSame(
+            [
+                'Otsikko suomeksi',
+                'Toinen otsikko',
+                'Yet another title',
+            ],
+            $driver->getAlternativeTitles()
+        );
+    }
+
+    /**
      * Get a record driver with fake data.
      *
-     * @param string $recordXml    Xml record to use for the test
-     * @param array  $overrides    Fixture fields to override.
-     * @param array  $searchConfig Search configuration.
+     * @param string $recordXml         Xml record to use for the test
+     * @param array  $overrides         Fixture fields to override.
+     * @param array  $searchConfig      Search configuration.
+     * @param string $language          Language
+     * @param string $fallbackLanguages Site fallback languages
      *
      * @return SolrEad3
      */
-    protected function getDriver(string $recordXml, $overrides = [], $searchConfig = []): SolrEad3
-    {
+    protected function getDriver(
+        string $recordXml,
+        $overrides = [],
+        $searchConfig = [],
+        $language = 'en',
+        $fallbackLanguages = 'fi,en',
+    ): SolrEad3 {
         $fixture = $this->getFixture("ead3/$recordXml", 'Finna');
         $record = new SolrEad3(
             null,
             null,
             new \VuFind\Config\Config($searchConfig)
         );
+
         $record->setTranslator(
             $this->getMockTranslator(
-                ['default' => ['year_decade_or_century' => '%%year%%-luku']]
+                ['default' => ['year_decade_or_century' => '%%year%%-luku']],
+                $language,
             )
         );
+        $record->setPreferredLanguage($language);
         $record->setRawData(array_merge(['fullrecord' => $fixture], $overrides));
+        $localeConfig = [
+            'Site' => [
+                'language' => 'fi',
+                'fallback_languages' => $fallbackLanguages,
+                'browserDetectLanguage' => false,
+            ],
+            'Languages' => [
+                'fi' => 'Finnish',
+                'en' => 'English',
+                'sv' => 'Swedish',
+                'en-gb' => 'British English',
+                'se' => 'Northern Sámi',
+            ],
+        ];
+        $localeConfig = new \VuFind\Config\Config($localeConfig);
+        $record->attachLocaleSettings(new \VuFind\I18n\Locale\LocaleSettings($localeConfig));
         return $record;
     }
 }

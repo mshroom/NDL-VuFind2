@@ -107,7 +107,7 @@
   }
 }
 
-.search-tab-tip {
+.search-tab-tip, .search-sort-title {
   background-color: $search-tab-tip-bg;
   box-shadow: 2px 2px 4px #888888;
   margin-bottom: 12px;
@@ -116,4 +116,9 @@
   p {
     margin: 2px;
   }
+}
+
+.search-sort-title {
+  flex: 1 0 99%;
+  margin-right: 4px;
 }

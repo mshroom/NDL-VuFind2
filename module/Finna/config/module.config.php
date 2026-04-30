@@ -771,6 +771,22 @@ $config = [
                     'VuFind\Form\Handler\Email' => 'Finna\Form\Handler\Email',
                 ],
             ],
+            'hierarchy_treedataformatter' => [
+                'factories' => [
+                    'Finna\Hierarchy\TreeDataFormatter\Json' => 'VuFind\Hierarchy\TreeDataFormatter\AbstractBaseFactory',
+                ],
+                'aliases' => [
+                    'VuFind\Hierarchy\TreeDataFormatter\Json' => 'Finna\Hierarchy\TreeDataFormatter\Json',
+                ],
+            ],
+            'hierarchy_treedatasource' => [
+                'factories' => [
+                    'Finna\Hierarchy\TreeDataSource\Solr' => 'VuFind\Hierarchy\TreeDataSource\SolrFactory',
+                ],
+                'aliases' => [
+                    'VuFind\Hierarchy\TreeDataSource\Solr' => 'Finna\Hierarchy\TreeDataSource\Solr',
+                ],
+            ],
             'ils_driver' => [
                 'factories' => [
                     'Finna\ILS\Driver\Alma' => 'VuFind\ILS\Driver\DriverWithDateConverterFactory',
