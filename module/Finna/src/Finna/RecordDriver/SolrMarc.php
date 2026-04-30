@@ -1517,7 +1517,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     /**
      * Get the publication end date of the record.
      *
-     * @return number|false
+     * @return int|false
      */
     public function getPublicationEndDate()
     {
@@ -1872,6 +1872,8 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
                         || preg_match('/^(http|ftp)s?:\/\//', $address))
                     ) {
                         // Is there a description?  If not, just use the URL itself.
+                        $desc = null;
+                        $subfield = null;
                         foreach ($subfields as $subfield) {
                             $desc = $this->getSubfield($url, $subfield);
                             if ($desc) {
@@ -2007,10 +2009,9 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     /**
      * Returns the array element for the 'getAllRecordLinks' method.
      *
-     * @param File_MARC_Data_Field $field Field to examine
+     * @param array $field Field to examine
      *
-     * @return array|bool                 Array on success, boolean false if no
-     * valid link could be found in the data.
+     * @return array|bool Array on success, boolean false if no valid link could be found in the data.
      */
     protected function getFieldData($field)
     {
