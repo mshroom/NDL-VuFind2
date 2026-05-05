@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Record tab view helper
+ * Record tab view helper.
  *
  * PHP version 8
  *
@@ -34,7 +34,7 @@ use VuFind\RecordTab\TabManager;
 use function in_array;
 
 /**
- * Record tab view helper
+ * Record tab view helper.
  *
  * @category VuFind
  * @package  View_Helpers
@@ -45,7 +45,7 @@ use function in_array;
 class RecordTabs extends \Laminas\View\Helper\AbstractHelper
 {
     /**
-     * Constructor
+     * Constructor.
      *
      * @param array      $config     Config
      * @param TabManager $tabManager Tab Manager

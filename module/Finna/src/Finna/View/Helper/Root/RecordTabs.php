@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Record tab view helper
+ * Record tab view helper.
  *
  * PHP version 8
  *
@@ -32,7 +32,7 @@ namespace Finna\View\Helper\Root;
 use function count;
 
 /**
- * Record tab view helper
+ * Record tab view helper.
  *
  * @category VuFind
  * @package  View_Helpers
