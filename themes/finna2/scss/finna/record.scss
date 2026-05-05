@@ -1196,6 +1196,11 @@ finna-model-viewer .object-editor {
     display: flex;
     place-content: center;
   }
+  .series-record-format .iconlabel {
+    font-size: 0.9rem;
+    color: $gray-dark;
+    margin: 0;
+  }
 }
 
 // Component parts

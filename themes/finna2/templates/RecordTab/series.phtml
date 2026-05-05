@@ -70,10 +70,16 @@
             <a class="list-scrollable__item-container js-list-link" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($current))?>">
               <div class="list-scrollable__image-container">
                 <img class="list-scrollable__image" loading="lazy" src="<?=$this->recordImage($this->record($current))->getLargeImage()?>" alt="">
-                <div class="list-scrollable__image iconlabel hidden format-<?=$this->record($this->driver)->getFormatClass(end($formats))?>"></div>
+                <div class="list-scrollable__image iconlabel hidden format-<?=$this->record($current)->getFormatClass(end($formats))?>"></div>
               </div>
               <div class="list-scrollable__title-container">
                 <span class="list-scrollable__title"><?=$this->escapeHtml($current->getTitle())?></span>
+                <?php if ($formats = $current->getFormats()): ?>
+                  <?php $binding = $current->tryMethod('getBinding');?>
+                  <span class="series-record-format">
+                    <?=trim($this->record($current)->getFormatList())?><?php if (!empty($binding)): ?><span class="iconlabel label-binding"><span class="label-punctuation">, </span><?=$this->transEsc($binding)?></span><?php endif; ?>
+                  </span>
+                <?php endif; ?>
               </div>
             </a>
           </li>
