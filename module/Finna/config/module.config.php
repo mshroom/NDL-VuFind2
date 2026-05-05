@@ -522,6 +522,8 @@ $config = [
                         'Finna\AjaxHandler\GetRecordDriverRelatedRecordsFactory',
                     'Finna\AjaxHandler\GetRecordInfoByAuthority' =>
                         'Finna\AjaxHandler\GetRecordInfoByAuthorityFactory',
+                    'Finna\AjaxHandler\GetRecordSeries' =>
+                        'Finna\AjaxHandler\GetRecordSeriesFactory',
                     'Finna\AjaxHandler\GetRequestGroupPickupLocations' =>
                         'VuFind\AjaxHandler\AbstractIlsAndUserActionFactory',
                     'Finna\AjaxHandler\GetSearchResults' => 'VuFind\AjaxHandler\GetSearchResultsFactory',
@@ -575,6 +577,7 @@ $config = [
                     'getRecordData' => 'Finna\AjaxHandler\GetRecordData',
                     'getRecordDriverRelatedRecords' => 'Finna\AjaxHandler\GetRecordDriverRelatedRecords',
                     'getRecordInfoByAuthority' => 'Finna\AjaxHandler\GetRecordInfoByAuthority',
+                    'getRecordSeries' => 'Finna\AjaxHandler\GetRecordSeries',
                     'getSearchTabsRecommendations' => 'Finna\AjaxHandler\GetSearchTabsRecommendations',
                     'getSimilarRecords' => 'Finna\AjaxHandler\GetSimilarRecords',
                     'getUserList' => 'Finna\AjaxHandler\GetUserList',
@@ -1105,6 +1108,8 @@ $config = [
                     'Finna\RecordTab\HierarchyTree' => 'VuFind\RecordTab\HierarchyTreeFactory',
                     'Finna\RecordTab\Map' => 'Finna\RecordTab\Factory::getMap',
                     'Finna\RecordTab\UserComments' => 'Finna\RecordTab\Factory::getUserComments',
+                    'Finna\RecordTab\Series' => 'Finna\RecordTab\Factory::getSeries',
+
                 ],
                 'invokables' => [
                     'componentparts' => 'Finna\RecordTab\ComponentParts',
@@ -1114,6 +1119,7 @@ $config = [
                     'authorityrecordstopic' => 'Finna\RecordTab\AuthorityRecordsTopic',
                     'componentparts' => 'Finna\RecordTab\ComponentParts',
                     'holdingsarchive' => 'Finna\RecordTab\HoldingsArchive',
+                    'series' => 'Finna\RecordTab\Series',
 
                     // Overrides:
                     'VuFind\RecordTab\CollectionHierarchyTree' => 'Finna\RecordTab\CollectionHierarchyTree',

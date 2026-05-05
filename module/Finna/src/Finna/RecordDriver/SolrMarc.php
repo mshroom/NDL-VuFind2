@@ -1561,7 +1561,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
      *
      * @return array
      */
-    public function getSeries()
+    public function getSeries(): array
     {
         $matches = [];
 
@@ -1587,6 +1587,35 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
         }
 
         return $matches;
+    }
+
+    /**
+     * Get series order number and series order index field.
+     *
+     * @param string $series Series name
+     *
+     * @return ?array
+     */
+    public function getSeriesOrder(string $series): ?array
+    {
+        $record = $this->getMarcReader();
+        $seriesNormalized = $this->normalizeStringForComparison($series);
+        foreach ($record->getFields('490') as $field490) {
+            $order = $this->getSubfield($field490, 'v');
+            $subANormalized = $this->normalizeStringForComparison(
+                $this->stripTrailingPunctuation($this->getSubfield($field490, 'a'))
+            );
+            if (
+                $seriesNormalized === $subANormalized
+                && preg_match('/(\d+)$/', $order, $matches)
+            ) {
+                return [
+                    'order' => (int)$matches[1],
+                    'orderKey' => $this->fields['series_order_str'] ?? '',
+                ];
+            }
+        }
+        return null;
     }
 
     /**
