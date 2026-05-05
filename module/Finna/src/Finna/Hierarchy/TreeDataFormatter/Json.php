@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Hierarchy Tree Data Formatter (JSON)
+ * Hierarchy Tree Data Formatter (JSON).
  *
  * PHP version 8
  *
@@ -33,7 +33,7 @@ use function count;
 use function is_array;
 
 /**
- * Hierarchy Tree Data Formatter (JSON)
+ * Hierarchy Tree Data Formatter (JSON).
  *
  * @category VuFind
  * @package  HierarchyTree_DataFormatter
@@ -44,7 +44,7 @@ use function is_array;
 class Json extends \VuFind\Hierarchy\TreeDataFormatter\Json
 {
     /**
-     * Get Solr Children for JSON
+     * Get Solr Children for JSON.
      *
      * @param object $record   Solr record to format
      * @param string $parentID The starting point for the current recursion
@@ -73,7 +73,7 @@ class Json extends \VuFind\Hierarchy\TreeDataFormatter\Json
 
     /**
      * Get language versions of the record title.
-     * See also \VuFind\Hierarchy\TreeDataFormatter::pickTitle()
+     * See also \VuFind\Hierarchy\TreeDataFormatter::pickTitle().
      *
      * @param object $record   Solr record to format
      * @param string $parentID The starting point for the current recursion
@@ -106,7 +106,7 @@ class Json extends \VuFind\Hierarchy\TreeDataFormatter\Json
     /**
      * Get the language versions of the titles of this item within parent collections.
      * Returns an array of parent ID => sequence number.
-     * See also \VuFind\Hierarchy\TreeDataFormatter::getTitlesInHierarchy()
+     * See also \VuFind\Hierarchy\TreeDataFormatter::getTitlesInHierarchy().
      *
      * @param object $fields   Solr fields
      * @param string $language Language code

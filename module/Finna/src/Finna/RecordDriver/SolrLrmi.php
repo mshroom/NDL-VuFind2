@@ -55,7 +55,7 @@ class SolrLrmi extends SolrQdc
     use LrmiDriverTrait;
 
     /**
-     * File formats that are downloadable
+     * File formats that are downloadable.
      *
      * @var array
      */
@@ -77,7 +77,7 @@ class SolrLrmi extends SolrQdc
     ];
 
     /**
-     * Array of excluded descriptions
+     * Array of excluded descriptions.
      *
      * @var array
      */
@@ -94,7 +94,7 @@ class SolrLrmi extends SolrQdc
     }
 
     /**
-     * Get identifier
+     * Get identifier.
      *
      * @return array
      */
@@ -133,7 +133,7 @@ class SolrLrmi extends SolrQdc
     }
 
     /**
-     * Get an array of summary strings for the record
+     * Get an array of summary strings for the record.
      *
      * @return array
      */
@@ -174,7 +174,7 @@ class SolrLrmi extends SolrQdc
     }
 
     /**
-     * Get educational audiences
+     * Get educational audiences.
      *
      * @return array
      */
@@ -184,7 +184,7 @@ class SolrLrmi extends SolrQdc
     }
 
     /**
-     * Get all authors apart from presenters
+     * Get all authors apart from presenters.
      *
      * @return array
      */
@@ -207,7 +207,7 @@ class SolrLrmi extends SolrQdc
     }
 
     /**
-     * Return educational levels
+     * Return educational levels.
      *
      * @return array
      */
@@ -256,7 +256,7 @@ class SolrLrmi extends SolrQdc
     }
 
     /**
-     * Get educational subjects
+     * Get educational subjects.
      *
      * @return array
      */
@@ -266,7 +266,7 @@ class SolrLrmi extends SolrQdc
     }
 
     /**
-     * Get educational material type
+     * Get educational material type.
      *
      * @return array
      */
@@ -276,7 +276,7 @@ class SolrLrmi extends SolrQdc
     }
 
     /**
-     * Get topics
+     * Get topics.
      *
      * @param string $type defaults to /onto/yso/
      *
@@ -311,7 +311,7 @@ class SolrLrmi extends SolrQdc
     }
 
     /**
-     * Get file format
+     * Get file format.
      *
      * @param string $filename file name
      *
@@ -465,7 +465,7 @@ class SolrLrmi extends SolrQdc
     }
 
     /**
-     * Get material titles in an assoc array
+     * Get material titles in an assoc array.
      *
      * @param object $names to look for
      *
@@ -483,7 +483,7 @@ class SolrLrmi extends SolrQdc
     }
 
     /**
-     * Get creation date
+     * Get creation date.
      *
      * @return string|false
      */
@@ -497,7 +497,7 @@ class SolrLrmi extends SolrQdc
     }
 
     /**
-     * Get last modified date
+     * Get last modified date.
      *
      * @return string|false
      */
@@ -511,7 +511,7 @@ class SolrLrmi extends SolrQdc
     }
 
     /**
-     * Get educational use
+     * Get educational use.
      *
      * @return array
      */
@@ -526,7 +526,7 @@ class SolrLrmi extends SolrQdc
     }
 
     /**
-     * Get educational aim
+     * Get educational aim.
      *
      * @return array
      */
@@ -540,7 +540,7 @@ class SolrLrmi extends SolrQdc
     }
 
     /**
-     * Get accessibility features
+     * Get accessibility features.
      *
      * @return array
      */
@@ -555,7 +555,7 @@ class SolrLrmi extends SolrQdc
     }
 
     /**
-     * Get accessibility hazards
+     * Get accessibility hazards.
      *
      * @return array
      */

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Hierarchy Tree Data Source (Solr)
+ * Hierarchy Tree Data Source (Solr).
  *
  * PHP version 8
  *
@@ -30,7 +30,7 @@
 namespace Finna\Hierarchy\TreeDataSource;
 
 /**
- * Hierarchy Tree Data Source (Solr)
+ * Hierarchy Tree Data Source (Solr).
  *
  * This is a base helper class for producing hierarchy Trees.
  *

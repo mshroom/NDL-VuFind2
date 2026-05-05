@@ -35,6 +35,7 @@ namespace Finna\RecordDriver;
 use FinnaXml\XmlDoc;
 
 use function array_slice;
+use function count;
 use function in_array;
 
 /**
@@ -56,35 +57,35 @@ class SolrQdc extends SolrDefault implements \Psr\Log\LoggerAwareInterface
     use \VuFind\Log\LoggerAwareTrait;
 
     /**
-     * Dublin Core XML namespace
+     * Dublin Core XML namespace.
      *
      * @var string
      */
     protected string $dcNs = 'http://purl.org/dc/elements/1.1/';
 
     /**
-     * Dublin Core Terms vocabulary namespace
+     * Dublin Core Terms vocabulary namespace.
      *
      * @var string
      */
     protected string $dcTermsNs = 'http://purl.org/dc/terms/';
 
     /**
-     * Extended Dublic Core namespace
+     * Extended Dublic Core namespace.
      *
      * @var string
      */
     protected string $qdcExtendedNs = 'http://www.kansalliskirjasto.fi/qdc_extended';
 
     /**
-     * KK namespace
+     * KK namespace.
      *
      * @var string
      */
     protected string $kkNs = 'http://kk/1.0';
 
     /**
-     * Image size mappings
+     * Image size mappings.
      *
      * @var array
      */
@@ -98,7 +99,7 @@ class SolrQdc extends SolrDefault implements \Psr\Log\LoggerAwareInterface
     ];
 
     /**
-     * Image media types
+     * Image media types.
      *
      * @var array
      */
@@ -108,7 +109,7 @@ class SolrQdc extends SolrDefault implements \Psr\Log\LoggerAwareInterface
     ];
 
     /**
-     * Mappings for series information, type => key
+     * Mappings for series information, type => key.
      *
      * @var array
      */
@@ -118,21 +119,21 @@ class SolrQdc extends SolrDefault implements \Psr\Log\LoggerAwareInterface
     ];
 
     /**
-     * Default value for no_locale definition used for no language
+     * Default value for no_locale definition used for no language.
      *
      * @var string
      */
     protected const NO_LOCALE = 'no_locale';
 
     /**
-     * Array of excluded descriptions
+     * Array of excluded descriptions.
      *
      * @var array
      */
     protected $excludedDescriptions = ['notification'];
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param \VuFind\Config\Config $mainConfig     VuFind main configuration (omit
      * for built-in defaults)
@@ -151,7 +152,7 @@ class SolrQdc extends SolrDefault implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
-     * Return an associative array of abstracts associated with this record
+     * Return an associative array of abstracts associated with this record.
      *
      * @return array of abstracts using abstract languages as keys
      */
@@ -194,7 +195,7 @@ class SolrQdc extends SolrDefault implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
-     * Get descriptions as an array
+     * Get descriptions as an array.
      *
      * @return array
      */
@@ -214,7 +215,7 @@ class SolrQdc extends SolrDefault implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
-     * Get an array of mediums for the record
+     * Get an array of mediums for the record.
      *
      * @return array
      */
@@ -224,7 +225,7 @@ class SolrQdc extends SolrDefault implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
-     * Get an array of formats/extents for the record
+     * Get an array of formats/extents for the record.
      *
      * @return array
      */
@@ -234,7 +235,7 @@ class SolrQdc extends SolrDefault implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
-     * Get all authors apart from presenters
+     * Get all authors apart from presenters.
      *
      * @return array
      */
@@ -424,7 +425,7 @@ class SolrQdc extends SolrDefault implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
-     * Get image rights
+     * Get image rights.
      *
      * @param string $language Language for the copyright
      *
@@ -495,7 +496,7 @@ class SolrQdc extends SolrDefault implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
-     * Return education programs
+     * Return education programs.
      *
      * @return array
      */
@@ -564,6 +565,35 @@ class SolrQdc extends SolrDefault implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
+     * Return full record as a filtered SimpleXMLElement for public APIs.
+     * Legacy method, use getFilteredXmlElement instead.
+     *
+     * @return \SimpleXMLElement
+     */
+    public function getFilteredXMLElementLegacy(): \SimpleXMLElement
+    {
+        $record = clone $this->getXmlRecord();
+        while ($record->abstract) {
+            unset($record->abstract[0]);
+        }
+        // Try to filter out any summary or abstract fields
+        $filterTerms = [
+            'tiivistelmä', 'abstract', 'abstracts', 'abstrakt', 'sammandrag',
+            'sommario', 'summary', 'аннотация',
+        ];
+        for ($i = count($record->description) - 1; $i >= 0; $i--) {
+            $node = $record->description[$i];
+            $description = mb_strtolower((string)$node, 'UTF-8');
+            $firstWords = array_slice(preg_split('/\s/', $description), 0, 5);
+            if (array_intersect($firstWords, $filterTerms)) {
+                unset($record->description[$i]);
+            }
+        }
+
+        return $record;
+    }
+
+    /**
      * Return full record as filtered XML for public APIs.
      *
      * @return string
@@ -574,7 +604,7 @@ class SolrQdc extends SolrDefault implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
-     * Get identifier
+     * Get identifier.
      *
      * @return array
      */
@@ -591,7 +621,7 @@ class SolrQdc extends SolrDefault implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
-     * Get identifiers as an array
+     * Get identifiers as an array.
      *
      * @return array
      */
@@ -658,7 +688,7 @@ class SolrQdc extends SolrDefault implements \Psr\Log\LoggerAwareInterface
      *               'link'  => link_URI
      *        ),
      *        ...
-     * )
+     * ).
      *
      * @return null|array
      */
@@ -691,7 +721,7 @@ class SolrQdc extends SolrDefault implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
-     * Return keywords
+     * Return keywords.
      *
      * @return array
      */
@@ -767,7 +797,7 @@ class SolrQdc extends SolrDefault implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
-     * Get series information
+     * Get series information.
      *
      * @return array
      */
@@ -798,7 +828,7 @@ class SolrQdc extends SolrDefault implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
-     * Get access rights
+     * Get access rights.
      *
      * @return array
      */
@@ -822,7 +852,7 @@ class SolrQdc extends SolrDefault implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
-     * Get descriptions by type
+     * Get descriptions by type.
      *
      * @param array $include Description types to include, otherwise all but excluded types
      *
@@ -872,7 +902,7 @@ class SolrQdc extends SolrDefault implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
-     * Get contributor role translation key
+     * Get contributor role translation key.
      *
      * @param string $role     Contributor role
      * @param string $fallback Fallback to use when no supported role is found
