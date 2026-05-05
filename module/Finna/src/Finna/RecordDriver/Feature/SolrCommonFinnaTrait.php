@@ -318,7 +318,7 @@ trait SolrCommonFinnaTrait
                 $titles[] = $title;
             }
         }
-        return array_unique([...$titles, ...$this->fields['title_alt'] ?? []]);
+        return array_values(array_unique([...$titles, ...$this->fields['title_alt'] ?? []]));
     }
 
     /**
