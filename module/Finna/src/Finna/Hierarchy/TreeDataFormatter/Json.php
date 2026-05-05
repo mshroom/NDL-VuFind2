@@ -118,10 +118,9 @@ class Json extends \VuFind\Hierarchy\TreeDataFormatter\Json
         $retVal = [];
         $field = 'title_in_hierarchy_' . substr($language, 0, 2) . '_str';
         if (
-            isset($fields->$field)
-            && is_array($fields->$field)
+            null !== ($titles = $fields->$field ?? null)
+            && is_array($titles)
         ) {
-            $titles = $fields->$field;
             $parentIDs = (array)($fields->hierarchy_parent_id ?? []);
             if (count($titles) === count($parentIDs)) {
                 foreach ($parentIDs as $key => $val) {
