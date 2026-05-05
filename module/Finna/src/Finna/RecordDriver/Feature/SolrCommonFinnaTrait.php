@@ -314,7 +314,7 @@ trait SolrCommonFinnaTrait
             $titles[] = $title;
         }
         foreach ($this->getPrioritizedLanguages() as $language) {
-            if ($title = $this->fields['title_' . $language . '_txt'] ?? '') {
+            if ('' !== ($title = $this->fields['title_' . $language . '_txt'] ?? '')) {
                 $titles[] = $title;
             }
         }
