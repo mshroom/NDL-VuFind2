@@ -111,7 +111,7 @@ class Json extends \VuFind\Hierarchy\TreeDataFormatter\Json
      * @param object $fields   Solr fields
      * @param string $language Language code
      *
-     * @return Array
+     * @return array
      */
     protected function getLanguageTitlesInHierarchy($fields, $language)
     {
