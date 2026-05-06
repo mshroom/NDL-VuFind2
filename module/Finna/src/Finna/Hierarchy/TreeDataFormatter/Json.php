@@ -54,34 +54,22 @@ class Json extends \VuFind\Hierarchy\TreeDataFormatter\Json
      */
     protected function formatNode($record, $parentID = null)
     {
-        $raw = [
-            'id' => $record->id,
-            'type' => $this->isCollection($record) ? 'collection' : 'record',
-            'title' => $this->pickTitle($record, $parentID),
-            'titles' => $this->pickLanguageTitles($record, $parentID),
-        ];
-
-        if (isset($this->childMap[$record->id])) {
-            $children = $this->mapChildren($record->id);
-            if (!empty($children)) {
-                $raw['children'] = $children;
-            }
-        }
-
-        return (object)$raw;
+        $result = (object)parent::formatNode($record, $parentID);
+        $result->titles = $this->pickLanguageTitles($record, $parentID);
+        return $result;
     }
 
     /**
      * Get language versions of the record title.
      * See also \VuFind\Hierarchy\TreeDataFormatter::pickTitle().
      *
-     * @param object $record   Solr record to format
-     * @param string $parentID The starting point for the current recursion
+     * @param object  $record   Solr record to format
+     * @param ?string $parentID The starting point for the current recursion
      * (equivalent to Solr field hierarchy_parent_id)
      *
      * @return array
      */
-    protected function pickLanguageTitles($record, $parentID): array
+    protected function pickLanguageTitles(object $record, ?string $parentID): array
     {
         $results = [];
 
@@ -113,7 +101,7 @@ class Json extends \VuFind\Hierarchy\TreeDataFormatter\Json
      *
      * @return array
      */
-    protected function getLanguageTitlesInHierarchy($fields, $language)
+    protected function getLanguageTitlesInHierarchy(object $fields, string $language): array
     {
         $retVal = [];
         $field = 'title_in_hierarchy_' . substr($language, 0, 2) . '_str';
