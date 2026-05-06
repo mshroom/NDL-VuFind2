@@ -57,9 +57,8 @@ use function strlen;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:plugins:record_drivers Wiki
  */
-class SolrLido extends \VuFind\RecordDriver\SolrDefault implements \Psr\Log\LoggerAwareInterface
+class SolrLido extends SolrDefault implements \Psr\Log\LoggerAwareInterface
 {
-    use Feature\SolrFinnaTrait;
     use Feature\FinnaXmlReaderTrait;
     use Feature\FinnaUrlCheckTrait;
     use \VuFind\Log\LoggerAwareTrait;
@@ -405,11 +404,12 @@ class SolrLido extends \VuFind\RecordDriver\SolrDefault implements \Psr\Log\Logg
      * - dateTaken   Photo date taken
      * - perspectives Image perspectives
      *
-     * @param string $language Language for textual information
+     * @param string $language   Language for textual information
+     * @param bool   $includePdf Whether to include first PDF file when no image
      *
      * @return array
      */
-    public function getAllImages($language = null)
+    public function getAllImages($language = null, $includePdf = false)
     {
         $language ??= $this->getTranslatorLocale();
         $representations = $this->getRepresentations($language);
@@ -1191,13 +1191,23 @@ class SolrLido extends \VuFind\RecordDriver\SolrDefault implements \Psr\Log\Logg
     }
 
     /**
+     * Get the full title of the record.
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->fields[$this->getPrioritizedTitleField()] ?? '';
+    }
+
+    /**
      * Get an array of alternative titles for the record.
      *
      * @return array
      */
     public function getAlternativeTitles()
     {
-        return $this->fields['title_alt'] ?? [];
+        return $this->compareWithTitle($this->getAllTitles());
     }
 
     /**
@@ -1261,9 +1271,12 @@ class SolrLido extends \VuFind\RecordDriver\SolrDefault implements \Psr\Log\Logg
     /**
      * Get online URLs.
      *
+     * @param bool  $raw          Whether to return raw data
+     * @param array $excludeTypes If set, will remove types of urls from result
+     *
      * @return array
      */
-    public function getOnlineURLs(): array
+    public function getOnlineURLs($raw = false, $excludeTypes = []): array
     {
         return $this->getDocuments();
     }
