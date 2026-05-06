@@ -104,7 +104,7 @@ class Json extends \VuFind\Hierarchy\TreeDataFormatter\Json
     protected function getLanguageTitlesInHierarchy(object $fields, string $language): array
     {
         $retVal = [];
-        $field = 'title_in_hierarchy_' . substr($language, 0, 2) . '_str';
+        $field = 'title_in_hierarchy_' . substr($language, 0, 2) . '_str_mv';
         if (
             null !== ($titles = $fields->$field ?? null)
             && is_array($titles)
