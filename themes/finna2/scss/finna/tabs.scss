@@ -288,6 +288,7 @@
  */
 .nav-scrollable {
   position: relative;
+  overscroll-behavior-x: contain;
   --#{$prefix}nav-link-padding-y: #{$nav-link-padding-y};
 
   .nav {
