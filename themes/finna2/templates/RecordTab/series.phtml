@@ -31,16 +31,18 @@
       <h2 id="series"><?=$this->escapeHtml($currentSeries)?></h2>
     <?php endif; ?>
     <div class="series-controls">
-      <?=
-        $this->translate(
-            'showing_results_of_html',
-            [
-              '%%start%%' => 1,
-              '%%end%%' => count($results),
-              '%%total%%' => $this->localizedNumber($results->getTotal()),
-            ]
-        );
-      ?>
+      <div class="search-stats">
+        <?=
+          $this->translate(
+              'showing_results_of_html',
+              [
+                '%%start%%' => 1,
+                '%%end%%' => count($results),
+                '%%total%%' => $this->localizedNumber($results->getTotal()),
+              ]
+          );
+        ?>
+      </div>
 
       <?php if (count($seriesKeys) > 1): ?>
         <span class="series-dropdown-text"><?= $this->transEsc('Series')?>:</span>
