@@ -1592,11 +1592,12 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     /**
      * Get series order number and series order index field.
      *
-     * @param string $series Series name
+     * @param string $series    Current series
+     * @param string $seriesKey Current series key
      *
      * @return ?array
      */
-    public function getSeriesOrder(string $series): ?array
+    public function getSeriesOrder(string $series, string $seriesKey): ?array
     {
         $record = $this->getMarcReader();
         $seriesNormalized = $this->normalizeStringForComparison($series);

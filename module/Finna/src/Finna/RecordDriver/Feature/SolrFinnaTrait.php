@@ -1450,8 +1450,11 @@ trait SolrFinnaTrait
      */
     public function getSeriesFromSeriesKey(string $seriesKey): string
     {
+        if (!$seriesKey) {
+            return '';
+        }
         $parts = explode(' ', $seriesKey);
-        $seriesName = $parts[1];
+        $seriesName = $parts[1] ?? '';
         $reg = '/[\x00-\x20\x21-\x2F\x3A-\x40,\x5B-\x60,\x7B-\x7F]/';
         foreach ($this->tryMethod('getSeries') ?? [] as $series) {
             $name = is_array($series) ? $series['name'] : $series;
@@ -1472,7 +1475,13 @@ trait SolrFinnaTrait
      */
     protected function normalizeStringForComparison(string $str): string
     {
-        return mb_strtolower(trim(strtr($str, $this->foldingTable)), 'UTF-8');
+        $str = strtr($str, $this->foldingTable);
+        $str = preg_replace(
+            '/[\x00-\x20\x21-\x2F\x3A-\x40,\x5B-\x60,\x7B-\x7F]/',
+            '',
+            $str
+        );
+        return mb_strtolower(trim($str), 'UTF-8');
     }
 
     /**

@@ -12,6 +12,7 @@
     scroll-snap-type: x mandatory;
     padding: 1rem 0.5rem 1rem 0.5rem;
     list-style: none;
+    overscroll-behavior-x: contain;
   }
 
   /* Arrow buttons */
