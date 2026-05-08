@@ -1427,7 +1427,7 @@ trait SolrFinnaTrait
             'series_key_str_mv:"' . $key . '"'
         );
         $params = new \VuFindSearch\ParamBag(['sort' => 'series_order_str asc']);
-        $command = new SearchCommand($this->sourceIdentifier, $query, 0, 20, $params);
+        $command = new SearchCommand($this->sourceIdentifier, $query, 0, 40, $params);
         return $this->searchService->invoke($command)->getResult();
     }
 
