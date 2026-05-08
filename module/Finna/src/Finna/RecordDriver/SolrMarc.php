@@ -1608,7 +1608,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
             );
             if (
                 $seriesNormalized === $subANormalized
-                && preg_match('/(\d+)$/', $order, $matches)
+                && preg_match('/(\d+)/', $order, $matches)
             ) {
                 return [
                     'order' => (int)$matches[1],
