@@ -726,11 +726,6 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
                 $user->setEmail('');
                 $user->setHasUserProvidedEmail(true);
                 $userService->persistEntity($user);
-            } elseif ($values->email === $user->getEmail()) {
-                // No need to do anything, but check if we need a message about pending email:
-                if ($user->getPendingEmail()) {
-                    $this->flashMessenger()->addInfoMessage('email_verification_pending');
-                }
             } elseif ($validator->isValid($values->email)) {
                 $this->getAuthManager()->updateEmail($user, $values->email);
                 // If we have a pending change, we need to send a verification email:
