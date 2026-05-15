@@ -104,6 +104,9 @@ class FinnaCookieConsentElement extends HTMLElement {
     aShowModal.href = '#';
     aShowModal.setAttribute('aria-haspopup', 'dialog');
     aShowModal.dataset.cc = 'show-consentModal';
+    aShowModal.addEventListener('click', () => {
+      $.fn.finnaPopup.closeOpen();
+    });
     aShowModal.append(VuFind.translate('Cookie Settings'));
     divActions.append(aShowModal);
     divInfo.append(divActions);
