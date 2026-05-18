@@ -1831,7 +1831,6 @@ class SolrEad3 extends SolrEad
             $relations[$role][]
                 = ['id' => (string)$attr->href, 'field' => 'identifier'];
         }
-        var_dump($relations);
         return $relations;
     }
 
