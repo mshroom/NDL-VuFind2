@@ -32,6 +32,7 @@
 namespace Finna\RecordTab;
 
 use Laminas\ServiceManager\ServiceManager;
+use VuFind\Config\ConfigManager;
 use VuFind\Config\PathResolver;
 
 /**
@@ -106,5 +107,18 @@ class Factory
             'enabled' === $capabilities->getCommentSetting(),
             $useCaptcha
         );
+    }
+
+    /**
+     * Factory for Series tab plugin.
+     *
+     * @param ServiceManager $sm Service manager.
+     *
+     * @return Series
+     */
+    public static function getSeries(ServiceManager $sm)
+    {
+        $config = $sm->get(ConfigManager::class)->get('config');
+        return new Series((bool)($config['Record']['series_tab'] ?? true));
     }
 }

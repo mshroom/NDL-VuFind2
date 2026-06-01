@@ -41,6 +41,15 @@ namespace Finna\RecordTab;
 class Series extends \VuFind\RecordTab\AbstractBase
 {
     /**
+     * Constructor.
+     *
+     * @param bool $enabled Is series tab enabled?
+     */
+    public function __construct(protected bool $enabled)
+    {
+    }
+
+    /**
      * Get the on-screen description for this tab.
      *
      * @return string
@@ -67,6 +76,6 @@ class Series extends \VuFind\RecordTab\AbstractBase
      */
     public function isActive()
     {
-        return (bool)$this->getRecordDriver()->tryMethod('getSeriesKeys');
+        return $this->enabled && (bool)$this->getRecordDriver()->tryMethod('getSeriesKeys');
     }
 }
