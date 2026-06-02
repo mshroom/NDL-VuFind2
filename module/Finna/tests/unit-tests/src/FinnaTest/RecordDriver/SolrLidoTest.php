@@ -1715,6 +1715,78 @@ class SolrLidoTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Function to get expected extended colors data.
+     *
+     * @return \Iterator
+     */
+    public static function getColorsExtendedData(): \Iterator
+    {
+        yield [
+            'fi',
+            [
+                [
+                    'color' => 'mustavalkoinen',
+                    'id' => '',
+                    'source' => '',
+                ],
+                [
+                    'color' => 'punainen',
+                    'id' => 'http://www.yso.fi/onto/koko/p54358',
+                    'source' => 'koko',
+                ],
+            ],
+        ];
+        yield [
+            'sv',
+            [
+                [
+                    'color' => 'svartvit',
+                    'id' => '',
+                    'source' => '',
+                ],
+                [
+                    'color' => 'punainen',
+                    'id' => 'http://www.yso.fi/onto/koko/p54358',
+                    'source' => 'koko',
+                ],
+            ],
+        ];
+        yield [
+            'en',
+            [
+                [
+                    'color' => 'mustavalkoinen',
+                    'id' => '',
+                    'source' => '',
+                ],
+                [
+                    'color' => 'red',
+                    'id' => 'http://www.yso.fi/onto/koko/p54358',
+                    'source' => 'koko',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test getColorsExtended.
+     *
+     * @param string $language Language
+     * @param array  $expected Result to be expected
+     *
+     * @return void
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getColorsExtendedData')]
+    public function testGetColorsExtended(string $language, array $expected): void
+    {
+        $driver = $this->getDriver('lido_test2.xml', language: $language);
+        $this->assertSame(
+            $expected,
+            $driver->getColorsExtended()
+        );
+    }
+
+    /**
      * Test getInscriptions.
      *
      * @return void
