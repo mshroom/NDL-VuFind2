@@ -135,6 +135,7 @@ class Bootstrapper
                 || ($controller == 'l1record' && $action == 'ajaxtab')
                 || ($controller == 'myresearch')
                 || ($controller == 'record' && $action == 'ajaxtab')
+                || ($controller == 'record' && $action == 'collectionlist')
                 || ($controller == 'record' && $action == 'holdings')
                 || ($controller == 'record' && $action == 'details')
                 || ($controller == 'record' && $action == 'downloadfile')
