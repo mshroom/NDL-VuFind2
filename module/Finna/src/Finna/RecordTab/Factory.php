@@ -119,6 +119,6 @@ class Factory
     public static function getSeries(ServiceManager $sm)
     {
         $config = $sm->get(ConfigManager::class)->get('config');
-        return new Series((bool)($config['Record']['series_tab'] ?? true));
+        return new Series((bool)($config['Record']['series_tab'] ?? false));
     }
 }
