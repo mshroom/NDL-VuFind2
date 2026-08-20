@@ -2595,8 +2595,7 @@ class SolrLido extends SolrDefault implements \Psr\Log\LoggerAwareInterface
                 if (null === $firstNode && '' !== $contents) {
                     $firstNode = $node;
                 }
-                $langAttr = $reader->attr($node, "{{$this->xmlNs}}lang") ?? $reader->attr($node, 'lang');
-                if ($langAttr === $lng && '' !== $contents) {
+                if ('' !== $contents && $this->getLangAttr($node) === $lng) {
                     return $node;
                 }
             }
