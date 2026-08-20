@@ -807,7 +807,7 @@ class SolrLido extends SolrDefault implements \Psr\Log\LoggerAwareInterface
         $reader = $this->getXmlReader();
         foreach ($reader->all($resourceSet, 'resourceDescription') as $description) {
             if ($type = $reader->attr($description, 'type')) {
-                if ($lang = $reader->attr($description, 'lang')) {
+                if ($lang = $this->getLangAttr($description)) {
                     $results[$type][$lang] = $reader->value($description);
                 } else {
                     $results[$type][] = $reader->value($description);
@@ -1520,7 +1520,7 @@ class SolrLido extends SolrDefault implements \Psr\Log\LoggerAwareInterface
                         'id' => $id,
                         'source' => $source,
                     ];
-                    $lang = $reader->attr($term, 'lang');
+                    $lang = $this->getLangAttr($term);
                     if ($lang === $language) {
                         $langMethodsExtended[] = [
                             'data' => $termStr,
@@ -1558,7 +1558,7 @@ class SolrLido extends SolrDefault implements \Psr\Log\LoggerAwareInterface
                                 continue;
                             }
                             $label = null;
-                            $lang = $reader->attr($term, 'lang');
+                            $lang = $this->getLangAttr($term);
                             // Musketti
                             $label = $reader->attr($term, 'label');
                             if (!$label) {
@@ -2248,7 +2248,7 @@ class SolrLido extends SolrDefault implements \Psr\Log\LoggerAwareInterface
                     if ('' === ($str = $reader->value($term) ?? '')) {
                         continue;
                     }
-                    $langAttr = $reader->attr($term, 'lang');
+                    $langAttr = $this->getLangAttr($term);
                     if ($id !== '') {
                         $topics[] = [
                             'data' => $str,
@@ -2663,7 +2663,7 @@ class SolrLido extends SolrDefault implements \Psr\Log\LoggerAwareInterface
         $reader = $this->getXmlReader();
         foreach ($nodeList as $node) {
             if ('' !== ($reader->value($node))) {
-                $lang = $reader->attr($node, 'lang') ?? 'no_locale';
+                $lang = $this->getLangAttr($node) ?? 'no_locale';
                 $first = $first ?: $lang;
                 if (in_array($lang, $languages)) {
                     $items[] = $node;
@@ -2828,7 +2828,7 @@ class SolrLido extends SolrDefault implements \Psr\Log\LoggerAwareInterface
                 continue;
             }
             foreach ($reader->all($objectDescriptionSet, 'descriptiveNoteValue') as $node) {
-                if (in_array($reader->attr($node, 'lang'), $preferredLanguages)) {
+                if (in_array($this->getLangAttr($node), $preferredLanguages)) {
                     if ('' !== ($term = $reader->value($node))) {
                         $results[] = $term;
                     }
