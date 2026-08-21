@@ -416,19 +416,25 @@ class ModelViewerClass extends HTMLElement {
      * Start to load the model from the provider to cache
      */
     fetch(this.src)
-      .then(response => response.json())
-      .then(responseJSON => {
-        if (responseJSON.data && responseJSON.data.url) {
-          this.src = responseJSON.data.url;
-          try {
-            this.createElement();
-            return;
-          } catch (e) {
-            console.error('Failed to create element:');
-            console.error(e);
-          }
+      .then(response => {
+        if (!response.ok) {
+          this.loadInfo.textContent = this.translations.error_occurred || 'An error has occurred';
+        } else {
+          response.json()
+            .then(responseJSON => {
+              if (responseJSON.data && responseJSON.data.url) {
+                this.src = responseJSON.data.url;
+                try {
+                  this.createElement();
+                  return;
+                } catch (e) {
+                  console.error('Failed to create element:');
+                  console.error(e);
+                }
+              }
+              this.loadInfo.textContent = this.translations.error_occurred || 'An error has occurred';
+            });
         }
-        this.loadInfo.textContent = this.translations['An error has occurred'] || 'An error has occurred';
       });
   }
 

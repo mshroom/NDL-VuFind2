@@ -94,11 +94,12 @@ class Loader
     ): array {
         $cacheDir = $this->cacheManager->getCache($cacheId)->getOptions()->getCacheDir();
         $path = "$cacheDir/$fileName";
+        $tmpPath = "$cacheDir/" . getmypid() . '_' . time() . '_' . $fileName;
         $maxAge = $this->config->$configSection->cacheTime ?? 43200;
         $result = true;
         $error = '';
         if (!file_exists($path) || time() - filemtime($path) > $maxAge * 60) {
-            $fileStream = new FileStream($path);
+            $fileStream = new FileStream($tmpPath);
             $client = $this->guzzleService->createGuzzleClient($url, 300);
             $response = $client->request(
                 'GET',
@@ -123,6 +124,12 @@ class Loader
                 );
                 $this->logError($error);
                 $result = false;
+            }
+            // Move file into place:
+            if (!rename($tmpPath, $path)) {
+                $this->logError("Could not rename $tmpPath to $path");
+                $result = false;
+                unlink($tmpPath);
             }
         }
 
