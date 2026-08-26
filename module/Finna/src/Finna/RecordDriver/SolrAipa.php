@@ -30,9 +30,14 @@
 
 namespace Finna\RecordDriver;
 
+use Exception;
 use Finna\RecordDriver\Feature\ContainerFormatInterface;
 use Finna\RecordDriver\Feature\ContainerFormatTrait;
 use Finna\RecordDriver\Feature\LrmiDriverTrait;
+use NatLibFi\FinnaCodeSets\FinnaCodeSets;
+use NatLibFi\FinnaCodeSets\Model\Organisation\OrganisationInterface;
+use NatLibFi\FinnaCodeSets\Source\NatLibFi\Finna\FinnaAdminApi;
+use NatLibFi\FinnaCodeSets\Source\OrganisationsSourceInterface;
 use VuFindXml\XmlDoc;
 
 use function in_array;
@@ -58,6 +63,13 @@ class SolrAipa extends SolrQdc implements ContainerFormatInterface
     public const AIPA_TYPE_RESEARCH = 'aipa-research';
 
     /**
+     * Finna Code Sets library instance.
+     *
+     * @var ?FinnaCodeSets
+     */
+    protected ?FinnaCodeSets $codeSets = null;
+
+    /**
      * Encapsulated content type records.
      *
      * @var array
@@ -70,6 +82,24 @@ class SolrAipa extends SolrQdc implements ContainerFormatInterface
      * @var array
      */
     protected $excludedDescriptions = [];
+
+    /**
+     * Attach Finna Code Sets library instance.
+     *
+     * @param FinnaCodeSets $codeSets Finna Code Sets library instance
+     *
+     * @return void
+     */
+    public function attachCodeSetsLibrary(FinnaCodeSets $codeSets): void
+    {
+        if (!$apiBaseUrl = $this->mainConfig['Finna']['finna_admin_api_base_url']) {
+            return;
+        }
+        // Configure and set FinnaAdmin source for organizations.
+        $codeSets->setClassConfig(FinnaAdminApi::class, ['apiBaseUrl' => $apiBaseUrl]);
+        $codeSets->setSourceClass(OrganisationsSourceInterface::class, FinnaAdminApi::class);
+        $this->codeSets = $codeSets;
+    }
 
     /**
      * Get an array of summary strings for the record.
@@ -359,6 +389,41 @@ class SolrAipa extends SolrQdc implements ContainerFormatInterface
     public function getAdditionalInformation(): string
     {
         return $this->getXmlReader()->firstValue(path: "{{$this->aipaNs}}additionalInformation") ?? '';
+    }
+
+    /**
+     * Return feedback organization.
+     *
+     * @return ?OrganisationInterface
+     */
+    public function getFeedbackOrganization(): ?OrganisationInterface
+    {
+        try {
+            if (
+                ($id = $this->getXmlReader()->firstValue(path: "{{$this->aipaNs}}feedbackOrganization"))
+                && ($organization = $this->codeSets?->getOrganisation($id))
+            ) {
+                return $organization;
+            }
+        } catch (Exception) {
+        }
+        return null;
+    }
+
+    /**
+     * Return feedback email.
+     *
+     * @return ?string
+     */
+    public function getFeedbackEmail(): ?string
+    {
+        if (
+            ($organization = $this->getFeedbackOrganization())
+            && ($feedbackEmail = $organization->getFeedbackEmail())
+        ) {
+            return $feedbackEmail;
+        }
+        return null;
     }
 
     /**
