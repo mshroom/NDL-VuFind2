@@ -60,7 +60,7 @@
           <?=$i > 0 ? '<br>' : ''?>
           <?php
             $linkToResource = ($url['linkType'] ?? null) === 'proxy-link'
-                ? $this->url('record-downloadfile', [], ['query' => ['id' => $this->driver->getUniqueID(), 'index' => $i, 'format' => $url['format'], 'type' => 'document']]) 
+                ? $this->url('record-downloadfile', [], ['query' => ['id' => $this->driver->getUniqueID(), 'index' => $i, 'format' => $url['format'] ?? '', 'type' => 'document']])
                 : $this->proxyUrl($url['url']);
             $currentUrl = [
               'href' => $linkToResource,
