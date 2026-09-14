@@ -1439,7 +1439,7 @@ class SolrLido extends SolrDefault implements \Psr\Log\LoggerAwareInterface
     /**
      * Return value and source of any conceptID or skos:Concept nodes of a node as an associative array.
      * - id            Value of conceptID or skos:Concept
-     * - source        Source attribute of conceptID
+     * - source        Source attribute of conceptID.
      *
      * @param array $parentNode   The node that contains conceptID or skos:Concept nodes
      * @param array $allowedTypes Allowed conceptID types
