@@ -81,6 +81,7 @@ class RecordDataFormatter extends \VuFind\View\Helper\Root\RecordDataFormatter
             'Classification',
             'Contains collections',
             'Copyright Notes',
+            'Constituent Units',
             'Country of Producing Entity',
             'Creator Characteristics',
             'DOI',

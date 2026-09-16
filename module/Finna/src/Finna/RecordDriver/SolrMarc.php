@@ -2833,6 +2833,16 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc implements \Psr\Log\LoggerA
     }
 
     /**
+     * Get constituent units.
+     *
+     * @return array
+     */
+    public function getConstituentUnits()
+    {
+        return $this->stripTrailingPunctuation($this->getFieldArray('774', ['t']));
+    }
+
+    /**
      * Get record linking settings.
      *
      * @param string $recordSource Record source

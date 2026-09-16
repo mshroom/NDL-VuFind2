@@ -146,6 +146,7 @@ class RecordSpecsTest extends \PHPUnit\Framework\TestCase
           'Additional Information',
           'Additional Information Extended',
           'child_records',
+          'Constituent Units',
           'Record Links',
           'Related Materials',
           'Online Access',

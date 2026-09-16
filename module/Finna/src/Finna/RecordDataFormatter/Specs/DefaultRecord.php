@@ -163,6 +163,7 @@ class DefaultRecord extends \VuFind\RecordDataFormatter\Specs\DefaultRecord
         'Additional Information',
         'Additional Information Extended',
         'child_records',
+        'Constituent Units',
         'Record Links',
         'Related Materials',
         'Online Access',
@@ -567,6 +568,16 @@ class DefaultRecord extends \VuFind\RecordDataFormatter\Specs\DefaultRecord
                 [
                     'context' => [
                         'class' => 'record-color',
+                    ],
+                ],
+            ],
+            'Constituent Units' => [
+                'getConstituentUnits',
+                'data-titles.phtml',
+                [
+                    'context' => [
+                        'class' => 'recordConstituentUnit',
+                        'title' => 'note_774',
                     ],
                 ],
             ],
