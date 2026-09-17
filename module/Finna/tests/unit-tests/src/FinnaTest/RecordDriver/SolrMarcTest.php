@@ -56,10 +56,9 @@ class SolrMarcTest extends \PHPUnit\Framework\TestCase
     public static function driverMethodsProvider(): \Iterator
     {
         yield [
-            'getConstituentUnits',
+            'getAlternativeTitles',
             [
-                'Studies towards an elephant utopia',
-                'On the sources of mighty mammoths',
+                'Proposcidea : Elephantidae and their ancestors',
             ],
         ];
     }
@@ -560,6 +559,30 @@ class SolrMarcTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
         ];
+        yield 'record links in 774 field' => [
+            'marc_test.xml',
+            [],
+            [
+                [
+                    'value' => 'Studies towards an elephant utopia',
+                    'title' => 'note_774',
+                    'link' => [
+                        'type' => 'title',
+                        'value' => 'Studies towards an elephant utopia',
+                    ],
+                    'isCollection' => false,
+                ],
+                [
+                    'value' => 'On the sources of mighty mammoths',
+                    'title' => 'note_774',
+                    'link' => [
+                        'type' => 'title',
+                        'value' => 'On the sources of mighty mammoths',
+                    ],
+                    'isCollection' => false,
+                ],
+            ],
+        ];
     }
 
     /**
@@ -595,7 +618,7 @@ class SolrMarcTest extends \PHPUnit\Framework\TestCase
         $fixture = $recordXml ? $this->getFixture("marc/$recordXml", 'Finna') : json_encode($recordArray);
         $config = new \VuFind\Config\Config([
             'Record' => [
-                'marc_links' => '760,762,765,767,770,772,773,775,776,780,785',
+                'marc_links' => '760,762,765,767,770,772,773,774,775,776,780,785',
                 'marc_links_link_types' => 'linkingId,id,oclc,dlc,isbn,issn,title',
             ],
         ]);
