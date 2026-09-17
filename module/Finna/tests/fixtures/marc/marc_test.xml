@@ -10,6 +10,13 @@
         <controlfield tag="001">123</controlfield>
         <controlfield tag="003">   FI-MELINDA    </controlfield>
         <controlfield tag="008">021122s2020    en            000 0 eng d</controlfield>
+        <datafield tag="245" ind1="0" ind2="0">
+            <subfield code="a">Proposcidea</subfield>
+        </datafield>
+        <datafield tag="246" ind1="3" ind2="1">
+            <subfield code="a">Proposcidea :</subfield>
+            <subfield code="b">Elephantidae and their ancestors</subfield>
+        </datafield>
         <datafield tag="774" ind1="0">
             <subfield code="i">Yhteensidottuna:</subfield>
             <subfield code="t">Studies towards an elephant utopia</subfield>
