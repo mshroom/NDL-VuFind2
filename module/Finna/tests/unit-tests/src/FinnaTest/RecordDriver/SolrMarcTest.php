@@ -58,7 +58,7 @@ class SolrMarcTest extends \PHPUnit\Framework\TestCase
         yield [
             'getAlternativeTitles',
             [
-                'Proposcidea : Elephantidae and their ancestors',
+                'Proboscidea : Elephantidae and their ancestors',
             ],
         ];
     }
