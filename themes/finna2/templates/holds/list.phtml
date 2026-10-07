@@ -69,7 +69,7 @@
                           <li><span class="dropdown-header"><?=$this->transEsc('confirm_hold_cancel_selected_text') ?></span></li>
                           <li class="useraccount-confirm-buttons">
                             <a class="dropdown-item" href="#" id="confirm_cancel_selected_yes" role="button"><?=$this->transEsc('confirm_dialog_yes') ?></a>
-                            <a class="dropdown-item" href="#" class="confirm_cancel_no" role="button"><?=$this->transEsc('confirm_dialog_no')?></a>
+                            <a class="dropdown-item confirm_cancel_no" href="#" role="button"><?=$this->transEsc('confirm_dialog_no')?></a>
                           </li>
                         </ul>
                       <?php endif; ?>
@@ -237,7 +237,7 @@
                       <a class="hold-edit" href="<?=$this->escapeHtmlAttr($this->url('holds-edit', [], ['query' => ['selectedIDS[]' => $ilsDetails['updateDetails']]])) ?>" data-lightbox><?=$this->transEsc('Edit') ?></a>
                     <?php endif; ?>
                     <?php if ($this->cancelForm && isset($ilsDetails['cancel_details'])): ?>
-                      <input id="cancelOne" name="cancelOne" type="submit" value="<?=$this->transEscAttr('Delete') ?>" class="btn btn-link dropdown-toggle hold-cancel-one" data-bs-toggle="dropdown" data-lightbox-ignore aria-expanded="false">
+                      <input name="cancelOne" type="submit" value="<?=$this->transEscAttr('Delete') ?>" class="btn btn-link dropdown-toggle hold-cancel-one" data-bs-toggle="dropdown" data-lightbox-ignore aria-expanded="false">
                       <ul class="dropdown-menu useraccount-confirm" role="presentation">
                         <li><span class="dropdown-header"><?=$this->transEsc('confirm_hold_cancel_one_text') ?></span></li>
                         <li class="useraccount-confirm-buttons">
@@ -260,7 +260,7 @@
                   <li><span class="dropdown-header"><?=$this->transEsc('confirm_hold_cancel_all_text') ?></span></li>
                   <li class="useraccount-confirm-buttons">
                     <a class="dropdown-item" href="#" id="confirm_cancel_all_yes" role="button"><?=$this->transEsc('confirm_dialog_yes') ?></a>
-                    <a class="dropdown-item" href="#" class="confirm_cancel_no" role="button"><?=$this->transEsc('confirm_dialog_no')?></a>
+                    <a class="dropdown-item confirm_cancel_no" href="#" role="button"><?=$this->transEsc('confirm_dialog_no')?></a>
                   </li>
                 </ul>
               </div>
