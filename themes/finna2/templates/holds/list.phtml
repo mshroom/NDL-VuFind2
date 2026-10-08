@@ -237,7 +237,7 @@
                       <a class="hold-edit" href="<?=$this->escapeHtmlAttr($this->url('holds-edit', [], ['query' => ['selectedIDS[]' => $ilsDetails['updateDetails']]])) ?>" data-lightbox><?=$this->transEsc('Edit') ?></a>
                     <?php endif; ?>
                     <?php if ($this->cancelForm && isset($ilsDetails['cancel_details'])): ?>
-                      <input name="cancelOne" type="submit" value="<?=$this->transEscAttr('Delete') ?>" class="btn btn-link dropdown-toggle hold-cancel-one" data-bs-toggle="dropdown" data-lightbox-ignore aria-expanded="false">
+                      <input type="submit" value="<?=$this->transEscAttr('Delete') ?>" class="btn btn-link dropdown-toggle hold-cancel-one" data-bs-toggle="dropdown" data-lightbox-ignore aria-expanded="false">
                       <ul class="dropdown-menu useraccount-confirm" role="presentation">
                         <li><span class="dropdown-header"><?=$this->transEsc('confirm_hold_cancel_one_text') ?></span></li>
                         <li class="useraccount-confirm-buttons">
