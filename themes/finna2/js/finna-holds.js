@@ -23,7 +23,7 @@ finna.holds = (function finnaHolds() {
   }
 
   return {
-    init: function init() {},
+    init: () => {},
     initCancelButtons
   };
 })();
