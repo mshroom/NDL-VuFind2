@@ -198,11 +198,6 @@
 .btn-sort-order, .btn-delete-list {
   padding: 0.4em;
 }
-@include media-breakpoint-down(sm) {
-  .btn-delete-list {
-    //margin-right: 0px;
-  }
-}
 
 .own-favorite-list-button-area {
   width: 100%;
