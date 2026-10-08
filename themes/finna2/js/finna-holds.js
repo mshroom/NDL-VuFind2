@@ -3,7 +3,7 @@ finna.holds = (function finnaHolds() {
 
   /**
    * Select single checkbox and deselect other checkboxes.
-   * @param {string} value Checkbox value.
+   * @param {string} value Value of checkbox to be selected.
    */
   function selectSingleCheckbox(value) {
     document.querySelectorAll('form[name="updateForm"] .checkbox-select-item').forEach(checkbox => checkbox.checked = checkbox.value === value);
