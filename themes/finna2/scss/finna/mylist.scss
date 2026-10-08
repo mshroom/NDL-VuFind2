@@ -153,10 +153,17 @@
 }
 
 .mylist-controls {
+  display: flex;
+  gap: 0.5rem;
   .control-container {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+  }
+  .pagination-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
   }
 }
 @include media-breakpoint-down(md) {
@@ -167,6 +174,13 @@
         white-space: initial;
       }
     }
+  }
+}
+@include media-breakpoint-down(xl) {
+  .pagination-container {
+    width: 100%;
+    justify-content: space-between;
+    margin-right: 0.5rem;
   }
 }
 @include media-breakpoint-down(md) {
@@ -181,8 +195,13 @@
   }
 }
 
-.btn-sort-order {
+.btn-sort-order, .btn-delete-list {
   padding: 0.4em;
+}
+@include media-breakpoint-down(sm) {
+  .btn-delete-list {
+    //margin-right: 0px;
+  }
 }
 
 .own-favorite-list-button-area {
