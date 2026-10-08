@@ -153,17 +153,19 @@
 }
 
 .mylist-controls {
-  display: flex;
-  gap: 0.5rem;
+  &.myresearch-mylist {
+    display: flex;
+    gap: 0.5rem;
+    .pagination-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+  }
   .control-container {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-  }
-  .pagination-container {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
   }
 }
 @include media-breakpoint-down(md) {
@@ -177,10 +179,14 @@
   }
 }
 @include media-breakpoint-down(xl) {
-  .pagination-container {
-    width: 100%;
-    justify-content: space-between;
-    margin-right: 0.5rem;
+  .mylist-controls{
+    &.myresearch-mylist {
+      .pagination-container {
+        width: 100%;
+        justify-content: space-between;
+        margin-right: 0.5rem;
+      }
+    }
   }
 }
 @include media-breakpoint-down(md) {

@@ -121,7 +121,7 @@
     <?=$this->component('finna-addition-template', ['template' => 'myresearch-favorites'])?>
     <div class="mylist-header">
       <?php if ($recordTotal > 0): ?>
-        <div class="mylist-controls search-controls">
+        <div class="mylist-controls search-controls myresearch-mylist">
           <div class="pagination-container">
             <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination_simple.phtml', ['results' => $this->results])?>
             <?php if ($list): ?>
