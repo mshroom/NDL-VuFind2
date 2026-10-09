@@ -196,7 +196,9 @@
                   <?php elseif (isset($ilsDetails['in_transit']) && $ilsDetails['in_transit']): ?>
                     <div class="text-success"><?=$this->transEsc('request_in_transit') . (is_string($ilsDetails['in_transit']) ? ': ' . $this->transEsc('institution_' . $ilsDetails['in_transit'], [], $ilsDetails['in_transit']) : '') ?></div>
                   <?php elseif (isset($ilsDetails['position'])): ?>
-                    <p><strong><?=$this->transEsc('hold_queue_position') ?>:</strong> <?=$this->escapeHtml($ilsDetails['position']) ?></p>
+                    <div>
+                      <strong><?=$this->transEsc('hold_queue_position') ?>:</strong> <?=$this->escapeHtml($ilsDetails['position']) ?>
+                    </div>
                   <?php endif; ?>
 
                   <?php if (isset($this->cancelResults['items'])): ?>
@@ -223,13 +225,13 @@
                   <?php endif; ?>
 
                   <?php if (!empty($ilsDetails['frozen'])): ?>
-                    <strong>
+                    <div class="alert alert-info">
                       <?php if (empty($ilsDetails['frozenThrough'])): ?>
                         <?=$this->transEsc('hold_frozen') ?>
                       <?php else: ?>
                         <?=$this->transEsc('hold_frozen_through', ['%%date%%' => $ilsDetails['frozenThrough']]) ?>
                       <?php endif; ?>
-                    </strong>
+                    </div>
                   <?php endif; ?>
 
                   <div class="hold-single-actions">
