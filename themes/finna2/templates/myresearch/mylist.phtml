@@ -135,11 +135,15 @@
     <div class="mylist-header">
       <?php if ($recordTotal > 0): ?>
         <div class="mylist-controls search-controls myresearch-mylist">
-          <div class="pagination-container">
-            <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination_simple.phtml', ['results' => $this->results])?>
-            <?php if ($list): ?>
-              <?=$deleteButton ?>
-            <?php endif; ?>
+          <div class="pagination-delete-wrapper">
+            <div class="pagination-container">
+              <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination_simple.phtml', ['results' => $this->results])?>
+            </div>
+            <div class="delete-list-wrapper">
+              <?php if ($list): ?>
+                <?=$deleteButton ?>
+              <?php endif; ?>
+            </div>
           </div>
           <div class="control-container hidden-print">
             <?php if ($list): ?>

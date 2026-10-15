@@ -157,12 +157,13 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    .pagination-container {
+    .pagination-delete-wrapper {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       gap: 0.5rem;
-      .pagination-simple {
-        margin-left: 0px;
+      .pagination-container .pagination-simple{
+         margin-left: 0px;
       }
     }
   }
@@ -183,7 +184,7 @@
   }
 }
 @include media-breakpoint-down(xl) {
-  .mylist-controls.myresearch-mylist .pagination-container {
+  .mylist-controls.myresearch-mylist .pagination-delete-wrapper {
     width: 100%;
     justify-content: space-between;
     margin-right: 0.5rem;
