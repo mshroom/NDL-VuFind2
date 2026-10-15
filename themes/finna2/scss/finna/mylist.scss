@@ -179,14 +179,10 @@
   }
 }
 @include media-breakpoint-down(xl) {
-  .mylist-controls{
-    &.myresearch-mylist {
-      .pagination-container {
-        width: 100%;
-        justify-content: space-between;
-        margin-right: 0.5rem;
-      }
-    }
+  .mylist-controls.myresearch-mylist .pagination-container {
+    width: 100%;
+    justify-content: space-between;
+    margin-right: 0.5rem;
   }
 }
 @include media-breakpoint-down(md) {
