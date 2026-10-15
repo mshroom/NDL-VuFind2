@@ -28,6 +28,19 @@
   $lists = $user ? $this->userlist()->getUserListsAndCountsByUser($user) : null;
 
   $this->jsTranslations()->addStrings(['add_list_description' => 'Add list description', 'loading' => 'Loading']);
+
+  if ($list) {
+    $deleteButton = $this->component(
+        'confirm-button',
+        [
+          'buttonLink' => $this->url('myresearch-deletelist', [], ['query' => ['listID' => $list->getId()]]),
+          'buttonLabel' => 'delete_list',
+          'buttonClass' => 'btn btn-sm btn-danger btn-delete-list',
+          'confirmLink' => $this->url('myresearch-deletelist', [], ['query' => ['listID' => $list->getId(), 'confirm' => 1]]),
+          'header' => 'confirm_delete_list_text',
+        ]
+    );
+  }
 ?>
 
 <!-- Leftside navigationbar -->
@@ -125,18 +138,7 @@
           <div class="pagination-container">
             <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination_simple.phtml', ['results' => $this->results])?>
             <?php if ($list): ?>
-              <?=
-                $this->component(
-                    'confirm-button',
-                    [
-                      'buttonLink' => $this->url('myresearch-deletelist', [], ['query' => ['listID' => $list->getId()]]),
-                      'buttonLabel' => 'delete_list',
-                      'buttonClass' => 'btn btn-sm btn-danger btn-delete-list',
-                      'confirmLink' => $this->url('myresearch-deletelist', [], ['query' => ['listID' => $list->getId(), 'confirm' => 1]]),
-                      'header' => 'confirm_delete_list_text',
-                    ]
-                )
-              ?>
+              <?=$deleteButton ?>
             <?php endif; ?>
           </div>
           <div class="control-container hidden-print">
@@ -165,22 +167,9 @@
         <div class="useraccount-header">
           <h3><?=$this->transEsc('You do not have any saved resources')?></h3>
         </div>
-          <?php if ($list): ?>
-            <div>
-              <?=
-                $this->component(
-                    'confirm-button',
-                    [
-                      'buttonLink' => $this->url('myresearch-deletelist', [], ['query' => ['listID' => $list->getId()]]),
-                      'buttonLabel' => 'delete_list',
-                      'buttonClass' => 'btn btn-danger',
-                      'confirmLink' => $this->url('myresearch-deletelist', [], ['query' => ['listID' => $list->getId(), 'confirm' => 1]]),
-                      'header' => 'confirm_delete_list_text',
-                    ]
-                )
-              ?>
-            </div>
-          <?php endif; ?>
+        <?php if ($list): ?>
+          <?=$deleteButton ?>
+        <?php endif; ?>
       <?php endif; ?>
     </div>
     <?php if ($recordTotal > 0): ?>
