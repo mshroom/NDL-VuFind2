@@ -182,17 +182,6 @@
       <?=$this->component('finna-addition-template', ['template' => 'myresearch-favorites-post-list'])?>
     <?php endif;?>
   </div>
-  <?php if ($user && $list): ?>
-    <form class="float-start delete-list" action="<?=$this->url('myresearch-deletelist') ?>?listID=<?=urlencode($list->getId())?>&confirm=1" method="post">
-      <ul class="dropdown-menu useraccount-confirm">
-        <li class="disabled"><?=$this->transEsc('confirm_delete_list_text')?></li>
-        <li class="useraccount-confirm-buttons">
-          <a class="dropdown-item confirm" href="#" role="button"><?=$this->transEsc('confirm_dialog_yes') ?></a>
-          <a class="dropdown-item cancel" href="#" role="button"><?=$this->transEsc('confirm_dialog_no')?></a>
-        </li>
-      </ul>
-    </form>
-  <?php endif; ?>
-  </div>
+</div>
 
 <!-- END of: finna - myresearch/mylist.phtml -->
