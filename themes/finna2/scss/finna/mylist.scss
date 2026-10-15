@@ -155,11 +155,15 @@
 .mylist-controls {
   &.myresearch-mylist {
     display: flex;
+    align-items: center;
     gap: 0.5rem;
     .pagination-container {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.5rem;
+      .pagination-simple {
+        margin-left: 0px;
+      }
     }
   }
   .control-container {
