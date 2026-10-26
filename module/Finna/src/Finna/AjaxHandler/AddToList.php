@@ -29,10 +29,9 @@
 
 namespace Finna\AjaxHandler;
 
+use Finna\Favorites\FavoritesService;
 use Laminas\Mvc\Controller\Plugin\Params;
 use VuFind\Db\Entity\UserEntityInterface;
-use VuFind\Db\Service\UserListServiceInterface;
-use VuFind\Favorites\FavoritesService;
 use VuFind\I18n\Translator\TranslatorAwareInterface;
 use VuFind\Record\Loader;
 use VuFind\View\Helper\Root\Record as RecordHelper;
@@ -53,16 +52,14 @@ class AddToList extends \VuFind\AjaxHandler\AbstractBase implements TranslatorAw
     /**
      * Constructor.
      *
-     * @param ?UserEntityInterface     $user            Logged in user (or null)
-     * @param UserListServiceInterface $userListService User list database service
-     * @param FavoritesService         $favorites       Favorites service
-     * @param Loader                   $recordLoader    Record loader
-     * @param RecordHelper             $recordHelper    Record helper
-     * @param bool                     $enabled         Are lists enabled?
+     * @param ?UserEntityInterface $user         Logged in user (or null)
+     * @param FavoritesService     $favorites    Favorites service
+     * @param Loader               $recordLoader Record loader
+     * @param RecordHelper         $recordHelper Record helper
+     * @param bool                 $enabled      Are lists enabled?
      */
     public function __construct(
         protected ?UserEntityInterface $user,
-        protected UserListServiceInterface $userListService,
         protected FavoritesService $favorites,
         protected Loader $recordLoader,
         protected RecordHelper $recordHelper,
@@ -105,7 +102,7 @@ class AddToList extends \VuFind\AjaxHandler\AbstractBase implements TranslatorAw
         $currentListId = $listParams['currentListId'];
         $ids = (array)$listParams['ids'];
 
-        $list = $this->userListService->getUserListById($listId);
+        $list = $this->favorites->getAndRememberListObject($listId, $this->user);
         if ($list->getUser()?->getId() !== $this->user->getId()) {
             return $this->formatResponse(
                 $this->translate('Invalid list id'),

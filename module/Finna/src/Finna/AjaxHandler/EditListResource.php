@@ -29,6 +29,7 @@
 
 namespace Finna\AjaxHandler;
 
+use Finna\Favorites\FavoritesService;
 use Finna\View\Helper\Root\Markdown;
 use Laminas\Mvc\Controller\Plugin\Params;
 use VuFind\Db\Entity\UserEntityInterface;
@@ -53,12 +54,14 @@ class EditListResource extends \VuFind\AjaxHandler\AbstractBase implements Trans
      *
      * @param ?UserEntityInterface         $user                Logged in user (or null)
      * @param UserResourceServiceInterface $userResourceService UserResource database service
+     * @param FavoritesService             $favoritesService    Favorites service
      * @param Markdown                     $markdownHelper      Markdown view helper
      * @param bool                         $enabled             Are lists enabled?
      */
     public function __construct(
         protected ?UserEntityInterface $user,
         protected UserResourceServiceInterface $userResourceService,
+        protected FavoritesService $favoritesService,
         protected Markdown $markdownHelper,
         protected $enabled = true
     ) {
@@ -120,11 +123,13 @@ class EditListResource extends \VuFind\AjaxHandler\AbstractBase implements Trans
         }
 
         foreach ($userResources as $userResource) {
-            $this->userResourceService->createOrUpdateLink(
-                $userResource->getResource(),
+            $this->favoritesService->saveResourceToFavorites(
                 $userResource->getUser(),
+                $userResource->getResource(),
                 $userResource->getUserList(),
-                $notes
+                [],
+                $notes,
+                false
             );
         }
 

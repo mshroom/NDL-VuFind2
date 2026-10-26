@@ -35,8 +35,6 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerExceptionInterface as ContainerException;
 use Psr\Container\ContainerInterface;
 use VuFind\Db\Service\SearchServiceInterface;
-use VuFind\Db\Service\UserListServiceInterface;
-use VuFind\Db\Service\UserResourceServiceInterface;
 
 /**
  * Factory for ImportFavorites AJAX handler.
@@ -78,8 +76,6 @@ class ImportFavoritesFactory implements FactoryInterface
             $container->get(\VuFind\Auth\Manager::class)->getUserObject(),
             $container->get(\VuFind\Search\SearchNormalizer::class),
             $dbServiceManager->get(SearchServiceInterface::class),
-            $dbServiceManager->get(UserListServiceInterface::class),
-            $dbServiceManager->get(UserResourceServiceInterface::class),
             $container->get(\VuFind\Favorites\FavoritesService::class),
             $container->get(\Laminas\Session\SessionManager::class),
             $container->get(\VuFind\Record\Loader::class),

@@ -29,14 +29,10 @@
 
 namespace Finna\Db\Service;
 
-use DateTime;
 use Finna\Db\Entity\UserList;
 use Finna\Db\Entity\UserListEntityInterface;
 use Finna\Db\Entity\UserResourceEntityInterface;
-use VuFind\Db\Entity\EntityInterface;
 use VuFind\Db\Entity\UserEntityInterface;
-
-use function assert;
 
 /**
  * Database service for UserList.
@@ -159,19 +155,5 @@ class UserListService extends \VuFind\Db\Service\UserListService implements User
     public function getProtectedLists(): array
     {
         return $this->entityManager->getRepository(UserListEntityInterface::class)->findBy(['finnaProtected' => true]);
-    }
-
-    /**
-     * Persist an entity.
-     *
-     * @param EntityInterface $entity Entity to persist.
-     *
-     * @return void
-     */
-    public function persistEntity(EntityInterface $entity): void
-    {
-        assert($entity instanceof UserListEntityInterface);
-        $entity->setFinnaUpdated(new DateTime());
-        parent::persistEntity($entity);
     }
 }
