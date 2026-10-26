@@ -250,6 +250,9 @@
           </div>
         </div>
     <?php endif; ?>
+    <?php if ($isLandingPage && ($template = $this->content()->findTemplateForLng('content/Additions/frontpage-searchContent-post'))): ?>
+      <?= $this->render($template) ?>
+    <?php endif; ?>
     <?php if ($isLandingPage && $template = $this->content()->findTemplateForLng('search/home/browsebar')): ?>
       <?=$this->render($template)?>
     <?php endif; ?>
