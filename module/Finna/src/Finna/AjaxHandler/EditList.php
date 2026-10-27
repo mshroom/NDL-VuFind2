@@ -56,14 +56,14 @@ class EditList extends \VuFind\AjaxHandler\AbstractBase implements TranslatorAwa
     /**
      * Constructor.
      *
-     * @param ?UserEntityInterface $user             Logged in user (or null)
+     * @param ?UserEntityInterface     $user             Logged in user (or null)
      * @param UserListServiceInterface $userListService  UserList database service
-     * @param FavoritesService     $favoritesService Favorites service
-     * @param TagsService          $tagsService      Tags service
-     * @param RendererInterface    $renderer         View renderer
-     * @param bool                 $enabled          Are lists enabled?
-     * @param bool                 $listTagsEnabled  Are list tags enabled?
-     * @param ?Markdown            $markdownHelper   Markdown view helper
+     * @param FavoritesService         $favoritesService Favorites service
+     * @param TagsService              $tagsService      Tags service
+     * @param RendererInterface        $renderer         View renderer
+     * @param bool                     $enabled          Are lists enabled?
+     * @param bool                     $listTagsEnabled  Are list tags enabled?
+     * @param ?Markdown                $markdownHelper   Markdown view helper
      */
     public function __construct(
         protected ?UserEntityInterface $user,
