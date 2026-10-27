@@ -24,6 +24,7 @@
  * @package  AJAX
  * @author   Joni Nevalainen <joni.nevalainen@gofore.com>
  * @author   Ere Maijala <ere.maijala@helsinki.fi>
+ * @author   Minna Rönkä <minna.ronka@helsinki.fi>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
@@ -52,6 +53,7 @@ use function count;
  * @package  AJAX
  * @author   Joni Nevalainen <joni.nevalainen@gofore.com>
  * @author   Ere Maijala <ere.maijala@helsinki.fi>
+ * @author   Minna Rönkä <minna.ronka@helsinki.fi>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */

@@ -25,6 +25,7 @@
  * @category VuFind
  * @package  Favorites
  * @author   Ere Maijala <ere.maijala@helsinki.fi>
+ * @author   Minna Rönkä <minna.ronka@helsinki.fi>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
@@ -49,6 +50,7 @@ use function assert;
  * @category VuFind
  * @package  Favorites
  * @author   Ere Maijala <ere.maijala@helsinki.fi>
+ * @author   Minna Rönkä <minna.ronka@helsinki.fi>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
@@ -182,20 +184,24 @@ class FavoritesService extends \VuFind\Favorites\FavoritesService
     }
 
     /**
-     * Save list custom order.
+     * Given an array of item ids, remove them from the specified list.
      *
-     * @param UserEntityInterface $user        User id
-     * @param int                 $listId      List id
-     * @param array               $orderedList Ordered List of Resources
+     * @param UserListEntityInterface $list   List being updated
+     * @param ?UserEntityInterface    $user   Logged-in user (null if none)
+     * @param string[]                $ids    IDs to remove from the list
+     * @param string                  $source Type of resource identified by IDs
      *
      * @return void
      */
-    public function saveCustomFavoriteOrder(UserEntityInterface $user, int $listId, array $orderedList): void
-    {
-        assert($this->userListService instanceof UserListService);
-        $this->userListService->saveCustomFavoriteOrder($user, $listId, $orderedList);
+    public function removeListResourcesById(
+        VuFindUserListEntityInterface $list,
+        ?UserEntityInterface $user,
+        array $ids,
+        string $source = DEFAULT_SEARCH_BACKEND
+    ): void {
+        parent::removeListResourcesById($list, $user, $ids, $source);
         // Update list timestamp
-        $this->saveListForUser($this->userListService->getUserListById($listId), $user);
+        $this->saveListForUser($list, $user);
     }
 
     /**
@@ -227,39 +233,34 @@ class FavoritesService extends \VuFind\Favorites\FavoritesService
     }
 
     /**
-     * Get user's list id by list title.
+     * Save list custom order.
      *
-     * @param UserEntityInterface|int $userOrId User entity or ID.
-     * @param string                  $title    Title of the list to retrieve
-     *
-     * @return ?int
-     */
-    public function getListIdByTitle(UserEntityInterface|int $userOrId, string $title): ?int
-    {
-        assert($this->userListService instanceof UserListService);
-        if (null !== $list = $this->userListService->getListByTitle($userOrId, $title)) {
-            return $list->getId();
-        }
-        return null;
-    }
-
-    /**
-     * Given an array of item ids, remove them from the specified list.
-     *
-     * @param UserListEntityInterface $list   List being updated
-     * @param ?UserEntityInterface    $user   Logged-in user (null if none)
-     * @param string[]                $ids    IDs to remove from the list
-     * @param string                  $source Type of resource identified by IDs
+     * @param UserEntityInterface $user        User id
+     * @param int                 $listId      List id
+     * @param array               $orderedList Ordered List of Resources
      *
      * @return void
      */
-    public function removeListResourcesById(
-        VuFindUserListEntityInterface $list,
-        ?UserEntityInterface $user,
-        array $ids,
-        string $source = DEFAULT_SEARCH_BACKEND
-    ): void {
-        parent::removeListResourcesById($list, $user, $ids, $source);
+    public function saveCustomFavoriteOrder(UserEntityInterface $user, int $listId, array $orderedList): void
+    {
+        assert($this->userListService instanceof UserListService);
+        $this->userListService->saveCustomFavoriteOrder($user, $listId, $orderedList);
+        // Update list timestamp
+        $this->saveListForUser($this->userListService->getUserListById($listId), $user);
+    }
+
+    /**
+     * Add a tag to a list.
+     *
+     * @param string                  $tagText The tag to save.
+     * @param UserListEntityInterface $list    The list being tagged.
+     * @param UserEntityInterface     $user    The user posting the tag.
+     *
+     * @return void
+     */
+    public function addListTag(string $tagText, VuFindUserListEntityInterface $list, UserEntityInterface $user): void
+    {
+        parent::addListTag($tagText, $list, $user);
         // Update list timestamp
         $this->saveListForUser($list, $user);
     }
@@ -282,18 +283,19 @@ class FavoritesService extends \VuFind\Favorites\FavoritesService
     }
 
     /**
-     * Add a tag to a list.
+     * Get user's list id by list title.
      *
-     * @param string                  $tagText The tag to save.
-     * @param UserListEntityInterface $list    The list being tagged.
-     * @param UserEntityInterface     $user    The user posting the tag.
+     * @param UserEntityInterface|int $userOrId User entity or ID.
+     * @param string                  $title    Title of the list to retrieve
      *
-     * @return void
+     * @return ?int
      */
-    public function addListTag(string $tagText, VuFindUserListEntityInterface $list, UserEntityInterface $user): void
+    public function getListIdByTitle(UserEntityInterface|int $userOrId, string $title): ?int
     {
-        parent::addListTag($tagText, $list, $user);
-        // Update list timestamp
-        $this->saveListForUser($list, $user);
+        assert($this->userListService instanceof UserListService);
+        if (null !== $list = $this->userListService->getListByTitle($userOrId, $title)) {
+            return $list->getId();
+        }
+        return null;
     }
 }
