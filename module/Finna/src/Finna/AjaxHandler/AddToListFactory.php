@@ -23,7 +23,6 @@
  * @category VuFind
  * @package  AJAX
  * @author   Ere Maijala <ere.maijala@helsinki.fi>
- * @author   Minna Rönkä <minna.ronka@helsinki.fi>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
@@ -34,6 +33,7 @@ use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Psr\Container\ContainerExceptionInterface as ContainerException;
 use Psr\Container\ContainerInterface;
+use VuFind\Db\Service\UserListServiceInterface;
 
 /**
  * Factory for AddToList AJAX handler.
@@ -41,7 +41,6 @@ use Psr\Container\ContainerInterface;
  * @category VuFind
  * @package  AJAX
  * @author   Ere Maijala <ere.maijala@helsinki.fi>
- * @author   Minna Rönkä <minna.ronka@helsinki.fi>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
@@ -74,6 +73,7 @@ class AddToListFactory implements \Laminas\ServiceManager\Factory\FactoryInterfa
         $capabilities = $container->get(\VuFind\Config\AccountCapabilities::class);
         return new $requestedName(
             $container->get(\VuFind\Auth\Manager::class)->getUserObject(),
+            $container->get(\VuFind\Db\Service\PluginManager::class)->get(UserListServiceInterface::class),
             $container->get(\VuFind\Favorites\FavoritesService::class),
             $container->get(\VuFind\Record\Loader::class),
             $container->get('ViewRenderer')->plugin('record'),

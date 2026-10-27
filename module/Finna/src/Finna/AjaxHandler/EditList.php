@@ -23,7 +23,6 @@
  * @category VuFind
  * @package  AJAX
  * @author   Ere Maijala <ere.maijala@helsinki.fi>
- * @author   Minna Rönkä <minna.ronka@helsinki.fi>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
@@ -36,6 +35,7 @@ use Laminas\Mvc\Controller\Plugin\Params;
 use Laminas\Stdlib\Parameters;
 use Laminas\View\Renderer\RendererInterface;
 use VuFind\Db\Entity\UserEntityInterface;
+use VuFind\Db\Service\UserListServiceInterface;
 use VuFind\Exception\ListPermission as ListPermissionException;
 use VuFind\I18n\Translator\TranslatorAwareInterface;
 use VuFind\Tags\TagsService;
@@ -46,7 +46,6 @@ use VuFind\Tags\TagsService;
  * @category VuFind
  * @package  AJAX
  * @author   Ere Maijala <ere.maijala@helsinki.fi>
- * @author   Minna Rönkä <minna.ronka@helsinki.fi>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
@@ -58,6 +57,7 @@ class EditList extends \VuFind\AjaxHandler\AbstractBase implements TranslatorAwa
      * Constructor.
      *
      * @param ?UserEntityInterface $user             Logged in user (or null)
+     * @param UserListServiceInterface $userListService  UserList database service
      * @param FavoritesService     $favoritesService Favorites service
      * @param TagsService          $tagsService      Tags service
      * @param RendererInterface    $renderer         View renderer
@@ -67,6 +67,7 @@ class EditList extends \VuFind\AjaxHandler\AbstractBase implements TranslatorAwa
      */
     public function __construct(
         protected ?UserEntityInterface $user,
+        protected UserListServiceInterface $userListService,
         protected FavoritesService $favoritesService,
         protected TagsService $tagsService,
         protected RendererInterface $renderer,
@@ -112,7 +113,7 @@ class EditList extends \VuFind\AjaxHandler\AbstractBase implements TranslatorAwa
         // of the ID parameter:
         $newList = 'NEW' === $listParams['id'];
         $list = $newList ? $this->favoritesService->createListForUser($this->user)
-            : $this->favoritesService->getAndRememberListObject($listParams['id'], $this->user);
+            : $this->userListService->getUserListById($listParams['id']);
 
         if (!$newList && !$this->favoritesService->userCanEditList($this->user, $list)) {
             throw new ListPermissionException('Access denied.');

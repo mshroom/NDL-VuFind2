@@ -212,7 +212,7 @@ class FavoritesService extends \VuFind\Favorites\FavoritesService
      * @param string               $description List description
      * @param bool                 $public      List publicity
      *
-     * @return int ID of the created list or the already existing list.
+     * @return UserListEntityInterface
      * @throws LoginRequiredException
      */
     public function createListForUserWithDetails(
@@ -220,7 +220,7 @@ class FavoritesService extends \VuFind\Favorites\FavoritesService
         string $title,
         string $description = '',
         bool $public = false
-    ): int {
+    ): UserListEntityInterface {
         assert($this->userListService instanceof UserListService);
         if (!($list = $this->userListService->getListByTitle($user, $title))) {
             $list = parent::createListForUser($user);
@@ -229,7 +229,7 @@ class FavoritesService extends \VuFind\Favorites\FavoritesService
             $list->setPublic($public);
             $this->saveListForUser($list, $user);
         }
-        return $list->getId();
+        return $list;
     }
 
     /**
@@ -280,22 +280,5 @@ class FavoritesService extends \VuFind\Favorites\FavoritesService
     {
         $list->setFinnaUpdated(new DateTime());
         parent::saveListForUser($list, $user);
-    }
-
-    /**
-     * Get user's list id by list title.
-     *
-     * @param UserEntityInterface|int $userOrId User entity or ID.
-     * @param string                  $title    Title of the list to retrieve
-     *
-     * @return ?int
-     */
-    public function getListIdByTitle(UserEntityInterface|int $userOrId, string $title): ?int
-    {
-        assert($this->userListService instanceof UserListService);
-        if (null !== $list = $this->userListService->getListByTitle($userOrId, $title)) {
-            return $list->getId();
-        }
-        return null;
     }
 }

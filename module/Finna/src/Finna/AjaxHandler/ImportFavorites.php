@@ -31,6 +31,7 @@
 
 namespace Finna\AjaxHandler;
 
+use Finna\Db\Service\UserListServiceInterface;
 use Finna\Favorites\FavoritesService;
 use Laminas\Mvc\Controller\Plugin\Params;
 use Laminas\Session\SessionManager;
@@ -64,19 +65,21 @@ class ImportFavorites extends \VuFind\AjaxHandler\AbstractBase implements Transl
     /**
      * Constructor.
      *
-     * @param ?UserEntityInterface   $user              Logged in user (or null)
-     * @param SearchNormalizer       $searchNormalizer  Search normalize
-     * @param SearchServiceInterface $searchService     Search database service
-     * @param FavoritesService       $favoritesService  Favorites service
-     * @param SessionManager         $sessionManager    Session manager
-     * @param RecordLoader           $recordLoader      Record loader
-     * @param ResourcePopulator      $resourcePopulator Resource populator
-     * @param RendererInterface      $renderer          View renderer
+     * @param ?UserEntityInterface     $user              Logged in user (or null)
+     * @param SearchNormalizer         $searchNormalizer  Search normalize
+     * @param SearchServiceInterface   $searchService     Search database service
+     * @param UserListServiceInterface $userListService   User list database service
+     * @param FavoritesService         $favoritesService  Favorites service
+     * @param SessionManager           $sessionManager    Session manager
+     * @param RecordLoader             $recordLoader      Record loader
+     * @param ResourcePopulator        $resourcePopulator Resource populator
+     * @param RendererInterface        $renderer          View renderer
      */
     public function __construct(
         protected ?UserEntityInterface $user,
         protected SearchNormalizer $searchNormalizer,
         protected SearchServiceInterface $searchService,
+        protected UserListServiceInterface $userListService,
         protected FavoritesService $favoritesService,
         protected SessionManager $sessionManager,
         protected RecordLoader $recordLoader,
@@ -212,7 +215,7 @@ class ImportFavorites extends \VuFind\AjaxHandler\AbstractBase implements Transl
             if ('' === ($title = $list['title'] ?? '')) {
                 continue;
             }
-            if (null === ($targetList = $this->favoritesService->getListIdByTitle($this->user, $title))) {
+            if (!($targetList = $this->userListService->getListByTitle($this->user, $title))) {
                 $targetList = $this->favoritesService->createListForUserWithDetails(
                     $this->user,
                     $title,
@@ -236,7 +239,7 @@ class ImportFavorites extends \VuFind\AjaxHandler\AbstractBase implements Transl
 
                 $params = [
                     'notes' => $record['notes'] ?? '',
-                    'list' => $targetList,
+                    'list' => $targetList->getId(),
                     'mytags' => $record['tags'] ?? [],
                 ];
                 $this->favoritesService->saveRecordToFavorites($params, $this->user, $driver);
