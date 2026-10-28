@@ -145,9 +145,7 @@ class FavoritesService extends \VuFind\Favorites\FavoritesService
         bool $replaceExisting = true
     ): void {
         parent::saveResourceToFavorites($userOrId, $resourceOrId, $listOrId, $tagArray, $notes, $replaceExisting);
-        $user = $userOrId instanceof UserEntityInterface
-            ? $userOrId
-            : $this->userService->getUserById($userOrId);
+        $user = $userOrId instanceof UserEntityInterface ? $userOrId : $this->userService->getUserById($userOrId);
         $list = $listOrId instanceof UserListEntityInterface
             ? $listOrId
             : $this->userListService->getUserListById($listOrId);
@@ -173,9 +171,7 @@ class FavoritesService extends \VuFind\Favorites\FavoritesService
     ): void {
         assert($this->userResourceService instanceof UserResourceService);
         $this->userResourceService->createOrUpdateLinkWithOrder($resourceOrId, $userOrId, $listOrId, null, $order);
-        $user = $userOrId instanceof UserEntityInterface
-            ? $userOrId
-            : $this->userService->getUserById($userOrId);
+        $user = $userOrId instanceof UserEntityInterface ? $userOrId : $this->userService->getUserById($userOrId);
         $list = $listOrId instanceof UserListEntityInterface
             ? $listOrId
             : $this->userListService->getUserListById($listOrId);

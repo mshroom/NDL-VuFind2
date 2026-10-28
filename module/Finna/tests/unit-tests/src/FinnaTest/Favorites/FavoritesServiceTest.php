@@ -5,7 +5,7 @@
  *
  * PHP version 8
  *
- * Copyright (C) Villanova University 2010-2024.
+ * Copyright (C) The National Library of Finland 2026.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -99,9 +99,8 @@ class FavoritesServiceTest extends \PHPUnit\Framework\TestCase
      */
     protected function getMockListForMockUser(): MockObject&UserListEntityInterface
     {
-        $user = $this->getMockUser();
         $list = $this->createMock(UserListEntityInterface::class);
-        $list->method('getUser')->willReturn($user);
+        $list->method('getUser')->willReturn($this->getMockUser());
         $list->method('getTitle')->willReturn('Mock List Title');
         $list->method('getId')->willReturn(12345);
         return $list;
@@ -123,29 +122,15 @@ class FavoritesServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Create a mock resource object.
-     *
-     * @return MockObject&ResourceEntityInterface
-     */
-    protected function getMockResource(): MockObject&ResourceEntityInterface
-    {
-        $resource = $this->createMock(ResourceEntityInterface::class);
-        $resource->method('getId')->willReturn(123);
-        return $resource;
-    }
-
-    /**
      * Test that saving user list updates finnaUpdated timestamp.
      *
      * @return void
      */
     public function testSaveListForUser()
     {
-        $user = $this->getMockUser();
         $listService = $this->getListServiceExpectingSavingListOnce();
-        $list = $listService->getUserListById(12345);
         $service = $this->getFavoritesService($listService);
-        $service->saveListForUser($list, $user);
+        $service->saveListForUser($listService->getUserListById(12345), $this->getMockUser());
     }
 
     /**
@@ -155,10 +140,9 @@ class FavoritesServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveMany()
     {
-        $user = $this->getMockUser();
         $listService = $this->getListServiceExpectingSavingListOnce();
         $service = $this->getFavoritesService($listService, $this->createMock(UserResourceService::class));
-        $service->saveMany(['list' => 12345], $user, []);
+        $service->saveMany(['list' => 12345], $this->getMockUser(), []);
     }
 
     /**
@@ -168,12 +152,15 @@ class FavoritesServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveResourceToFavorites()
     {
-        $user = $this->getMockUser();
         $listService = $this->getListServiceExpectingSavingListOnce();
-        $list = $listService->getUserListById(12345);
         $service = $this->getFavoritesService($listService);
-        $resource = $this->getMockResource();
-        $service->saveResourceToFavorites($user, $resource, $list, [], '');
+        $service->saveResourceToFavorites(
+            $this->getMockUser(),
+            $this->createMock(ResourceEntityInterface::class),
+            $listService->getUserListById(12345),
+            [],
+            ''
+        );
     }
 
     /**
@@ -183,12 +170,14 @@ class FavoritesServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testUpdateResourceCustomOrder()
     {
-        $user = $this->getMockUser();
         $listService = $this->getListServiceExpectingSavingListOnce();
-        $list = $listService->getUserListById(12345);
         $service = $this->getFavoritesService($listService, $this->createMock(UserResourceService::class));
-        $resource = $this->getMockResource();
-        $service->updateResourceCustomOrder($user, $resource, $list, 2);
+        $service->updateResourceCustomOrder(
+            $this->getMockUser(),
+            $this->createMock(ResourceEntityInterface::class),
+            $listService->getUserListById(12345),
+            2
+        );
     }
 
     /**
@@ -198,11 +187,9 @@ class FavoritesServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testRemoveListResourcesById()
     {
-        $user = $this->getMockUser();
         $listService = $this->getListServiceExpectingSavingListOnce();
-        $list = $listService->getUserListById(12345);
         $service = $this->getFavoritesService($listService);
-        $service->removeListResourcesById($list, $user, [12345]);
+        $service->removeListResourcesById($listService->getUserListById(12345), $this->getMockUser(), [12345]);
     }
 
     /**
@@ -212,10 +199,9 @@ class FavoritesServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveCustomFavoriteOrder()
     {
-        $user = $this->getMockUser();
         $listService = $this->getListServiceExpectingSavingListOnce();
         $service = $this->getFavoritesService($listService);
-        $service->saveCustomFavoriteOrder($user, 12345, []);
+        $service->saveCustomFavoriteOrder($this->getMockUser(), 12345, []);
     }
 
     /**
@@ -225,10 +211,8 @@ class FavoritesServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddListTag()
     {
-        $user = $this->getMockUser();
         $listService = $this->getListServiceExpectingSavingListOnce();
-        $list = $listService->getUserListById(12345);
         $service = $this->getFavoritesService($listService);
-        $service->addListTag('My Test Tag', $list, $user);
+        $service->addListTag('My Test Tag', $listService->getUserListById(12345), $this->getMockUser());
     }
 }
