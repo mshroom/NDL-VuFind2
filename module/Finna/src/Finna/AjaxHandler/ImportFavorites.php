@@ -216,7 +216,7 @@ class ImportFavorites extends \VuFind\AjaxHandler\AbstractBase implements Transl
                 continue;
             }
             if (!($targetList = $this->userListService->getListByTitle($this->user, $title))) {
-                $targetList = $this->favoritesService->createListForUserWithDetails(
+                $targetList = $this->favoritesService->createAndPersistListForUserWithDetails(
                     $this->user,
                     $title,
                     $list['description'] ?? '',

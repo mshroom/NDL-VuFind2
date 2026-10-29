@@ -159,7 +159,7 @@ class FavoritesService extends \VuFind\Favorites\FavoritesService
      * @param UserEntityInterface|int     $userOrId     The user entity or ID saving the favorites.
      * @param ResourceEntityInterface|int $resourceOrId The resource entity or ID to update.
      * @param UserListEntityInterface|int $listOrId     The list entity or ID to update.
-     * @param ?int                        $order        Custom order.
+     * @param int                         $order        Custom order.
      *
      * @return void
      */
@@ -167,7 +167,7 @@ class FavoritesService extends \VuFind\Favorites\FavoritesService
         UserEntityInterface|int $userOrId,
         ResourceEntityInterface|int $resourceOrId,
         UserListEntityInterface|int $listOrId,
-        ?int $order = null
+        int $order
     ): void {
         assert($this->userResourceService instanceof UserResourceService);
         $this->userResourceService->createOrUpdateLinkWithOrder($resourceOrId, $userOrId, $listOrId, null, $order);
@@ -201,7 +201,8 @@ class FavoritesService extends \VuFind\Favorites\FavoritesService
     }
 
     /**
-     * Create a new list object for the specified user if a list with same title does not already exist.
+     * Create a new list object for the specified user or modify existing list with given title.
+     * Update list details and save the list object.
      *
      * @param ?UserEntityInterface $user        Logged in user (null if logged out)
      * @param string               $title       List title
@@ -211,20 +212,20 @@ class FavoritesService extends \VuFind\Favorites\FavoritesService
      * @return UserListEntityInterface
      * @throws LoginRequiredException
      */
-    public function createListForUserWithDetails(
+    public function createAndPersistListForUserWithDetails(
         ?UserEntityInterface $user,
         string $title,
-        string $description = '',
-        bool $public = false
+        string $description,
+        bool $public
     ): UserListEntityInterface {
         assert($this->userListService instanceof UserListService);
         if (!($list = $this->userListService->getListByTitle($user, $title))) {
             $list = parent::createListForUser($user);
             $list->setTitle($title);
-            $list->setDescription($description);
-            $list->setPublic($public);
-            $this->saveListForUser($list, $user);
         }
+        $list->setDescription($description);
+        $list->setPublic($public);
+        $this->saveListForUser($list, $user);
         return $list;
     }
 

@@ -67,9 +67,9 @@ class UserResourceService extends \VuFind\Db\Service\UserResourceService impleme
     }
 
     /**
-     * Create user/resource/list link if one does not exist; update notes if one does.
+     * Create user/resource/list link if one does not exist.
      *
-     * Finna: updates custom order as well.
+     * Finna: Optionally, also update notes and/or custom order.
      *
      * @param ResourceEntityInterface|int $resourceOrId Entity or ID of resource to link up
      * @param UserEntityInterface|int     $userOrId     Entity or ID of user creating link
@@ -84,8 +84,8 @@ class UserResourceService extends \VuFind\Db\Service\UserResourceService impleme
         ResourceEntityInterface|int $resourceOrId,
         UserEntityInterface|int $userOrId,
         UserListEntityInterface|int $listOrId,
-        ?string $notes = '',
-        ?int $order = null
+        ?string $notes,
+        ?int $order
     ): UserResourceEntityInterface {
         $resource = $this->getDoctrineReference(ResourceEntityInterface::class, $resourceOrId);
         $user = $this->getDoctrineReference(UserEntityInterface::class, $userOrId);

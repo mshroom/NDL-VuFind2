@@ -71,7 +71,7 @@ interface UserResourceServiceInterface extends \VuFind\Db\Service\UserResourceSe
         ResourceEntityInterface|int $resourceOrId,
         UserEntityInterface|int $userOrId,
         UserListEntityInterface|int $listOrId,
-        ?string $notes = '',
-        ?int $order = null
+        ?string $notes,
+        ?int $order
     ): UserResourceEntityInterface;
 }
